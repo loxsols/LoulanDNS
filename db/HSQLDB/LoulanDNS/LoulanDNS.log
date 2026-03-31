@@ -1,0 +1,26 @@
+/*C12*/SET SCHEMA PUBLIC
+INSERT INTO COMMON_SYSTEM_LOG VALUES(11,'[2026/03/12 02:21:36.291 JST][INFO][main][-1299878266746663491]','Logger is created. loggerName=UDPServiceApplication, LoggerClass=org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSDBLoggerImpl','2026/03/12 02:21:36.291 JST',NULL,NULL,NULL,101,NULL,'2026/03/12 02:21:36.291 JST','2026/03/12 02:21:36.291 JST')
+COMMIT
+INSERT INTO COMMON_SYSTEM_LOG VALUES(12,'[2026/03/12 02:22:29.918 JST][DEBUG][Thread-4][5548939666713817298]','DNSQuery is arrived. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@68aeba2c','2026/03/12 02:22:29.918 JST',NULL,NULL,NULL,101,NULL,'2026/03/12 02:22:29.918 JST','2026/03/12 02:22:29.918 JST')
+COMMIT
+INSERT INTO COMMON_SYSTEM_LOG VALUES(13,'[2026/03/12 02:22:30.040 JST][DEBUG][Thread-4][832207713705127147]','DNSQuery is proccessed. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@68aeba2c, DNSResponse=--------------------------------------\u000d\u000aHeader Section\u000d\u000aRCode = 8\u000d\u000aQDCount = 1\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000d\u000a--------------------------------------\u000a\u000d\u000aQuestion Section\u000a\u000d\u000aQDCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000aqname : google.co.jp.\u000a\u000d\u000a--------------------------------------\u000a\u000d\u000aAnswer Section\u000a\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000arname : google.co.jp.\u000a\u000d\u000a','2026/03/12 02:22:30.040 JST',NULL,NULL,NULL,101,NULL,'2026/03/12 02:22:30.040 JST','2026/03/12 02:22:30.040 JST')
+COMMIT
+DISCONNECT
+/*C13*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C14*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C15*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C16*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C17*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C18*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C19*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C20*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C21*/SET SCHEMA PUBLIC
+DISCONNECT
