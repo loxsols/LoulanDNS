@@ -33,6 +33,11 @@ echo "build for DoHServerApplication..."
 call %MODOULE_BUILD_CMD_DIR%\build-for-DoHServerApplication.bat
 
 
+REM --- LoulanDNSAdminAPIServiceApplication
+echo "build for LoulanDNSAdminAPIServiceApplication..."
+call %MODOULE_BUILD_CMD_DIR%\build-for-LoulanDNSAdminAPIServiceApplication.bat
+
+
 REM --- SpringTestRunnerCommandApplication
 echo "build for SpringTestRunnerCommandApplication..."
 call %MODOULE_BUILD_CMD_DIR%\build-for-SpringTestRunnerCommandApplication.bat

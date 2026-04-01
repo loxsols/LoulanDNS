@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.server.http.spring.controller;
+package org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.endpoint.doh;
 
 
 import java.util.Base64;

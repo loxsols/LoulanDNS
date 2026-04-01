@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.app.spring.udp;
+package org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.udp;
 
 
 import java.io.IOException;

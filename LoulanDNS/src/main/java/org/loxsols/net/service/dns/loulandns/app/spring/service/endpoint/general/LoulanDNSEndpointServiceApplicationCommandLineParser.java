@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.app.spring.endpoint.general;
+package org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general;
 
 
 import org.kohsuke.args4j.Argument;

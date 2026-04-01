@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.app.spring.doh;
+package org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.doh;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.boot.SpringApplication;

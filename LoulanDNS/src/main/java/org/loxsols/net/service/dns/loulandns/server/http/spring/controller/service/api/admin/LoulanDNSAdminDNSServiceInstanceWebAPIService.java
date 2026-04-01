@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.server.http.spring.controller.api.admin;
+package org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.admin;
 
 
 import java.util.Base64;
@@ -43,7 +43,7 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
 {
 
     // 次の値と同等の文字列を設定する. ※ 固定値でないとコンパイルが通らないため.
-    // "LoulanDNSConstatns.DB_CONST_VALUE_RECORD_STATUS_ACTIVE"
+    // "LoulanDNSConstatns.DB_CONST_VALUE_RECORD_STATUS_AC  TIVE"
     final static String PRM_STR_DB_CONST_VALUE_RECORD_STATUS_ACTIVE = "101";
     // "LoulanDNSConstatns.DB_CONST_VALUE_RECORD_STATUS_INACTIVE"
     final static String PRM_STR_DB_CONST_VALUE_RECORD_STATUS_INACTIVE = "401";

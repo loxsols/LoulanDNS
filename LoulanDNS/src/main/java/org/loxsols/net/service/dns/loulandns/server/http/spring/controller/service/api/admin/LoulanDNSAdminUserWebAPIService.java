@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.server.http.spring.controller.api.admin;
+package org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.admin;
 
 import java.util.Base64;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.loxsols.net.service.dns.loulandns.server.http.spring.common.exception
 
 // LoulanDNSのユーザー管理用WebAPIサービスクラス
 @RestController
-@RequestMapping("/admin/api")
+@RequestMapping("/admin/api/user")
 public class LoulanDNSAdminUserWebAPIService {
 
     // 次の値と同等の文字列を設定する. ※ 固定値でないとコンパイルが通らないため.

@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.app.spring.doh;
+package org.loxsols.net.service.dns.loulandns.app.spring.base.config;
 
 
 import java.io.IOException;
@@ -29,16 +29,21 @@ import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSCo
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.service.LoulanDNSDBService;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.service.LoulanDNSLogicalDBService;
+import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.factory.DNSServiceEndpointInstanceFactoryImpl;
+import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.model.IDNSProtocolModelInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.factory.IDNSResolverInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.factory.impl.DNSResolverInstanceFactoryImpl;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.IDNSServiceEndpointInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.impl.LoulanDNSLoggerFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.*;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.impl.*;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.impl.mock.*;
-
+import org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.endpoint.doh.LoulanDNSDoHService;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.*;
@@ -56,21 +61,25 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.impl.service.*;
 
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.factory.*;
 
 
+
+/**
+ * LoulanDNSのSpringのベースConfigurationクラス.
+ * 本クラスを@Importして拡張することを想定している.
+ * 
+ */
 @Configuration
 @EnableAutoConfiguration
 @EnableJpaRepositories( basePackages = "org.loxsols.net.service.dns.loulandns.server.http.spring.repository" )
 @EntityScan("org.loxsols.net.service.dns.loulandns.server.http.spring")
-@ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.repository")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.model")
-@ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.controller")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.common.security")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider")
-public class DoHServiceApplicationConfig
+public class LoulanDNSBaseApplicationConfig
 {
-
 
     @Bean(name = "loulanDNSDBServiceImpl")
     LoulanDNSDBService configLoulanDNSDBServiceImpl() throws IOException, ZoneTransferException
@@ -221,8 +230,42 @@ public class DoHServiceApplicationConfig
     }
 
 
+    /**
+     * ロガーのファクトリクラスを返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    @Bean( name="loulanDNSLoggerFactoryImpl")
+    ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory() throws DNSServiceCommonException
+    {
+
+        ILoulanDNSLoggerFactory loggerFactory = new LoulanDNSLoggerFactoryImpl();
+
+        LoulanDNSLogicalDBService logicalDBService;
+        try
+        {
+            // LoulanDNSLogicalDBServiceのインスタンスをセットする.
+            logicalDBService = configLoulanDNSLogicalDBServiceImpl();
+        }
+        catch(IOException cause)
+        {
+            String msg = String.format("Failed to load LoulanDNSLogicalDBService instance, caused of IOException.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+        catch(ZoneTransferException cause)
+        {
+            String msg = String.format("Failed to load LoulanDNSLogicalDBService instance, caused of ZoneTransferException.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
 
 
+        ( (LoulanDNSLoggerFactoryImpl)loggerFactory ).setLogicalDBService( logicalDBService );
+
+        return loggerFactory;
+    }
 
 
 

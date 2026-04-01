@@ -49,7 +49,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.IDNSHeaderSection;
 
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSDebugUtils;
-import org.loxsols.net.service.dns.loulandns.app.spring.doh.DoHServiceApplicationConfig;
+import org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.doh.DoHServiceApplicationConfig;
 
 
 

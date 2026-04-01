@@ -1,4 +1,4 @@
-package org.loxsols.net.service.dns.loulandns.app.spring.endpoint.general;
+package org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general;
 
 
 import org.springframework.context.ApplicationContext;
@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 
 import org.loxsols.net.service.dns.loulandns.app.spring.test.SpringTestRunnerCommandApplicationConfig;
-import org.loxsols.net.service.dns.loulandns.app.spring.udp.UDPServiceApplicationConfig;
+import org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.udp.UDPServiceApplicationConfig;
 import org.loxsols.net.service.dns.loulandns.client.IDNSLookupClient;
 import org.loxsols.net.service.dns.loulandns.client.command.formatter.DNSMessageFormatterCommandApplication;
 import org.loxsols.net.service.dns.loulandns.client.command.lookup.simple.SimpleDNSLookupCommandApplication;
