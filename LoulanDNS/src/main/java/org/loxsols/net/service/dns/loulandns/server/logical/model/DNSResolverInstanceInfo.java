@@ -25,19 +25,31 @@ public class DNSResolverInstanceInfo
     public ZonedDateTime createDate;
     public ZonedDateTime updateDate;
     
-    private List<DNSResolverPropertiesInfo> dnsResolverPropertiesInfoList;
+    private List<DNSResolverInstancePropertyInfo> dnsResolverPropertiesInfoList;
 
     public void setCreateDate(String createDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
-        this.createDate = dateTime;
+        setCreateDate(dateTime);
     }
+
+    public void setCreateDate(ZonedDateTime createDate)
+    {
+        this.createDate = createDate;
+    }
+
 
     public void setUpdateDate(String updateDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
-        this.updateDate = dateTime;
+        setUpdateDate( dateTime );
     }
+
+    public void setUpdateDate(ZonedDateTime updateDate)
+    {
+        this.updateDate = updateDate;
+    }
+
 
     public Long getDNSResolverInstanceID()
     {
@@ -56,10 +68,10 @@ public class DNSResolverInstanceInfo
 
 
     // DNSリゾルバのプロパティ情報を取得する.
-    public List<DNSResolverPropertiesInfo> getDNSResolverPropertiesInfoList(String propKey)
+    public List<DNSResolverInstancePropertyInfo> getDNSResolverPropertiesInfoList(String propKey)
     {
-        List<DNSResolverPropertiesInfo> list = new ArrayList<DNSResolverPropertiesInfo>();
-        for( DNSResolverPropertiesInfo info : getDNSResolverPropertiesInfoList() )
+        List<DNSResolverInstancePropertyInfo> list = new ArrayList<DNSResolverInstancePropertyInfo>();
+        for( DNSResolverInstancePropertyInfo info : getDNSResolverPropertiesInfoList() )
         {
             if ( propKey.equals( info.getDNSResolverInstancePropertyKey() ) )
             {
@@ -70,33 +82,49 @@ public class DNSResolverInstanceInfo
         return list;
     }
 
-    public List<DNSResolverPropertiesInfo>  getDNSResolverPropertiesInfoList()
+    public List<DNSResolverInstancePropertyInfo>  getDNSResolverPropertiesInfoList()
     {
 
         if( this.dnsResolverPropertiesInfoList == null )
         {
             // プロパティのリストがnullの場合は新規作成する.
-            List<DNSResolverPropertiesInfo> list = new ArrayList<DNSResolverPropertiesInfo>();
+            List<DNSResolverInstancePropertyInfo> list = new ArrayList<DNSResolverInstancePropertyInfo>();
             this.dnsResolverPropertiesInfoList = list;
         }
 
         return this.dnsResolverPropertiesInfoList;
     }
 
-    public void setDNSResolverPropertiesInfoList(List<DNSResolverPropertiesInfo> list )
+    public void setDNSResolverPropertiesInfoList(List<DNSResolverInstancePropertyInfo> list )
     {
         this.dnsResolverPropertiesInfoList = list;
     }
 
 
     // DNSリゾルバのプロパティ情報を、DNSResolverPropertiesIDに基づいて取得する.
-    public DNSResolverPropertiesInfo getDNSPropertiesInfoList(long dnsResolverPropertitesID)
+    public DNSResolverInstancePropertyInfo getDNSPropertiesInfo(long dnsResolverPropertitesID)
     {
-        List<DNSResolverPropertiesInfo> list = getDNSResolverPropertiesInfoList();
+        List<DNSResolverInstancePropertyInfo> list = getDNSResolverPropertiesInfoList();
         
-        for( DNSResolverPropertiesInfo info : list )
+        for( DNSResolverInstancePropertyInfo info : list )
         {
             if ( info.getDNSResolverInstancePropertyID() == dnsResolverPropertitesID)
+            {
+                return info;
+            }
+        }
+
+        return null;
+    }
+
+    // DNSリゾルバのプロパティ情報を、プロパティキーに基づいて取得する.
+    public DNSResolverInstancePropertyInfo getDNSPropertiesInfo(String key)
+    {
+        List<DNSResolverInstancePropertyInfo> list = getDNSResolverPropertiesInfoList();
+        
+        for( DNSResolverInstancePropertyInfo info : list )
+        {
+            if ( info.getDNSResolverInstancePropertyKey().equals(key) )
             {
                 return info;
             }
@@ -108,7 +136,7 @@ public class DNSResolverInstanceInfo
 
     public boolean hasProperties(String propKey)
     {
-        List<DNSResolverPropertiesInfo> list = getDNSResolverPropertiesInfoList( propKey );
+        List<DNSResolverInstancePropertyInfo> list = getDNSResolverPropertiesInfoList(propKey);
         if ( list.size() > 0 )
         {
             return true;
@@ -118,10 +146,15 @@ public class DNSResolverInstanceInfo
     }
 
 
-    DNSResolverPropertiesInfo getDNSResolverPropertiesInfo(long propID)
+    DNSResolverInstancePropertyInfo getDNSResolverPropertiesInfo(long propID)
     {
-        for( DNSResolverPropertiesInfo info  : getDNSResolverPropertiesInfoList() )
+        for( DNSResolverInstancePropertyInfo info  : getDNSResolverPropertiesInfoList() )
         {
+            if ( info.getDNSResolverPropertyID() == null )
+            {
+                continue;
+            }
+
             if ( propID == info.getDNSResolverPropertyID() )
             {
                 return info;
@@ -133,7 +166,7 @@ public class DNSResolverInstanceInfo
 
     public boolean hasProperties(long propID)
     {
-        DNSResolverPropertiesInfo info = getDNSResolverPropertiesInfo( propID );
+        DNSResolverInstancePropertyInfo info = getDNSResolverPropertiesInfo( propID );
         if ( info != null )
         {
             return true;
@@ -152,8 +185,8 @@ public class DNSResolverInstanceInfo
     {
         Properties properties = new Properties();
 
-        List<DNSResolverPropertiesInfo> list = getDNSResolverPropertiesInfoList();
-        for( DNSResolverPropertiesInfo propInfo : list )
+        List<DNSResolverInstancePropertyInfo> list = getDNSResolverPropertiesInfoList();
+        for( DNSResolverInstancePropertyInfo propInfo : list )
         {
             String key = propInfo.getDnsResolverPropertyKey();
             String value = propInfo.getDnsResolverPropertyValue();

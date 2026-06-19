@@ -43,7 +43,7 @@ set LOGIN_PASSWORD=%3
 
 
 
-call %CURL_CMD% -X GET localhost:8080/admin/api/list/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  
+call %CURL_CMD% -X GET localhost:8080/admin/api/user/list/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  
 
 
 

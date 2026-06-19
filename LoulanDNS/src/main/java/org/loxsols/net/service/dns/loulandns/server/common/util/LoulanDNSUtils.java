@@ -451,11 +451,11 @@ public class LoulanDNSUtils
         {
             name = LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_NAME_TCP;
         }
-        else if ( code == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_DOH )
+        else if ( code == LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_CODE_DOH )
         {
             name = LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_NAME_DOH;
         }
-        else if ( code == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_DOT  )
+        else if ( code == LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_CODE_DOT  )
         {
             name = LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_NAME_DOT;
         }

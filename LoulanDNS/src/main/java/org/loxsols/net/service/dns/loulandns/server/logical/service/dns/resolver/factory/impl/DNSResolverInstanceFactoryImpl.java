@@ -9,7 +9,7 @@ import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonExcep
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverInstanceInfo;
-import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverPropertiesInfo;
+import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverInstancePropertyInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverTypeInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.*;
@@ -129,7 +129,7 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
         resolverInstanceInfo.setCreateDate(currentDateTimeString);
         resolverInstanceInfo.setUpdateDate(currentDateTimeString);
 
-        List<DNSResolverPropertiesInfo> propList = toTemporaryDNSResolverPropertiesInfoList(resolverProperties);
+        List<DNSResolverInstancePropertyInfo> propList = toTemporaryDNSResolverPropertiesInfoList(resolverProperties);
         resolverInstanceInfo.setDNSResolverPropertiesInfoList(propList);
 
 
@@ -152,17 +152,17 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
      * @return
      * @throws DNSServiceCommonException
      */
-    private List<DNSResolverPropertiesInfo> toTemporaryDNSResolverPropertiesInfoList(Properties properties) throws DNSServiceCommonException
+    private List<DNSResolverInstancePropertyInfo> toTemporaryDNSResolverPropertiesInfoList(Properties properties) throws DNSServiceCommonException
     {
 
-        List<DNSResolverPropertiesInfo> propList = new ArrayList<DNSResolverPropertiesInfo>();
+        List<DNSResolverInstancePropertyInfo> propList = new ArrayList<DNSResolverInstancePropertyInfo>();
         for( var keyObj : properties.keySet() )
         {
             String key = (String)keyObj;
             String value = (String)properties.get(key);
             String explain = null;
 
-            DNSResolverPropertiesInfo info = toTemporaryDNSResolverPropertiesInfo(key, value, explain);
+            DNSResolverInstancePropertyInfo info = toTemporaryDNSResolverPropertiesInfo(key, value, explain);
             propList.add(info);
         }
 
@@ -178,10 +178,10 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
      * @return
      * @throws DNSServiceCommonException
      */
-    private DNSResolverPropertiesInfo toTemporaryDNSResolverPropertiesInfo(String key, String value, String explain) throws DNSServiceCommonException
+    private DNSResolverInstancePropertyInfo toTemporaryDNSResolverPropertiesInfo(String key, String value, String explain) throws DNSServiceCommonException
     {
 
-        DNSResolverPropertiesInfo info = new DNSResolverPropertiesInfo();
+        DNSResolverInstancePropertyInfo info = new DNSResolverInstancePropertyInfo();
 
         info.setDNSResolverPropertyID(null);
         info.setDnsResolverID(null);

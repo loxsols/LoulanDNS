@@ -39,18 +39,41 @@ public class DNSServiceInstanceInfo
     public List<DNSServiceEndpointInstanceInfo> dnsServiceEndpointInstanceInfoList;
 
 
+    /**
+     * コンストラクタ
+     * 
+     */
+    public DNSServiceInstanceInfo()
+    {
+        this.dnsServiceInstanceProperties = new ArrayList<DNSServiceInstancePropertyInfo>();
+        this.dnsServiceEndpointInstanceInfoList = new ArrayList<DNSServiceEndpointInstanceInfo>();
+    }
+
+
 
     public void setCreateDate(String createDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
-        this.createDate = dateTime;
+        setCreateDate(dateTime);
     }
+
+    public void setCreateDate(ZonedDateTime createDate)
+    {
+        this.createDate = createDate;
+    }
+
 
     public void setUpdateDate(String updateDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
-        this.updateDate = dateTime;
+        setUpdateDate(dateTime);
     }
+
+    public void setUpdateDate(ZonedDateTime updateDate)
+    {
+        this.updateDate = updateDate;
+    }
+
 
 
     public DNSResolverInstanceInfo getDNSResolverInfo()
@@ -113,6 +136,27 @@ public class DNSServiceInstanceInfo
         return this.dnsServiceInstanceProperties;
     }
 
+    /**
+     * DNSサービスインスタンスのプロパティエントリを返す.
+     * @param key
+     * @return
+     */
+    public DNSServiceInstancePropertyInfo getDNSServiceInstanceProperty(String key)
+    {
+        DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo = null;
+
+        for( DNSServiceInstancePropertyInfo item : getDNSServiceInstanceProperties() )
+        {
+            if ( item.dnsServiceInstancePropertyKey.equals(key) )
+            {
+                dnsServiceInstancePropertyInfo = item;
+                break;
+            }
+        }
+
+        return dnsServiceInstancePropertyInfo;
+    }
+
 
     /**
      * DNSサービスインスタンスのプロパティをjava.util.Propertiesクラス形式で返す.
@@ -141,6 +185,7 @@ public class DNSServiceInstanceInfo
 
     public List<DNSServiceEndpointInstanceInfo> getDNSServiceEndpointInstanceInfoList()
     {
+
         return dnsServiceEndpointInstanceInfoList;
     }
 

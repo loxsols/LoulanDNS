@@ -154,6 +154,8 @@ public class LoulanDNSLogicalDBService
         // DNSサービスインスタンスのプロパティ情報を取得してDNSサービスインスタンス情報クラスに設定する.
         List<DNSServiceInstancePropertyInfo> propInfoList = getDNSServiceInstancePropertyInfoListByDNSServiceInstanceID( dnsServiceInstanceID );
         dnsServiceInstanceInfo.setDnsServiceInstanceProperties(propInfoList);
+
+        System.out.println( String.format("[DEBUG] getDNSServiceInstanceInfo() : propInfoList.size()=%d, dnsServiceInstanceInfo.getDNSServiceInstanceProperties()=%d", propInfoList.size(), dnsServiceInstanceInfo.getDNSServiceInstanceProperties().size() ) );
         
 
 
@@ -168,9 +170,12 @@ public class LoulanDNSLogicalDBService
         List<DNSServiceEndpointInstance> dnsServiceEndpointInstanceList = loulanDNSDBService.getDNSServiceEndpointInstanceListByDNSServiceInstanceID(dnsServiceInstanceID);
         for( DNSServiceEndpointInstance dnsServiceEndpointInstance : dnsServiceEndpointInstanceList )
         {
-            DNSServiceEndpointInstanceInfo info = toDNSServiceEndpointInstanceInfo(dnsServiceEndpointInstance);
+            // DBから再度DNSサービスエンドポイントインスタンスの論理モデルを取得する.
+            long dnsServiceEndpointInstanceID = dnsServiceEndpointInstance.getDnsServiceEndpointInstanceID();
+            DNSServiceEndpointInstanceInfo info = getDNSServiceEndpointInstanceInfo(dnsServiceEndpointInstanceID);
             dnsServiceEndpointInstanceInfoList.add( info );
         }
+        
         dnsServiceInstanceInfo.setDNSServiceEndpointInstanceInfoList(dnsServiceEndpointInstanceInfoList);
 
 
@@ -221,28 +226,149 @@ public class LoulanDNSLogicalDBService
     }
 
 
+    /**
+     * DNSサービスインスタンスのプロパティ情報をDBに書き込む.
+     * 
+     * @param dnsServiceInstancePropertyInfo
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public DNSServiceInstancePropertyInfo saveDNSServiceInstancePropertyInfo(DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo) throws LoulanDNSSystemServiceException
+    {
+
+        DNSServiceInstanceProperties dnsServiceInstanceProperties = toDNSServiceInstanceProperties(dnsServiceInstancePropertyInfo);
+
+        Long dnsServiceInstanceID = dnsServiceInstancePropertyInfo.getDnsServiceInstanceID();
+        String key = dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyKey();
+        
+        DNSServiceInstanceProperties existRecord = loulanDNSDBService.getDNSServiceInstancePropertiesByPropertyKey(dnsServiceInstanceID, key);
+
+        DNSServiceInstanceProperties  savedRecord;
+        if ( existRecord == null )
+        {
+            // 新規追加.
+            savedRecord = loulanDNSDBService.createDNSServiceInstanceProperties(dnsServiceInstanceProperties);
+        }
+        else
+        {
+            // 既存レコードの更新.
+            if ( existRecord.getDnsServiceInstancePropertyID() != 
+                    dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyID() )
+            {
+                // 既存レコードとプロパティキー値が衝突するレコードを追加しようとしている.
+                String msg = String.format("Specified DNSServiceInstanceProperties record is already exists. Unable to insert duplicate property-key record. dnsServiceInstanceID=%d, dnsServiceInstancePropertyKey=%s", dnsServiceInstanceID, key );
+                LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
+                throw exception;
+            }
+
+            savedRecord = loulanDNSDBService.updateDNSServiceInstanceProperties(dnsServiceInstanceProperties);
+        }
+
+
+        DNSServiceInstancePropertyInfo savedInfo = toDNSServiceInstancePropertyInfo(savedRecord);
+        return savedInfo;
+
+    }
+
+
 
     // DBからDNSリゾルバ情報を取得する.
     public DNSResolverInstanceInfo getDNSResolverInstanceInfo(long dnsResolverInstanceID) throws LoulanDNSSystemServiceException
     {
-
-        // DNSリゾルバ情報を取得する.
+        // DNSリゾルバ情報をDBから取得する.
         DNSResolverInstance dnsResolverInstnace = loulanDNSDBService.getDNSResolverInstanceByDNSResolverInstanceID( dnsResolverInstanceID  );
+
+        if ( dnsResolverInstnace == null )
+        {
+            // DB上にリゾルバ情報が存在しないのでnullで復帰する.
+            return null;
+        }
+
         
         DNSResolverInstanceInfo dnsResolverInstanceInfo = toDNSResolverInstanceInfo(dnsResolverInstnace);
 
         // DNSリゾルバプロパティのリストを設定する.
-        List<DNSResolverPropertiesInfo> dnsResolverPropertiesInfoList = new ArrayList<DNSResolverPropertiesInfo>();
+        List<DNSResolverInstancePropertyInfo> dnsResolverPropertiesInfoList = new ArrayList<DNSResolverInstancePropertyInfo>();
         List<DNSResolverInstanceProperties> dndDnsResolverInstancePropertiesList = loulanDNSDBService.getDNSResolverInstancePropertiesListByDNSResolverInstanceID( dnsResolverInstanceInfo.getDNSResolverInstanceID() );
+
+
+        System.out.println("[DEBUG] LoulanDNSLogicalDBService.getDNSResolverInstanceInfo() : dndDnsResolverInstancePropertiesList.size()=" + dndDnsResolverInstancePropertiesList.size() );
+
         for( DNSResolverInstanceProperties dnsResolverInstanceProperties : dndDnsResolverInstancePropertiesList )
         {
-            DNSResolverPropertiesInfo dnsResolverPropertiesInfo = toDNSResolverPropertiesInfo( dnsResolverInstanceProperties );
+            DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo = toDNSResolverPropertiesInfo( dnsResolverInstanceProperties );
             dnsResolverPropertiesInfoList.add( dnsResolverPropertiesInfo );
         }
         dnsResolverInstanceInfo.setDNSResolverPropertiesInfoList(dnsResolverPropertiesInfoList);
 
         return dnsResolverInstanceInfo;
     }
+
+
+    /**
+     * DBからDNSリゾルバ情報を取得する.
+     * 指定したユーザー名とリゾルバインスタンス名の組み合わせでインスタンスを取得する.
+     * 
+     * @param userName
+     * @param resolverInstanceName
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public DNSResolverInstanceInfo getDNSResolverInstanceInfo(String userName, String resolverInstanceName) throws LoulanDNSSystemServiceException
+    {
+        // DBからユーザー情報を取得する.
+        UserInfo userInfo = getUserInfo(userName);
+
+        if ( userInfo == null )
+        {
+            // 指定されたユーザーは存在しない.
+            String msg = String.format("Specified User is not found. userName=%s", userName );
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
+            throw exception;
+        }
+
+        // このユーザー情報に紐づく、リゾルバインスタンスの一覧の中から該当するインスタンスを取得する.
+        DNSResolverInstanceInfo resolverInstanceInfo = null;
+        for(DNSResolverInstanceInfo tmpDNSResolverInstanceInfo : userInfo.getDnsResolverInstanceInfoList() )
+        {
+            if ( tmpDNSResolverInstanceInfo.getDNSResolverInstanceName().equals( resolverInstanceName ) )
+            {
+                // 一致した.
+                resolverInstanceInfo = tmpDNSResolverInstanceInfo;
+                break;
+            }
+        }
+
+        return resolverInstanceInfo;
+    }
+
+
+    /**
+     * DBからDNSリゾルバ情報を取得する.
+     * 指定したユーザー名に所属するDNSリゾルバインスタンスのリストを取得する.
+     * 
+     * @param userName
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public List<DNSResolverInstanceInfo> getDNSResolverInstanceInfoByUserName(String userName) throws LoulanDNSSystemServiceException
+    {
+
+        // DBからユーザー情報を取得する.
+        UserInfo userInfo = getUserInfo(userName);
+        if ( userInfo == null )
+        {
+            // 指定されたユーザーは存在しない.
+            String msg = String.format("Specified User is not found. userName=%s", userName );
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
+            throw exception;
+        }
+
+        List<DNSResolverInstanceInfo> dnsResolverInstanceInfoList = userInfo.getDnsResolverInstanceInfoList();
+
+        return dnsResolverInstanceInfoList;
+    }
+
 
 
     // DBからシステムプロパティ情報を取得する.
@@ -558,7 +684,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    // DBにDoHインスタンス情報を設定する.(複数のテーブルを同時に更新する.)
+    // DBにDNSサービスインスタンス情報を設定する.(複数のテーブルを同時に更新する.)
     public DNSServiceInstanceInfo saveDNSServiceInstanceInfo(DNSServiceInstanceInfo dnsServiceInstanceInfo) throws LoulanDNSSystemServiceException
     {
 
@@ -571,11 +697,10 @@ public class LoulanDNSLogicalDBService
         dnsServiceInstanceInfo.setDNSResolverInstanceID( dnsResolverInstanceID );
         dnsServiceInstanceInfo.setDNSResolverInstanceInfo(savedDNSResolverInfo);
 
-
         DNSServiceInstance savedDNSServiceInstance = null;
 
-        // 最初にDOH_INSTANCEテーブルを更新する.
-        if ( loulanDNSDBService.getDNSServiceInstance( dnsServiceInstanceInfo.getDNSServiceInstanceID() ) == null)
+        // DNS_SERVICE_INSTANCEテーブルを更新する.
+        if ( dnsServiceInstanceInfo.getDNSServiceInstanceID() == null || loulanDNSDBService.getDNSServiceInstance( dnsServiceInstanceInfo.getDNSServiceInstanceID() ) == null)
         {
             // 指定されたIDのDoHインスタンス情報は存在しないので新規作成する.
             savedDNSServiceInstance = loulanDNSDBService.createDNSServiceInstance(  toDNSServiceInstance( dnsServiceInstanceInfo ) );
@@ -587,6 +712,16 @@ public class LoulanDNSLogicalDBService
 
         // DB更新後にDNS_SERVICE_INSTANCEテーブルのID値を取得する.
         long dnsServiceInstanceID = savedDNSServiceInstance.getDNSServiceInstanceID();
+
+
+        // DNS_SERVICE_INSTANCE_PROPERTIESテーブルを更新する.
+        for( DNSServiceInstancePropertyInfo propInfo : dnsServiceInstanceInfo.getDNSServiceInstanceProperties() )
+        {
+            propInfo.setDnsServiceInstanceID(dnsServiceInstanceID);
+            DNSServiceInstancePropertyInfo savedPropInfo = saveDNSServiceInstancePropertyInfo( propInfo );
+            propInfo.setDnsServiceInstancePropertyID( savedPropInfo.getDnsServiceInstancePropertyID() );
+        }
+
 
         DNSServiceInstanceInfo savedDNSServiceInstanceInfo = getDNSServiceInstanceInfo(dnsServiceInstanceID);
         return savedDNSServiceInstanceInfo;
@@ -600,7 +735,7 @@ public class LoulanDNSLogicalDBService
         Long dnsResolverInstanceID = dnsResolverInstanceInfo.getDNSResolverInstanceID();
 
         DNSResolverInstance savedDNSResolverInstance = null;
-        if ( getDNSResolverInstanceInfo( dnsResolverInstanceID ) == null )
+        if ( dnsResolverInstanceID == null )
         {
             // 新規作成.
             dnsResolverInstanceInfo.setDnsResolverInstanceID( null );
@@ -611,7 +746,7 @@ public class LoulanDNSLogicalDBService
 
             savedDNSResolverInstance = loulanDNSDBService.createDNSResolverInstance( toDNSResolverInstance( dnsResolverInstanceInfo ) );
         }
-        else
+        else if (getDNSResolverInstanceInfo( dnsResolverInstanceID ) != null )
         {
             // 更新.
             String currentDate = LoulanDNSUtils.getCurrentDateTimeString();
@@ -619,6 +754,14 @@ public class LoulanDNSLogicalDBService
 
             savedDNSResolverInstance = loulanDNSDBService.updateDNSResolverInstance( toDNSResolverInstance( dnsResolverInstanceInfo ) );
         }
+        else
+        {
+            // レコードID値は明示的に指定されているが、なぜか既存レコードが存在しない.
+            String msg = String.format("Faield to save DNSResolverInstance, caused by Invalid dnsResolverInstanceID=%d.", dnsResolverInstanceID );
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
+            throw exception;
+        }
+        
 
         // DB書き込み後のDNS_RESOLVERテーブルのID値を取得する.
         dnsResolverInstanceID = savedDNSResolverInstance.getDnsResolverInstanceID();
@@ -627,7 +770,7 @@ public class LoulanDNSLogicalDBService
         DNSResolverInstanceInfo savedDNSResolverInstanceInfo = getDNSResolverInstanceInfo(dnsResolverInstanceID);
 
         // DNS_RESOLVER_PROPERTIESテーブルを更新する.
-        for( DNSResolverPropertiesInfo dnsResolverPropertiesInfo : savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList() )
+        for( DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo : dnsResolverInstanceInfo.getDNSResolverPropertiesInfoList() )
         {
             // DDNS_RESOLVERテーブルのID値をDNS_RESOLVER_PROPETIESテーブルのモデルオブジェクトに設定する.
             dnsResolverPropertiesInfo.setDnsResolverID(dnsResolverInstanceID);
@@ -636,13 +779,20 @@ public class LoulanDNSLogicalDBService
             saveDNSResolverPropertiesInfo( dnsResolverPropertiesInfo );
         }
 
-
+        System.out.println( String.format("[DEBUG] saveDNSResolverInstanceInfo() : savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size()=%d", savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size() ) );
+        
         // DB上にのみ存在するDNSリゾルバのプロパティ情報を削除する.
         List<DNSResolverInstanceProperties> dnsResolverPropertiesListOnDB = loulanDNSDBService.getDNSResolverInstancePropertiesListByDNSResolverInstanceID( dnsResolverInstanceID );
-        for( DNSResolverInstanceProperties dnsResolverProperties : dnsResolverPropertiesListOnDB )
+
+        System.out.println( String.format("[DEBUG] saveDNSResolverInstanceInfo() : dnsResolverPropertiesListOnDB.size()=%d", dnsResolverPropertiesListOnDB.size() ) );
+        
+
+        for( DNSResolverInstanceProperties dnsResolverPropertiesOnDB : dnsResolverPropertiesListOnDB )
         {
-            long propIDonDB = dnsResolverProperties.getDnsResolverInstancePropertyID();
-            if ( dnsResolverInstanceInfo.hasProperties( propIDonDB ) == false )
+            long propIDonDB = dnsResolverPropertiesOnDB.getDnsResolverInstancePropertyID();
+            String propKeyOnDB = dnsResolverPropertiesOnDB.getDnsResolverInstancePropertyKey();
+
+            if ( dnsResolverInstanceInfo.hasProperties( propKeyOnDB ) == false )
             {
                 // このDNSリゾルバのプロパティ情報はDB上にのみ存在し、メモリ上のユーザー情報モデルクラスでは保持していない.
                 // 当該DNSリゾルバのプロパティ情報をDB上から削除する.
@@ -651,11 +801,22 @@ public class LoulanDNSLogicalDBService
         }
 
 
-        return savedDNSResolverInstanceInfo;
+        // 再度DBからプロパティも含めて更新済みのレコードを取得する.
+        DNSResolverInstanceInfo logcialSavedDNSResolverInstanceInfo = getDNSResolverInstanceInfo(dnsResolverInstanceID);
+
+        if ( logcialSavedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size() != dnsResolverInstanceInfo.getProperties().size() )
+        {
+            String msg = String.format("Faield to save DNSResolverInstance, caused by properties size is not match expected=%d, actualOnDB=%d.", dnsResolverInstanceInfo.getProperties().size(), logcialSavedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size() );
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
+            throw exception; 
+        }
+
+
+        return logcialSavedDNSResolverInstanceInfo;
     }
 
 
-    public DNSResolverPropertiesInfo getDNSResolverPropertiesInfo(long dnsResolverInstancePropertiesID) throws LoulanDNSSystemServiceException
+    public DNSResolverInstancePropertyInfo getDNSResolverPropertiesInfo(long dnsResolverInstancePropertiesID) throws LoulanDNSSystemServiceException
     {
         DNSResolverInstanceProperties dnsResolverInstanceProperties = loulanDNSDBService.getDNSResolverInstanceProperties(dnsResolverInstancePropertiesID);
 
@@ -664,19 +825,22 @@ public class LoulanDNSLogicalDBService
             return null;
         }
 
-        DNSResolverPropertiesInfo dnsResolverPropertiesInfo = toDNSResolverPropertiesInfo( dnsResolverInstanceProperties );
+        DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo = toDNSResolverPropertiesInfo( dnsResolverInstanceProperties );
 
         return dnsResolverPropertiesInfo;
     }
 
 
     // DBにDNSリゾルバプロパティ情報を設定する.
-    public DNSResolverPropertiesInfo saveDNSResolverPropertiesInfo(DNSResolverPropertiesInfo dnsResolverPropertiesInfo) throws LoulanDNSSystemServiceException
+    public DNSResolverInstancePropertyInfo saveDNSResolverPropertiesInfo(DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo) throws LoulanDNSSystemServiceException
     {
+
+        System.out.println( String.format("LoulanDNSLogicalDBService.saveDNSResolverPropertiesInfo() : DnsResolverID=%d, key=%s, value=%s", dnsResolverPropertiesInfo.getDnsResolverID(),  dnsResolverPropertiesInfo.getDnsResolverPropertyKey(), dnsResolverPropertiesInfo.getDnsResolverPropertyValue() ) );
+
         Long dnsResolverPropertiesID = dnsResolverPropertiesInfo.getDNSResolverInstancePropertyID();
 
         DNSResolverInstanceProperties savedDNSResolverProperties = null;
-        if ( getDNSResolverPropertiesInfo( dnsResolverPropertiesID ) == null )
+        if ( dnsResolverPropertiesID == null || getDNSResolverPropertiesInfo( dnsResolverPropertiesID ) == null )
         {
             // 新規作成.
             dnsResolverPropertiesInfo.setDNSResolverInstancePropertyID( null );
@@ -696,7 +860,7 @@ public class LoulanDNSLogicalDBService
             savedDNSResolverProperties = loulanDNSDBService.updateDNSResolverInstanceProperties( toDNSResolverInstanceProperties( dnsResolverPropertiesInfo )  );
         }
 
-        DNSResolverPropertiesInfo savedDNSResolverPropertiesInfo = toDNSResolverPropertiesInfo(savedDNSResolverProperties);
+        DNSResolverInstancePropertyInfo savedDNSResolverPropertiesInfo = toDNSResolverPropertiesInfo(savedDNSResolverProperties);
         return savedDNSResolverPropertiesInfo;
     }
 
@@ -806,7 +970,7 @@ public class LoulanDNSLogicalDBService
     {
 
         // DNS_RESOLVER_PROPERTIESテーブルからレコードを削除する.
-        for( DNSResolverPropertiesInfo dnsResolverPropertiesInfo : dnsResolverInstanceInfo.getDNSResolverPropertiesInfoList() )
+        for( DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo : dnsResolverInstanceInfo.getDNSResolverPropertiesInfoList() )
         {
             loulanDNSDBService.deleteDNSResolverInstanceProperties( dnsResolverPropertiesInfo.getDNSResolverInstancePropertyID() );
         }
@@ -924,6 +1088,9 @@ public class LoulanDNSLogicalDBService
             DNSServiceEndpointInstancePropertyInfo itemInfo = getDNSServiceEndpointInstancePropertyInfo( item.getDnsServiceEndpointInstancePropertyID() );
             itemInfoList.add( itemInfo );
         }
+
+
+        System.out.println( String.format("[DEBUG] LoulanDNSLogicalDBService.getDNSServiceEndpointInstancePropertyInfoListByDNSServiceEndpointInstanceID() : dnsServiceEndpointInstanceID=%d, itemInfoList.size()=%d", dnsServiceEndpointInstanceID, itemInfoList.size() ) );
 
         return itemInfoList;
     }
@@ -1089,6 +1256,9 @@ public class LoulanDNSLogicalDBService
         dnsServiceInstanceInfo.setDNSServiceInstanceName( dnsServiceInstance.getDNSServiceInstanceName() );
         dnsServiceInstanceInfo.setDNSResolverInstanceID( dnsServiceInstance.getDNSResolverInstanceID() );
         dnsServiceInstanceInfo.setDNSServiceInstanceExplain( dnsServiceInstance.getDNSServiceInstanceExplain() );
+
+        dnsServiceInstanceInfo.setDnsServiceTypeCode( dnsServiceInstance.getDNSServiceTypeCode() );
+
         dnsServiceInstanceInfo.setRecordStatus( dnsServiceInstance.getRecordStatus() );
         dnsServiceInstanceInfo.setMemo( dnsServiceInstance.getMemo() );
         dnsServiceInstanceInfo.setCreateDate( dnsServiceInstance.getCreateDate() );
@@ -1117,10 +1287,10 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSResolverPropertiesInfo toDNSResolverPropertiesInfo(DNSResolverInstanceProperties dnsResolverInstanceProperties)
+    private DNSResolverInstancePropertyInfo toDNSResolverPropertiesInfo(DNSResolverInstanceProperties dnsResolverInstanceProperties)
     {
 
-        DNSResolverPropertiesInfo dnsResolverPropertiesInfo = new DNSResolverPropertiesInfo();
+        DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo = new DNSResolverInstancePropertyInfo();
 
         dnsResolverPropertiesInfo.setDNSResolverInstancePropertyID( dnsResolverInstanceProperties.getDnsResolverInstancePropertyID() );
         dnsResolverPropertiesInfo.setDnsResolverID( dnsResolverInstanceProperties.getDnsResolverInstanceID() );
@@ -1302,8 +1472,9 @@ public class LoulanDNSLogicalDBService
         dnsServiceInstance.setDNSServiceInstanceID( dnsServiceInstanceInfo.getDNSServiceInstanceID() );
         dnsServiceInstance.setUserID( dnsServiceInstanceInfo.getUserID() );
         dnsServiceInstance.setDNSServiceInstanceName( dnsServiceInstanceInfo.getDNSServiceInstanceName() );
-        dnsServiceInstance.setDNSResolverInstanceID( dnsServiceInstanceInfo.getDNSResolverInstanceID() );
         dnsServiceInstance.setDNSServiceInstanceExplain( dnsServiceInstanceInfo.getDNSServiceInstanceExplain() );
+        dnsServiceInstance.setDNSServiceTypeCode(dnsServiceInstanceInfo.getDnsServiceTypeCode());
+        dnsServiceInstance.setDNSResolverInstanceID( dnsServiceInstanceInfo.getDNSResolverInstanceID() );
         dnsServiceInstance.setRecordStatus( dnsServiceInstanceInfo.getRecordStatus() );
         dnsServiceInstance.setMemo( dnsServiceInstanceInfo.getMemo() );
         dnsServiceInstance.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstanceInfo.getCreateDate() ) );
@@ -1351,8 +1522,25 @@ public class LoulanDNSLogicalDBService
         return info;
     }
 
+    public DNSServiceInstanceProperties toDNSServiceInstanceProperties(DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo)
+    {
+        DNSServiceInstanceProperties dnsServiceInstanceProperties = new DNSServiceInstanceProperties();
 
-    private DNSResolverInstanceProperties toDNSResolverInstanceProperties(DNSResolverPropertiesInfo dnsResolverPropertiesInfo)
+        dnsServiceInstanceProperties.setDnsServiceInstancePropertyID( dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyID() );
+        dnsServiceInstanceProperties.setDnsServiceInstanceID( dnsServiceInstancePropertyInfo.getDnsServiceInstanceID() );
+        dnsServiceInstanceProperties.setDnsServiceInstancePropertyKey( dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyKey() );
+        dnsServiceInstanceProperties.setDnsServiceInstancePropertyValue( dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyValue() );
+        dnsServiceInstanceProperties.setDnsServiceInstancePropertyExplain( dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyExplain() );
+        dnsServiceInstanceProperties.setRecordStatus( dnsServiceInstancePropertyInfo.getRecordStatus() );
+        dnsServiceInstanceProperties.setMemo( dnsServiceInstancePropertyInfo.getMemo() );
+        dnsServiceInstanceProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstancePropertyInfo.getCreateDate() ) );
+        dnsServiceInstanceProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstancePropertyInfo.getUpdateDate() ) );
+
+        return dnsServiceInstanceProperties;
+    }
+
+
+    private DNSResolverInstanceProperties toDNSResolverInstanceProperties(DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo)
     {
 
         DNSResolverInstanceProperties dnsResolverInstanceProperties = new DNSResolverInstanceProperties();

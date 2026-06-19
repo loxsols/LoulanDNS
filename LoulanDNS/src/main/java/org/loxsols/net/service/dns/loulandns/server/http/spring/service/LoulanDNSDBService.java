@@ -670,11 +670,9 @@ public class LoulanDNSDBService
         String currentDate = LoulanDNSUtils.getCurrentDateTimeString();
         dnsServiceInstance.setUpdateDate( currentDate );
 
-        dnsServiceInstanceRepository.save(dnsServiceInstance);
+        DNSServiceInstance savedDNSServiceInstance = dnsServiceInstanceRepository.save(dnsServiceInstance);
 
-
-        DNSServiceInstance savedDoHServerInstance = getDNSServiceInstance( dnsServiceInstance.getUserID(), dnsServiceInstance.getDNSServiceInstanceName() );
-        return savedDoHServerInstance;
+        return savedDNSServiceInstance;
     }
 
 
@@ -690,7 +688,7 @@ public class LoulanDNSDBService
             throw execption;
         }
 
-        dnsServiceInstanceRepository.deleteDNSServiceInstanceByDNSServiceInstanceID( dnsServiceInstance.getDNSServiceInstanceID() );
+        dnsServiceInstanceRepository.deleteById( dnsServiceInstance.getDNSServiceInstanceID() );
     }
 
 
@@ -765,7 +763,7 @@ public class LoulanDNSDBService
         }
 
         // 主キーのID値をnullで設定しDB側で採番させる.
-        dnsServiceInstanceProperties.setDnsServiceInstanceID(null);
+        dnsServiceInstanceProperties.setDnsServiceInstancePropertyID(null);
 
         // レコードの更新日付と作成日付を現在時刻で設定する.
         String currentDate = LoulanDNSUtils.getCurrentDateTimeString();
@@ -784,10 +782,10 @@ public class LoulanDNSDBService
     {
         DNSServiceInstanceProperties tmpProperties = 
             getDNSServiceInstancePropertiesByPropertyKey( dnsServiceInstanceProperties.getDnsServiceInstanceID(), dnsServiceInstanceProperties.getDnsServiceInstancePropertyKey() );
-        if (  tmpProperties != null && dnsServiceInstanceProperties.getDnsServiceInstancePropertyKey().equals( tmpProperties.getDnsServiceInstancePropertyKey() ) )
+        if (  tmpProperties == null  )
         {
-            // 指定されたプロパティ情報は既に存在する.
-            String msg = String.format("DNSServiceInstanceProperties is already exists. userID=%d, dnsServiceInstancePropertyKey=%s", dnsServiceInstanceProperties.getDnsServiceInstanceID(), dnsServiceInstanceProperties.getDnsServiceInstancePropertyKey() );
+            // 指定されたプロパティ情報はDB上に存在しない.
+            String msg = String.format("DNSServiceInstanceProperties is NOT exists. userID=%d, dnsServiceInstancePropertyKey=%s", dnsServiceInstanceProperties.getDnsServiceInstanceID(), dnsServiceInstanceProperties.getDnsServiceInstancePropertyKey() );
             LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
             throw execption;
         }
@@ -858,6 +856,15 @@ public class LoulanDNSDBService
     public DNSResolverInstance updateDNSResolverInstance(DNSResolverInstance dnsResolverInstance) throws LoulanDNSSystemServiceException
     {
         DNSResolverInstance tmpDNSResolverInstance = getDNSResolverInstanceByName(dnsResolverInstance.getUserID(), dnsResolverInstance.getDnsResolverInstanceName() );
+        if ( tmpDNSResolverInstance == null )
+        {
+            // 指定されたDNSリゾルバインスタンス(ユーザーID/リゾルバインスタンス名で指定)はDB上には存在しない.
+            String msg = String.format("DNSResolverInstance is not exists. userID=%d, dnsResolverInstanceName=%s", dnsResolverInstance.getUserID(),  dnsResolverInstance.getDnsResolverInstanceName() );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+
+
         if ( dnsResolverInstance.getDnsResolverInstanceID() != tmpDNSResolverInstance.getDnsResolverInstanceID() )
         {
             // レコード更新により重複するDNSリゾルバ情報が作成されようとしている.
@@ -923,7 +930,7 @@ public class LoulanDNSDBService
         DNSResolverInstance dnsResolverInstance = null;
         for( DNSResolverInstance tmpDNSResolverInstance : dnsResolverInstanceList )
         {
-            if ( dnsResolverInstanceName.equals( tmpDNSResolverInstance) )
+            if ( dnsResolverInstanceName.equals( tmpDNSResolverInstance.getDnsResolverInstanceName() ) )
             {
                 dnsResolverInstance = tmpDNSResolverInstance;
             }
@@ -1049,12 +1056,27 @@ public class LoulanDNSDBService
     // DNSリゾルバプロパティ情報(DNS_RESOLVER_PROPERTIESテーブル)を更新する.
     public DNSResolverInstanceProperties updateDNSResolverInstanceProperties(DNSResolverInstanceProperties dnsResolverInstanceProperties) throws LoulanDNSSystemServiceException
     {
-        DNSResolverInstanceProperties tmpProperties = 
-            getDNSResolverInstancePropertiesByPropertyKey( dnsResolverInstanceProperties.getDnsResolverInstanceID(), dnsResolverInstanceProperties.getDnsResolverInstancePropertyKey() );
-        if (  tmpProperties != null && dnsResolverInstanceProperties.getDnsResolverInstancePropertyKey().equals( tmpProperties.getDnsResolverInstancePropertyKey()) )
+        DNSResolverInstanceProperties tmpPropertiesByID = 
+            getDNSResolverInstanceProperties(dnsResolverInstanceProperties.getDnsResolverInstancePropertyID());   
+
+        if ( tmpPropertiesByID == null )
         {
-            // 指定されたプロパティ情報は既に存在する.
-            String msg = String.format("DNSResolverInstanceProperties is already exists. userID=%d, dnsResolverInstancePropertyKey=%s", dnsResolverInstanceProperties.getDnsResolverInstanceID(), dnsResolverInstanceProperties.getDnsResolverInstancePropertyKey() );
+            // 指定されたプロパティ情報(プロパティIDで指定)はDB上に存在しない.
+            String msg = String.format("Specified DNSResolverInstanceProperties is not exists. dnsResolverInstancePropertyID=%d" , dnsResolverInstanceProperties.getDnsResolverInstancePropertyID()  );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+
+
+        DNSResolverInstanceProperties tmpPropertiesByKey = 
+            getDNSResolverInstancePropertiesByPropertyKey( dnsResolverInstanceProperties.getDnsResolverInstanceID(), dnsResolverInstanceProperties.getDnsResolverInstancePropertyKey() );   
+
+        if ( tmpPropertiesByKey != null && 
+                tmpPropertiesByKey.getDnsResolverInstancePropertyID() != dnsResolverInstanceProperties.getDnsResolverInstancePropertyID() )
+        {
+            // 指定されたプロパティキー名と衝突する別レコード(IDが異なる)が、既にDNSリゾルバインスタンスの子要素として存在する.
+            // この場合は、既存のレコードを予め削除しておかないとデータ不整合が発生するため、例外をスローする.
+            String msg = String.format("Duplicate property key record of DNSResolverInstanceProperties is already exists. dnsResolverInstanceID=%d, dnsResolverInstancePropertyKey=%s" , dnsResolverInstanceProperties.getDnsResolverInstanceID(),  dnsResolverInstanceProperties.getDnsResolverInstancePropertyKey() );
             LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
             throw execption;
         }

@@ -90,6 +90,16 @@ public class DNSServiceInstance
         this.dnsServiceInstanceExplain = value;
     }
 
+    public Long getDNSServiceTypeCode()
+    {
+        return this.dnsServiceTypeCode;
+    }
+
+    public void setDNSServiceTypeCode(Long value)
+    {
+        this.dnsServiceTypeCode = value;
+    }
+
 
     public Long getDNSResolverInstanceID()
     {

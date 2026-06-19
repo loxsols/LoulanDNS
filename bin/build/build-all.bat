@@ -53,6 +53,9 @@ echo "build for EndpointServiceApplication..."
 call %MODOULE_BUILD_CMD_DIR%\build-for-EndpointServiceApplication.bat
 
 
+REM --- DynamicServiceLauncher
+echo "build for DynamicServiceLauncher..."
+call %MODOULE_BUILD_CMD_DIR%\build-for-DynamicServiceLauncher.bat
 
 
 

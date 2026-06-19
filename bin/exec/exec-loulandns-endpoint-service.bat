@@ -47,6 +47,7 @@ set DEFAULT_DNS_SERVICE_INSTANCE=default
 
 java ^
 -Dspring.datasource.url="%SPRING_DATASOURCE_URL%" ^
+-Dlogging.level.org.springframework.web=DEBUG ^
 -jar LoulanDNS\target\LoulanDNSEndpointService.jar ^
 %* 
 

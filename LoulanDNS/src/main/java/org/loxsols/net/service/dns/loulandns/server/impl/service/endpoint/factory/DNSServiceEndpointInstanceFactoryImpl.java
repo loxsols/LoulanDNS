@@ -107,9 +107,9 @@ import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.factor
 
 
 /**
- * シンプルなDNSサービスエンドポイントのファクトリクラス.
- * SpringのDI機能を使用しない.
- * ただし、DBにもアクセスできない.
+ * DNSサービスエンドポイントのファクトリクラス.
+ * 
+ * 
  */
 public class DNSServiceEndpointInstanceFactoryImpl extends SimpleDNSServiceEndpointInstanceFactoryImpl implements IDNSServiceEndpointInstanceFactory
 {

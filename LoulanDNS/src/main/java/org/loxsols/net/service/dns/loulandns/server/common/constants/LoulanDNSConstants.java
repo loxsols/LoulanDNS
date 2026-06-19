@@ -365,6 +365,7 @@ public class LoulanDNSConstants
     // ******************************************
 
 
+    //----------------- UDPサービスエンドポイント -----------------------
     // UDPサービスエンドポイントのbindアドレス
     // "loulan.dns.service.endpoint.udp.address"
     public static String PROP_KEY_SERVICE_ENDPOINT_UDP_BIND_ADDRESS = "loulan.dns.service.endpoint.udp.address";
@@ -372,6 +373,17 @@ public class LoulanDNSConstants
     // UDPサービスエンドポイントのbindポート番号
     // "loulan.dns.service.endpoint.udp.port";
     public static String PROP_KEY_SERVICE_ENDPOINT_UDP_BIND_PORT = "loulan.dns.service.endpoint.udp.port";
+
+
+    //----------------- DoHサービスエンドポイント -----------------------
+    // DoHサービスエンドポイントのbindアドレス
+    // "loulan.dns.service.endpoint.doh.address"
+    public static String PROP_KEY_SERVICE_ENDPOINT_DOH_BIND_ADDRESS = "loulan.dns.service.endpoint.doh.address";
+
+    // DoHサービスエンドポイントのbindポート番号
+    // "loulan.dns.service.endpoint.doh.port";
+    public static String PROP_KEY_SERVICE_ENDPOINT_DOH_BIND_PORT = "loulan.dns.service.endpoint.doh.port";
+
 
 
     // ******************************************

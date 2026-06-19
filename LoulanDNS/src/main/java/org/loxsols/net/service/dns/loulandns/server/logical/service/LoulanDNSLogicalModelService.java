@@ -117,11 +117,77 @@ public class LoulanDNSLogicalModelService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
-    public DNSResolverInstanceInfo getDNSResolverInstanceInfo(long dnsServiceInstanceID) throws LoulanDNSSystemServiceException
+    public DNSResolverInstanceInfo getDNSResolverInstanceInfo(long dnsResolverInstanceID) throws LoulanDNSSystemServiceException
     {
-        DNSResolverInstanceInfo dnsResolverInstanceInfo = logicalDBService.getDNSResolverInstanceInfo(dnsServiceInstanceID);
+        DNSResolverInstanceInfo dnsResolverInstanceInfo = logicalDBService.getDNSResolverInstanceInfo(dnsResolverInstanceID);
         return dnsResolverInstanceInfo;
     }
+
+    /**
+     * DBからDNSリゾルバ情報のリストを取得する.
+     * 指定したユーザー名に所属するDNSリゾルバインスタンスのリストを取得する.
+     * 
+     * @param userName
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public List<DNSResolverInstanceInfo> getDNSResolverInstanceInfoListByUserName(String userName) throws LoulanDNSSystemServiceException
+    {
+        List<DNSResolverInstanceInfo> list = logicalDBService.getDNSResolverInstanceInfoByUserName(userName);
+        return list;
+    }
+
+
+
+    /**
+     * DNSリゾルバインスタンス情報(論理モデル)をDBに書き込む.
+     * 
+     * @param dnsResolverInstanceInfo
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public DNSResolverInstanceInfo saveDNSResolverInstanceInfo(DNSResolverInstanceInfo dnsResolverInstanceInfo) throws LoulanDNSSystemServiceException
+    {
+        DNSResolverInstanceInfo savedDNSResolverInstanceInfo = logicalDBService.saveDNSResolverInstanceInfo(dnsResolverInstanceInfo);
+        return savedDNSResolverInstanceInfo;
+    }
+
+    /**
+     * DNSリゾルバインスタンス情報(論理モデル)をDBから削除する.
+     * 
+     * @param dnsResolverInstanceInfo
+     * @throws LoulanDNSSystemServiceException
+     */
+    public void deleteDNSResolverInstanceInfo(DNSResolverInstanceInfo dnsResolverInstanceInfo) throws LoulanDNSSystemServiceException
+    {
+        logicalDBService.deleteDNSResolverInstanceInfo(dnsResolverInstanceInfo);
+    }
+
+
+    /**
+     * DNSサービスエンドポイントインスタンス情報(論理モデル)をDBに書き込む.
+     * 
+     * @param dnsServiceEndpointInstanceInfo
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public DNSServiceEndpointInstanceInfo saveDNSServiceEndpointInstanceInfo(DNSServiceEndpointInstanceInfo dnsServiceEndpointInstanceInfo) throws LoulanDNSSystemServiceException
+    {
+        DNSServiceEndpointInstanceInfo savedDNSServiceEndpointInstanceInfo = logicalDBService.saveDNSServiceEndpointInstanceInfo(dnsServiceEndpointInstanceInfo);
+        return savedDNSServiceEndpointInstanceInfo;
+    }
+
+    /**
+     * DNSサービスエンドポイントインスタンス情報(論理モデル)をDBから削除する.
+     * 
+     * @param dnsServiceEndpointInstanceInfo
+     * @throws LoulanDNSSystemServiceException
+     */
+    public void deleteDNSServiceEndpointInstanceInfo(DNSServiceEndpointInstanceInfo dnsServiceEndpointInstanceInfo) throws LoulanDNSSystemServiceException
+    {
+        logicalDBService.deleteDNSServiceEndpointInstanceInfo( dnsServiceEndpointInstanceInfo );
+    }
+
 
 
 
@@ -198,6 +264,21 @@ public class LoulanDNSLogicalModelService
 
         return null;
     }
+
+
+    /**
+     * DNSサービスエンドポイントインスタンスIDをもとに、エンドポイント情報を返す.
+     * 
+     * @param dnsServiceEndpointInstanceID
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public DNSServiceEndpointInstanceInfo getDNSServiceEndpointInstanceInfo(Long dnsServiceEndpointInstanceID) throws LoulanDNSSystemServiceException
+    {
+        DNSServiceEndpointInstanceInfo info = logicalDBService.getDNSServiceEndpointInstanceInfo(dnsServiceEndpointInstanceID);
+        return info;
+    }
+
 
 }
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.model.DNSResolverInstance;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public interface DNSResolverInstanceRepository extends JpaRepository<DNSResolver
 
     public DNSResolverInstance save(DNSResolverInstance dnsResovler);
 
-
+    @Modifying
     @Transactional
     @Query("delete from DNSResolverInstance p where p.dnsResolverInstanceID = :dnsResolverInstanceID ")
     public void deleteDNSResolverInstanceByDNSResolverInstanceID(long dnsResolverInstanceID); 

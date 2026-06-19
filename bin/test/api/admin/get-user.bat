@@ -52,7 +52,7 @@ set USER_NAME=%4
 
 
 
-call %CURL_CMD% -X GET localhost:8080/admin/api/get/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -G -d UserName=%USER_NAME% 
+call %CURL_CMD% -X GET localhost:8080/admin/api/user/get/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -G -d UserName=%USER_NAME% 
 
 
 

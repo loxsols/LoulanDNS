@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-
+import org.springframework.cloud.deployer.spi.app.AppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalDeployerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -265,6 +267,16 @@ public class LoulanDNSBaseApplicationConfig
         ( (LoulanDNSLoggerFactoryImpl)loggerFactory ).setLogicalDBService( logicalDBService );
 
         return loggerFactory;
+    }
+
+
+    @Bean( name="SpringCloundAppDeployer" )
+    public AppDeployer getAppDeployer() throws DNSServiceCommonException
+    {
+        LocalDeployerProperties properties = new LocalDeployerProperties();
+
+        LocalAppDeployer instance = new LocalAppDeployer(properties);
+        return instance;
     }
 
 

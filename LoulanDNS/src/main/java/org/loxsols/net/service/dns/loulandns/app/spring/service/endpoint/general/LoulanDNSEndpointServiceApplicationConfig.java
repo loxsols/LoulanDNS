@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-
+import org.springframework.cloud.deployer.spi.app.AppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalAppDeployer;
+import org.springframework.cloud.deployer.spi.local.LocalDeployerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +28,12 @@ import org.xbill.DNS.ZoneTransferException;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.repository.UserRepository;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.service.LoulanDNSDBService;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.service.LoulanDNSLogicalDBService;
+import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.doh.SpringContextHolder;
 import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.factory.DNSServiceEndpointInstanceFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.model.IDNSProtocolModelInstanceFactory;
@@ -37,6 +41,8 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.factory.impl.DNSResolverInstanceFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.IDNSServiceEndpointInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.IDynamicServiceLauncherFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.impl.SpringCloudDeployerDynamicServiceLauncherFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.impl.LoulanDNSLoggerFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
@@ -65,12 +71,62 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.factory.*;
 import org.loxsols.net.service.dns.loulandns.app.spring.base.config.LoulanDNSBaseApplicationConfig;
 
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.impl.*;
+
 
 
 @Configuration
 @Import(LoulanDNSBaseApplicationConfig.class)
 public class LoulanDNSEndpointServiceApplicationConfig
 {
+
+    @Bean(name = "dnsServiceEndpointInstanceFactoryImpl")
+    IDNSServiceEndpointInstanceFactory configDNSServiceEndpointInstanceFactoryImpl() throws IOException, ZoneTransferException
+    {
+        IDNSServiceEndpointInstanceFactory instance = new DNSServiceEndpointInstanceFactoryImpl();
+        return instance;
+    }
+
+
+    @Bean(name = "springContextHolder")
+    SpringContextHolder configSpringContextHolder()
+    {
+        SpringContextHolder instance = new SpringContextHolder();
+        return instance;
+    }
+
+
+    
+    // SimpleLocalProcessDynamicServiceLauncherFactoryImplを生成する設定
+    @Bean(name = "loulanDNSDynamicServiceLauncherFactoryImpl")
+    IDynamicServiceLauncherFactory configDynamicServiceLauncherFactoryImpl() throws LoulanDNSSystemServiceException
+    {
+
+        IDynamicServiceLauncherFactory instance = new SimpleLocalProcessDynamicServiceLauncherFactoryImpl();
+        return instance;
+    }
+    
+
+    /*
+    // SpringCloudDeployerDynamicServiceLauncherFactoryImplを生成する設定
+    @Bean(name = "loulanDNSDynamicServiceLauncherFactoryImpl")
+    IDynamicServiceLauncherFactory configDynamicServiceLauncherFactoryImpl() throws LoulanDNSSystemServiceException
+    {
+        IDynamicServiceLauncherFactory instance = new SpringCloudDeployerDynamicServiceLauncherFactoryImpl();
+        return instance;
+    }
+    */
+
+
+
+    @Bean( name="springCloundAppDeployer" )
+    AppDeployer configSpringCloundAppDeployer() throws LoulanDNSSystemServiceException
+    {
+        LocalDeployerProperties properties = new LocalDeployerProperties();
+
+        LocalAppDeployer instance = new LocalAppDeployer(properties);
+        return instance;
+    }
 
 }
 

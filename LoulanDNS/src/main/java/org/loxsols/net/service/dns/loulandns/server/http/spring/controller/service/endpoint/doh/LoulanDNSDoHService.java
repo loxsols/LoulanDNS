@@ -60,6 +60,14 @@ public class LoulanDNSDoHService
     }
 
 
+    @GetMapping("/test")
+    public String test() throws DNSServiceCommonException
+    {
+        String message = "hello";
+        return message;
+    }
+
+
 
     @GetMapping("/test/db/get/user")
     public User getUser(@RequestParam(name = "userName", required = true) String userName) throws DNSServiceCommonException

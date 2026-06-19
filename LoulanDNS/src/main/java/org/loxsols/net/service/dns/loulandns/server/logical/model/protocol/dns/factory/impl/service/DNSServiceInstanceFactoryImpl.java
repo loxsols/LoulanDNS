@@ -113,10 +113,27 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
         String userName = properties.getProperty( LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_USER_NAME );
         setDefaultServiceInstanceUserName(userName);
 
+        /*
+        if ( userName == null || userName.isEmpty() )
+        {
+            String msg = String.format("Failed to init DNSServiceInstanceFactoryImpl. Default UserName is not specified. %s=%s", LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_USER_NAME, userName);
+            DNSServiceCommonException exception  = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+        */
 
         // デフォルトDNSインスタンスのインスタンス名.
         String instanceName = properties.getProperty( LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_NAME );
         setDefaultServiceInstanceName(instanceName);
+
+        /*
+        if ( instanceName == null || instanceName.isEmpty() )
+        {
+            String msg = String.format("Failed to init DNSServiceInstanceFactoryImpl. Default ServiceInstance is not specified. %s=%s", LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_NAME, instanceName);
+            DNSServiceCommonException exception  = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+        */
 
     }
 

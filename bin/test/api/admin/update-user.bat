@@ -69,9 +69,9 @@ if "%~7" neq "" (
 
 
 if "%USER_RECORD_STATUS%" == "" (
-	call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/update/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% 
+	call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/user/update/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% 
 ) else (
-	call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/update/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% -d RecordStatus=%USER_RECORD_STATUS% -d Memo=USER_MEMO%
+	call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/user/update/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% -d RecordStatus=%USER_RECORD_STATUS% -d Memo=USER_MEMO%
 )
 
 

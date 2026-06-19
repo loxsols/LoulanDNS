@@ -22,10 +22,6 @@ public interface DNSServiceInstanceRepository extends JpaRepository<DNSServiceIn
 
     public DNSServiceInstance save(DNSServiceInstance dnsServiceInstance);
 
-    @Transactional
-    @Query("delete from DNSServiceInstance p where p.dnsServiceInstanceID = :dnsServiceInstanceID ")
-    public void deleteDNSServiceInstanceByDNSServiceInstanceID(long dnsServiceInstanceID);
-
 }
 
 

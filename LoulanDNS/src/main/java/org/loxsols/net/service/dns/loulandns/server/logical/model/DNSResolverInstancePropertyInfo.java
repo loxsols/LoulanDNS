@@ -13,7 +13,7 @@ import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
 @Getter
 @Setter
-public class DNSResolverPropertiesInfo
+public class DNSResolverInstancePropertyInfo
 {
     public Long dnsResolverPropertyID;
     public Long dnsResolverID;

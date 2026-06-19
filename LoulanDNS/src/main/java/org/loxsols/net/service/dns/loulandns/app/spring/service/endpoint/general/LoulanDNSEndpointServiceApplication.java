@@ -182,7 +182,7 @@ public class LoulanDNSEndpointServiceApplication implements CommandLineRunner
     public void run(String... args) throws Exception
     {
 
-        String loggerName = "UDPServiceApplication";
+        String loggerName = "LoulanDNSEndpointServiceApplication";
         Properties loggerProperties = new Properties();
         ILoulanDNSLogger logger = loggerFactoryInstance.getOrCreateLogger(loggerName, loggerProperties);
         logger.info( String.format("Logger is created. loggerName=%s, LoggerClass=%s", loggerName, logger.getClass().getName() ) );
@@ -212,6 +212,9 @@ public class LoulanDNSEndpointServiceApplication implements CommandLineRunner
                             .web(WebApplicationType.NONE);
                             
         applicationBuilder.run(args);
+
+
+        System.out.println("[DEBUG] LoulanDNSEndpointServiceApplication.main() done.");
 
     }
 

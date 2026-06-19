@@ -83,12 +83,14 @@ import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtoco
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.model.DNSServiceEndpointInstance;
 import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.base.DNSServiceEndpointInstanceImplBase;
+import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.doh.DoHServiceEndpointInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.IDynamicServiceLauncherFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -128,6 +130,17 @@ public abstract class DNSServiceEndpointInstanceFactoryImplBase implements IDNSS
     {
         this.dnsServiceInstanceFactoryImpl = instance;
     }
+
+
+
+    IDynamicServiceLauncherFactory dynamicServiceLauncherFactory;
+
+    @Autowired
+    @Qualifier("loulanDNSDynamicServiceLauncherFactoryImpl")
+    public void setDynamicServiceLauncherFactory(IDynamicServiceLauncherFactory instance)
+    {
+      this.dynamicServiceLauncherFactory = instance;
+    } 
 
   
     /**
@@ -254,6 +267,16 @@ public abstract class DNSServiceEndpointInstanceFactoryImplBase implements IDNSS
             UDPServiceEndpointInstanceImpl instance = new UDPServiceEndpointInstanceImpl();
             instance.setDNSMessageFactory(dnsMessageFactoryImpl);
             instance.setDNSServiceInstanceFactory(dnsServiceInstanceFactoryImpl);
+
+            endpointInstance = instance;
+        }
+        else if ( serviceEndpointTypeName.toUpperCase().equals( LoulanDNSConstants.CONST_DNS_SERVICE_ENDPOINT_TYPE_NAME_DOH) )
+        {
+            // DoHエンドポイント.
+            DoHServiceEndpointInstanceImpl instance = new DoHServiceEndpointInstanceImpl();
+            instance.setDNSMessageFactory(dnsMessageFactoryImpl);
+            instance.setDNSServiceInstanceFactory(dnsServiceInstanceFactoryImpl);
+            instance.setDynamicServiceLauncherFactory(dynamicServiceLauncherFactory);
 
             endpointInstance = instance;
         }

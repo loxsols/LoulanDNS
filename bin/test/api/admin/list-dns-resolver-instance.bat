@@ -1,7 +1,7 @@
 @echo off
 
 REM **************************************
-REM DoHサーバーインスタンス一覧参照テストバッチ
+REM DNSリゾルバインスタンス 一覧参照 テストバッチ
 REM 
 REM "USAGE : <server port> <admin user> <admin password> <target user>"
 REM 
@@ -42,8 +42,16 @@ set LOGIN_PASSWORD=%3
 
 
 
+if "%~4"=="" (
+	call :PRINT_USAGE
+	exit /b 201
+)
+set TARGET_USER=%4
 
-call %CURL_CMD% -X GET localhost:8080/admin/api/list/doh-server-instance -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  
+
+
+
+call %CURL_CMD% -X GET localhost:8080/admin/api/dns/service/list/dns-resolver-instance -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -G -d "UserName=%TARGET_USER%"
 
 
 
@@ -56,7 +64,7 @@ rem -----------
 rem SUB PRINT_USAGE
 rem -----------
 :PRINT_USAGE
-echo "USAGE : <server port> <admin user> <admin password> "
+echo "USAGE : <server port> <admin user> <admin password> <targer user>"
 
 exit /b 0
 

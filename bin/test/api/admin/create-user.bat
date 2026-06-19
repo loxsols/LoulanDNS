@@ -58,7 +58,7 @@ set USER_PASSWORD=%5
 
 
 
-call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/create/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% 
+call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/user/create/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -d UserName=%USER_NAME% -d UserPassword=%USER_PASSWORD% 
 
 
 exit /b %ERRORLEVEL%

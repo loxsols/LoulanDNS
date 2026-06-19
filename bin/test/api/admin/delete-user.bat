@@ -52,7 +52,7 @@ set USER_NAME=%4
 
 
 
-call %CURL_CMD% -X DELETE localhost:8080/admin/api/delete/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -G -d UserName=%USER_NAME% 
+call %CURL_CMD% -X DELETE localhost:8080/admin/api/user/delete/user -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD%  -G -d UserName=%USER_NAME% 
 
 
 

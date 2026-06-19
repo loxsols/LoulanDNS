@@ -33,18 +33,36 @@ public class DNSServiceEndpointInstanceInfo
     List<DNSServiceEndpointInstancePropertyInfo> dnsServiceEndpointInstanceProperties;
 
 
+    public DNSServiceEndpointInstanceInfo()
+    {
+        this.dnsServiceEndpointInstanceProperties = new ArrayList<DNSServiceEndpointInstancePropertyInfo>();
+    }
+
+
 
     public void setCreateDate(String createDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
-        this.createDate = dateTime;
+        setCreateDate(dateTime);
+    }
+
+    public void setCreateDate(ZonedDateTime createDate)
+    {
+        this.createDate = createDate;
     }
 
     public void setUpdateDate(String updateDate)
     {
         ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
-        this.updateDate = dateTime;
+        setUpdateDate(dateTime);
     }
+
+    public void setUpdateDate(ZonedDateTime updateDate)
+    {
+        this.updateDate = updateDate;
+    }
+
+
 
     public Long getDNSServiceEndpointInstanceID()
     {
@@ -107,6 +125,21 @@ public class DNSServiceEndpointInstanceInfo
     public List<DNSServiceEndpointInstancePropertyInfo> getDNSServiceEndpointInstanceProperties()
     {
         return this.dnsServiceEndpointInstanceProperties;
+    }
+
+
+    public DNSServiceEndpointInstancePropertyInfo getDNSServiceEndpointInstanceProperty(String key)
+    {
+        List<DNSServiceEndpointInstancePropertyInfo> list = getDNSServiceEndpointInstanceProperties();
+        for( var item : list )
+        {
+            if ( item.getDNSServiceEndpointInstancePropertyKey().equals(key) )
+            {
+                return item;
+            }
+        }
+
+        return null;
     }
 
 

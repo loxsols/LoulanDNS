@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.model.DNSServiceEndpointInstance;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public interface DNSServiceEndpointInstanceRepository extends JpaRepository<DNSS
 
     public DNSServiceEndpointInstance save(DNSServiceEndpointInstance dnsServiceInstance);
 
+    @Modifying
     @Transactional
     @Query("delete from DNSServiceEndpointInstance p where p.dnsServiceEndpointInstanceID = :dnsServiceEndpointInstanceID ")
     public void deleteByDNSServiceEndpointInstanceID(long dnsServiceEndpointInstanceID);
