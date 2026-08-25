@@ -238,6 +238,7 @@ public class UDPServiceApplicationConfig
         UDPServiceEndpointInstanceImpl udpServiceEndpointInstance = new UDPServiceEndpointInstanceImpl();
         
         udpServiceEndpointInstance.setDNSServiceInstanceFactory( configDNSServiceInstanceFactory()  );
+        udpServiceEndpointInstance.setLoulanDNSLoggerFactory( getLoulanDNSLoggerFactory() );
 
         // プロパティを設定する.
         Properties properties = System.getProperties();

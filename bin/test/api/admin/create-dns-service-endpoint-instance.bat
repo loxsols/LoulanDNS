@@ -107,6 +107,8 @@ rem -----------
 :PRINT_USAGE
 echo "USAGE : <server port> <admin user> <admin password> <target user> <endpoint-instance> <explain> <endpoint-type-code> <service-instance-name> <record-status> <memo>"
 
+echo "<endpoint-instance> = UDP 10101 | TCP 10201 | DOH 81101 | JSON_RFC8427 82101 | DOT 82101"
+
 
 exit /b 0
 

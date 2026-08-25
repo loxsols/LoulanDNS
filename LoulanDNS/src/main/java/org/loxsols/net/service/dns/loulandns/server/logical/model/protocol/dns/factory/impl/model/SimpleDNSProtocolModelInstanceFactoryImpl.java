@@ -13,7 +13,6 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.impl.message.section.DNSQuestionSectionFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.section.*;
 
-
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 
 
@@ -191,7 +190,8 @@ public class SimpleDNSProtocolModelInstanceFactoryImpl implements IDNSProtocolMo
         rr.setResourceType(rtype);
         rr.setResourceClass(rclass);
         rr.setResourceTTL(rTTL);
-        rr.setDNSResourceRecordBytes(rdata);
+        rr.setResourceRData(rdata);
+        rr.setResourceRDLength( rdata.length );
 
         return rr;
     }

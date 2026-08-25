@@ -5,6 +5,7 @@ package org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolve
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
@@ -12,6 +13,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverIns
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverInstancePropertyInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverTypeInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserInfo;
+import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.IDNSMessageFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.part.*;
@@ -20,10 +22,14 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.factory.IDNSResolverInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.DNSResolverInstanceBaseImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.*;
+import org.loxsols.net.service.dns.loulandns.client.IDNSMessageTransporter;
+import org.loxsols.net.service.dns.loulandns.client.impl.simple.*;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+
 
 /**
  * DNSリゾルバインスタンスのファクトリクラスのインターフェース
@@ -34,6 +40,10 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
     @Autowired
     @Qualifier("loulanDNSLogicalModelServiceImpl")
     LoulanDNSLogicalModelService loulanDNSLogicalModelService;
+
+    @Autowired
+    @Qualifier("dnsMessageFactoryImpl")
+    IDNSMessageFactory dnsMessageFactory;
 
 
     Map<String, IDNSResolverInstance> onMemoryInstanceCacheTable = new HashMap<String, IDNSResolverInstance>();
@@ -51,6 +61,14 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
     {
 
         DNSResolverInstanceInfo info = loadLogicalModel(dnsResolverInstanceID);
+
+        if ( info == null )
+        {
+            String msg = String.format("Failed to getOrCreateResolverInstance, caused by Specified DNSResolverInstance record is not found. dnsResolverInstanceID=%d", dnsResolverInstanceID );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
         UserInfo userInfo = loulanDNSLogicalModelService.getUserInfo( info.getUserID() );
 
         IDNSResolverInstance instance = getDNSResolverInstanceCacheRecord( userInfo.getUserName(), info.getDNSResolverInstanceName() );
@@ -232,6 +250,17 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
 
         IDNSResolverInstance dnsResolverInstance;
 
+
+        // ------ DEBUG --------
+        for( var key : properties.keySet() )
+        {
+            String value = (String)properties.get(key);
+            String str = String.format("[DEBUG] DNSResolverInstanceFactoryImpl.createDNSResolverInstance() properties : %s=%s", key, value);
+            System.out.println( str );
+        }
+        // ---------------------
+
+
         // TODO : UDPリゾルバ以外のリゾルバのインスタンス化処理が未実装.
         if ( resolverType == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_UDP )
         {
@@ -242,6 +271,11 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
         {
             // -- 				205 : DoH問い合わせ
             dnsResolverInstance = new DoHResolverInstanceImpl(properties);
+        }
+        else if (resolverType == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_DNS_SUBWAY_SSH_TUNNEL_GW)
+        {
+            // -- 				501 : DNS-Subway SSHトンネルGW問い合わせ
+            dnsResolverInstance = new DNSSubwaySSHTunnelGWResolverInstanceImpl(properties, this);
         }
         else
         {

@@ -52,7 +52,7 @@ public class SimpleUDPMessageTransporterImpl implements IDNSMessageTransporter
     IDNSMessageFactory dnsMessageFactory;
 
     InetAddress serverAddress;
-    int serverPort;
+    Integer serverPort;
 
 
     public SimpleUDPMessageTransporterImpl() throws DNSClientCommonException
@@ -112,55 +112,89 @@ public class SimpleUDPMessageTransporterImpl implements IDNSMessageTransporter
         this.serverPort = port;
     }
 
-    public int getServerPort()
+    public Integer getServerPort()
     {
         return this.serverPort;
     }
 
 
+
     public void init(HashMap<String, String> properties) throws DNSClientCommonException
     {
-        String serverAddressValue    =  properties.get(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS);
-        String serverPortValue       =  properties.get(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_PORT);
 
-        if ( serverAddressValue == null || serverAddressValue.equals(""))
+        for(String key : properties.keySet() )
+        {
+            String value = properties.get(key);
+            setParamerter(key, value);
+        }
+
+
+        // 以下、設定済みの値をチェックする.
+        InetAddress  serverAddressValue    =  getServerAddress();
+        if ( serverAddressValue == null )
         {
             String msg = String.format("DNS Server address is not specified.");
             DNSClientCommonException exception = new DNSClientCommonException(msg);
             throw exception;
         }
 
-        if ( serverPortValue == null || serverPortValue.equals(""))
+        Integer serverPortValue       =  getServerPort();
+        if ( serverPortValue == null || serverPortValue == 0 )
         {
             String msg = String.format("DNS Server port is not specified.");
             DNSClientCommonException exception = new DNSClientCommonException(msg);
             throw exception;
         }
 
-        try
-        {
-            serverAddress = InetAddress.getByName(serverAddressValue);
-        }
-        catch(UnknownHostException cause)
-        {
-            String msg = String.format("Failed to parse DNS Server address. value=%s", serverPortValue );
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception; 
-        }
-
-
-        try
-        {
-            serverPort = Integer.parseInt(serverPortValue);
-        }
-        catch(NumberFormatException cause)
-        {
-            String msg = String.format("Failed to parse DNS Server port. value=%s", serverPortValue );
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception; 
-        }
 
     }
+
+
+    public void setParamerter(String key ,String value) throws DNSClientCommonException
+    {
+        if ( key.equals(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS) )
+        {
+            try
+            {
+                InetAddress serverAddress = InetAddress.getByName(value);
+                setServerAddress( serverAddress );
+            }
+            catch(UnknownHostException cause)
+            {
+                String msg = String.format("Failed to parse DNS Server address. value=%s", value );
+                DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
+                throw exception; 
+            }
+
+        }
+        else if ( key.equals(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_PORT) )
+        {
+            try
+            {
+                int serverPort = Integer.parseInt(value);
+                setServerPort( serverPort );
+            }
+            catch(NumberFormatException cause)
+            {
+                String msg = String.format("Failed to parse DNS Server port. value=%s", value );
+                DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
+                throw exception; 
+            }
+
+        }
+        else
+        {
+                String msg = String.format("Unsupported IDNSMessageTransporter parameter. key=%s, value=%s", key, value);
+                DNSClientCommonException exception = new DNSClientCommonException(msg);
+                throw exception;          
+        }
+
+
+
+    }
+
+    
+
 
     public IDNSResponseMessage lookup(IDNSQuestionMessage questionMessage) throws DNSClientCommonException
     {

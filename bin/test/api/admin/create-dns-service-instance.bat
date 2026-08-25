@@ -108,6 +108,10 @@ rem -----------
 :PRINT_USAGE
 echo "USAGE : <server port> <admin user> <admin password> <target user> <service-instance> <explain> <service-type-code> <resolver-instance-id> <record-status> <memo>"
 
+echo "<service-type-code> :=  DEFAULT 0"
+
+
+
 
 exit /b 0
 

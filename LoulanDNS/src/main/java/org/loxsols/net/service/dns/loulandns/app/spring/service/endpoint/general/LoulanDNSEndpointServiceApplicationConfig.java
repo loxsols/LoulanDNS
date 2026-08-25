@@ -42,10 +42,10 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.IDNSServiceEndpointInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.IDynamicServiceLauncherFactory;
-import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.impl.SpringCloudDeployerDynamicServiceLauncherFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.impl.LoulanDNSLoggerFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.impl.*;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.*;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.impl.*;
@@ -96,12 +96,23 @@ public class LoulanDNSEndpointServiceApplicationConfig
     }
 
 
+
+    /*
+    // SimpleLocalThreadDynamicServiceLauncherFactoryImplを生成する設定
+    @Bean(name = "loulanDNSDynamicServiceLauncherFactoryImpl")
+    IDynamicServiceLauncherFactory configDynamicServiceLauncherFactoryImpl() throws LoulanDNSSystemServiceException
+    {
+
+        IDynamicServiceLauncherFactory instance = new SimpleLocalThreadDynamicServiceLauncherFactoryImpl();
+        return instance;
+    }
+    */
+
     
     // SimpleLocalProcessDynamicServiceLauncherFactoryImplを生成する設定
     @Bean(name = "loulanDNSDynamicServiceLauncherFactoryImpl")
     IDynamicServiceLauncherFactory configDynamicServiceLauncherFactoryImpl() throws LoulanDNSSystemServiceException
     {
-
         IDynamicServiceLauncherFactory instance = new SimpleLocalProcessDynamicServiceLauncherFactoryImpl();
         return instance;
     }
@@ -119,8 +130,8 @@ public class LoulanDNSEndpointServiceApplicationConfig
 
 
 
-    @Bean( name="springCloundAppDeployer" )
-    AppDeployer configSpringCloundAppDeployer() throws LoulanDNSSystemServiceException
+    @Bean( name="springCloudAppDeployer" )
+    AppDeployer configSpringCloudAppDeployer() throws LoulanDNSSystemServiceException
     {
         LocalDeployerProperties properties = new LocalDeployerProperties();
 

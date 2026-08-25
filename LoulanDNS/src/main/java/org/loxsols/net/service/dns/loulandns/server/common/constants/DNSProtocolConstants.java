@@ -263,6 +263,7 @@ public class DNSProtocolConstants
     public static int ASCII_CODE_NULL = 0x00;
 
 
+
     // ******************************************
     // 以下、文字列チェック用の正規表現
     // ******************************************

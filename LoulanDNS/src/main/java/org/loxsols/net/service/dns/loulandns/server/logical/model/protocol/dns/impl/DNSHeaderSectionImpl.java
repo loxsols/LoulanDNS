@@ -250,9 +250,19 @@ public class DNSHeaderSectionImpl implements IDNSHeaderSection
         short id = (short)getID();
         buffer.putShort( (short)id );
         
-        // QR(1bit) | Opcode(4bit) | AA(1bit) | TC(1bit) | RD(1bit) | RA(1bit) | Z(1bit) | AD(1bit) | CD(1bit) | RCODE(4bit) |
-        long flags = ( getQR() ) | ( getOPCode() << 1 ) | ( getAA() << 5 ) | ( getTC() << 6 ) | ( getRD() << 7 ) | ( getRA() << 8 ) | ( getZ() << 9 ) | ( getAD() << 10 ) | ( getCD() << 11 ) | ( getRCode() << 12 );
+        // 2026/08/21 修正 : DNSのRFC文書は最下位桁(bit15のQR)が左側に記載されている. したがって、short型のflagsのビットの並びはRFCとは逆になる.
+        // | QR(1bit) | Opcode(4bit) | AA(1bit) | TC(1bit) | RD(1bit) | RA(1bit) | Z(1bit) | AD(1bit) | CD(1bit) | RCODE(4bit) |
+        // 
+        // [修正前]
+        // long flags = ( getQR() ) | ( getOPCode() << 1 ) | ( getAA() << 5 ) | ( getTC() << 6 ) | ( getRD() << 7 ) | ( getRA() << 8 ) | ( getZ() << 9 ) | ( getAD() << 10 ) | ( getCD() << 11 ) | ( getRCode() << 12 );
+        //
+        // [修正後]
+        long flags = ( getQR() << 15 ) | ( getOPCode() << 11 ) | ( getAA() << 10 ) | ( getTC() << 9 ) | ( getRD() << 8 ) | ( getRA() << 7 ) | ( getZ() << 6 ) | ( getAD() << 5 ) | ( getCD() << 4 ) | ( getRCode() << 0 );
         buffer.putShort( (short)flags);
+
+        // ---- 以下デバッグ用.
+        LoulanDNSDebugUtils.printDebug( this.getClass(), "getDNSHeaderBytes()", String.format("flags=%d, getQR()=%d, getOPCode()=%d, getAA()=%d, getTC()=%d, getRD()=%d, getRA()=%d, ", flags, getQR(), getOPCode(), getAA(), getTC(), getRD(), getRA() ) );
+        // -----
 
         long qdcount = getQDCOUNT();
         buffer.putShort( (short)qdcount);
@@ -296,25 +306,45 @@ public class DNSHeaderSectionImpl implements IDNSHeaderSection
 
         setID(id);
 
+        // 2026/08/21 修正 : DNSのRFC文書は最下位桁(bit15のQR)が左側に記載されている. したがって、short型のflagsのビットの並びはRFCとは逆になる.
+        // [修正前]
         // flags 16bit
         // 0        | 1            | 5        | 6        | 7        | 8        | 9       | 10       | 11       | 12          |   
         // QR(1bit) | Opcode(4bit) | AA(1bit) | TC(1bit) | RD(1bit) | RA(1bit) | Z(1bit) | AD(1bit) | CD(1bit) | RCODE(4bit) |
+        // 
+        // int flags = 0x00ff & headerBytes[2];
+        // flags = ( flags << 8 ) | ( 0x00ff & headerBytes[3] );
+        // 
+        // int qr         = ( flags & 0b0000000000000001 );
+        // int opecode    = ( flags & 0b0000000000011110 ) >> 1;
+        // int aa         = ( flags & 0b0000000000100000 ) >> 5;
+        // int tc         = ( flags & 0b0000000001000000 ) >> 6;
+        // int rd         = ( flags & 0b0000000010000000 ) >> 7;
+        // int ra         = ( flags & 0b0000000100000000 ) >> 8;
+        // int z          = ( flags & 0b0000001000000000 ) >> 9;
+        // int ad         = ( flags & 0b0000010000000000 ) >> 10;
+        // int cd         = ( flags & 0b0000100000000000 ) >> 11;
+        // int rcode      = ( flags & 0b1111000000000000 ) >> 12;
+        // 
+        // 
+        // [修正後]
+        // flags 16bit
+        // | QR(1bit) | Opcode(4bit) | AA(1bit) | TC(1bit) | RD(1bit) | RA(1bit) | Z(1bit) | AD(1bit) | CD(1bit) | RCODE(4bit) |
         
         int flags = 0x00ff & headerBytes[2];
         flags = ( flags << 8 ) | ( 0x00ff & headerBytes[3] );
         
+        int qr         = ( flags & 0b1000000000000000 ) >> 15;
+        int opecode    = ( flags & 0b0111100000000000 ) >> 11;
+        int aa         = ( flags & 0b0000010000000000 ) >> 10;
+        int tc         = ( flags & 0b0000001000000000 ) >> 9;
+        int rd         = ( flags & 0b0000000100000000 ) >> 8;
+        int ra         = ( flags & 0b0000000010000000 ) >> 7;
+        int z          = ( flags & 0b0000000001000000 ) >> 6;
+        int ad         = ( flags & 0b0000000000100000 ) >> 5;
+        int cd         = ( flags & 0b0000000000010000 ) >> 4;
+        int rcode      = ( flags & 0b0000000000001111 ) >> 0;
 
-        
-        int qr         = ( flags & 0b0000000000000001 );
-        int opecode    = ( flags & 0b0000000000011110 ) >> 1;
-        int aa         = ( flags & 0b0000000000100000 ) >> 5;
-        int tc         = ( flags & 0b0000000001000000 ) >> 6;
-        int rd         = ( flags & 0b0000000010000000 ) >> 7;
-        int ra         = ( flags & 0b0000000100000000 ) >> 8;
-        int z          = ( flags & 0b0000001000000000 ) >> 9;
-        int ad         = ( flags & 0b0000010000000000 ) >> 10;
-        int cd         = ( flags & 0b0000100000000000 ) >> 11;
-        int rcode      = ( flags & 0b1111000000000000 ) >> 12;
 
         // LoulanDNSDebugUtils.printHexString(getClass(), "setDNSHeaderBytes() : headerBytes", headerBytes);
         // LoulanDNSDebugUtils.printDebug(this.getClass(), "setDNSHeaderBytes() : flags(0b)", Integer.toBinaryString(flags) );

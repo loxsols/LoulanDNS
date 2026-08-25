@@ -104,6 +104,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.IDyanmicServiceDescriptor;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.IDynamicServiceLauncher;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.IDynamicServiceLauncherFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -153,6 +154,14 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     public void setDNSMessageFactory(IDNSMessageFactory instance)
     {
         super.setDNSMessageFactory(instance);
+    }
+
+
+    @Autowired
+    @Qualifier("loulanDNSLoggerFactoryImpl")
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+      super.setLoulanDNSLoggerFactory(instance);
     }
 
 
@@ -244,12 +253,17 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     {
 
       
+        // 現在のJVM/Springコンテキストと同じ環境を使用する場合.
         // doDoHEndpointServiceTaskOnCurrentSpringContext();
 
+        // 現在のJVM内で、異なるSpringコンテキスト起動して使用する場合.
         // doDoHEndpointServiceTaskOnOtherSpringContext();
 
+        // 新規に別のJVMを起動する場合.
         // doDoHEndpointServiceTaskOnOtherJVM();
 
+        // 動的サービス起動システムを使用する場合.
+        // どのようなシステム構成で起動するかは、動的サービス起動システムのDI設定("loulanDNSDynamicServiceLauncherFactoryImpl")による.
         doDoHEndpointServiceTaskOnDynamicService();
 
 
@@ -362,7 +376,7 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
 
 
     /**
-     * UDPサービスエンドポイントのメイン処理(現在のJVM/Springコンテキスト内の別スレッド)
+     * DoHサービスエンドポイントのメイン処理(現在のJVM/Springコンテキスト内の別スレッド)
      * 
      * @throws DNSServiceCommonException
      */
@@ -373,11 +387,20 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
 
       SocketAddress socketAddress = getDoHServiceSocketAddress();
 
-      // TODO
+      // TODO : 現在のSpringコンテキスト内でDoHサービスを起動する方法が未実装.
+      String msg = String.format("Failed to start DoHEndpointService on Current Spring Context.");
+      DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+      throw exception;
 
     }
 
   
+    /**
+     * DoHサービスエンドポイントのメイン処理(新しいSpringコンテキストを新規に構築する.)
+     * 
+     * 
+     * @throws DNSServiceCommonException
+     */
     protected void doDoHEndpointServiceTaskOnOtherSpringContext() throws DNSServiceCommonException
     {
       SocketAddress socketAddress = getDoHServiceSocketAddress();
@@ -457,11 +480,14 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
 
 
       // 2. ★超重要: PropertiesLauncherに「本来起動してほしいメインクラス」を教える
-        command.add("-Dloader.main=org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.doh.DoHServiceEndpointInstanceSpringApplication"); 
+        // command.add("-Dloader.main=org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.doh.DoHServiceEndpointInstanceSpringApplication"); 
+        String className = DoHServiceEndpointInstanceSpringApplication.class.getName();
+        command.add("-Dloader.main=" + className ); 
 
 
         // ★動的に生成したJDBC URLを引数として追加
-        String jdbcURL = "jdbc:hsqldb:file:C:\\data\\workspace\\dev\\src\\LoulanDNS\\101_working\\LoulanDNS_20260531-001\\LoulanDNS\\bin\\exec\\.\\..\\..\\db\\HSQLDB\\LoulanDNS\\LoulanDNS";
+        // String jdbcURL = "jdbc:hsqldb:file:C:\\data\\workspace\\dev\\src\\LoulanDNS\\101_working\\LoulanDNS_20260531-001\\LoulanDNS\\bin\\exec\\.\\..\\..\\db\\HSQLDB\\LoulanDNS\\LoulanDNS";
+        String jdbcURL = System.getProperty( "spring.datasource.url" );
         command.add("-Dspring.datasource.url=" + jdbcURL);
 
 
@@ -517,12 +543,16 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
       String[] args = new String[]{};
       Properties jvmProperties  = new Properties();
 
-      // TODO : とりあえず、デフォルトユーザー名をadminに設定する.
-      jvmProperties.put(LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_USER_NAME, "admin");
+      // デフォルトユーザー名を設定する.
+      String defaultUserName = getUserName();
+      jvmProperties.put(LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_USER_NAME, defaultUserName );
 
-      // TODO : とりあえず、デフォルトのDNSサービスインスタンス名を"default"に設定する.
-      jvmProperties.put(LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_NAME, "default");
+      // デフォルトのDNSサービスインスタンス名を設定する.
+      String defaultDNSServiceInstanceName = getDNSServiceInstanceName();
+      jvmProperties.put(LoulanDNSConstants.PROP_KEY_DEFAULT_SERVICE_INSTANCE_NAME, defaultDNSServiceInstanceName);
 
+      // DoHサーバーのポート番号を設定する.
+      jvmProperties.put("server.port", String.valueOf(getDoHServiceEndpointPort()) );
 
       IDynamicServiceLauncher  serviceLauncher = dynamicServiceLauncherFactory.getOrCreateDynamicServiceLauncher();
       IDyanmicServiceDescriptor  servoiceDescriptor = serviceLauncher.createDynamicServiceDiscriptor(serviceName, mainClass, args, jvmProperties );
@@ -569,7 +599,7 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
       this.dohServiceEndpointPort = port;
     }
 
-    public int getUDPServiceEndpointPort() throws DNSServiceCommonException
+    public int getDoHServiceEndpointPort() throws DNSServiceCommonException
     {
       return this.dohServiceEndpointPort;
     }
@@ -578,7 +608,7 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     public SocketAddress getDoHServiceSocketAddress() throws DNSServiceCommonException
     {
       String address = getDoHServiceEndpointAddress();
-      int port = getUDPServiceEndpointPort();
+      int port = getDoHServiceEndpointPort();
 
       SocketAddress socketAddress = new InetSocketAddress(address, port);
 

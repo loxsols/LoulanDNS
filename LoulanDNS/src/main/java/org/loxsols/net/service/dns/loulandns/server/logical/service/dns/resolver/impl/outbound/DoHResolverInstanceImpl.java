@@ -3,7 +3,9 @@ package org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolve
 
 
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.List;
 
 import org.loxsols.net.service.dns.loulandns.client.IDNSLookupClient;
 import org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleUDPResolverImpl;
@@ -22,11 +24,13 @@ import org.loxsols.net.service.dns.loulandns.client.impl.*;
 /**
  * DoHリゾルバインスタンスの実装クラス.
  */
-public class DoHResolverInstanceImpl extends DNSResolverInstanceBaseImpl implements IDNSResolverInstance
+public class DoHResolverInstanceImpl extends UDPResolverInstanceImpl implements IDNSResolverInstance
 {
 
     URI outboundDoHServerURI;
     String outboundDoHQueryHttpMethodType;
+    String outboundDoHQueryHttpContentType;
+    String outboundDoHQueryHttpAcceptType;
 
 
     public void setOutboundDoHServerURI(URI uri) throws DNSServiceCommonException
@@ -63,11 +67,35 @@ public class DoHResolverInstanceImpl extends DNSResolverInstanceBaseImpl impleme
         this.outboundDoHQueryHttpMethodType = httpMethodType;
     }
     
-
     public String getOutboundDoHQueryHttpMethodType() throws DNSServiceCommonException
     {
         return this.outboundDoHQueryHttpMethodType;
     }
+
+
+    public void setOutboundDoHQueryHttpContentType(String httpContentType) throws DNSServiceCommonException
+    {
+        this.outboundDoHQueryHttpContentType = httpContentType;
+    }
+    
+    public String getOutboundDoHQueryHttpContentType() throws DNSServiceCommonException
+    {
+        return this.outboundDoHQueryHttpContentType;
+    }
+
+
+    public void setOutboundDoHQueryHttpAcceptType(String httpAcceptType) throws DNSServiceCommonException
+    {
+        this.outboundDoHQueryHttpAcceptType = httpAcceptType;
+    }
+    
+    public String getOutboundDoHQueryHttpAcceptType() throws DNSServiceCommonException
+    {
+        return this.outboundDoHQueryHttpAcceptType;
+    }
+
+
+
 
 
     /**
@@ -88,38 +116,73 @@ public class DoHResolverInstanceImpl extends DNSResolverInstanceBaseImpl impleme
     public void init(Properties properties) throws DNSServiceCommonException
     {
 
-        // 外部DoHサーバーのURIを設定.
-        String primaryDoHServerURIString = properties.getProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_SERVER_URI_PRIMARY);
-        if ( primaryDoHServerURIString == null || primaryDoHServerURIString.equals("") )
-        {
-            String msg = String.format("Failed to initialize DoHResolverInstance. Outbound primary DoH server URI is not specified. key = %s", LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_SERVER_URI_PRIMARY);
-            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
-            throw exception;
-        }
-
-        setOutboundDoHServerURI(primaryDoHServerURIString);
-
-
-        // 外部DoHサーバーの問い合わせに使用するHTTPメソッドタイプを設定.
-        String primaryDoHServerHttpMethodType = properties.getProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_METHOD_TYPE_PRIMARY);
-        if ( primaryDoHServerHttpMethodType == null || primaryDoHServerHttpMethodType.equals("") )
-        {
-            String msg = String.format("Failed to initialize DoHResolverInstance. Outbound primary DNS server port is not specified. key = %s", LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_METHOD_TYPE_PRIMARY);
-            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
-            throw exception;
-        }
-
-        setOutboundDoHQueryHttpMethodType(primaryDoHServerHttpMethodType);
+        super.init(properties);
 
 
         // DNSリゾルバクライアントのオブジェクトを設定.
         DoHResolverImpl client = new DoHResolverImpl();
         client.setDoHServerURI( getOutboundDoHServerURI() );
         client.setDoHServerHttpMethodType( getOutboundDoHQueryHttpMethodType() );
-
+        client.setDoHServerHttpContentType( getOutboundDoHQueryHttpContentType() );
+        client.setDoHServerHttpAcceptType( getOutboundDoHQueryHttpAcceptType() );
+        
         setDNSLookupClient(client);
 
     }
+
+
+
+    // パラメータを設定する.
+    public void setProperty(String key, String value) throws DNSServiceCommonException
+    {
+
+        // 基底クラスのプロパティも併せて設定する.
+        super.setProperty(key, value);
+
+        if ( key.equals(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_SERVER_URI_PRIMARY) )
+        {
+            // 外部DoHサーバーのURIを設定.
+            String primaryDoHServerURIString = value;
+            setOutboundDoHServerURI(primaryDoHServerURIString);
+        }
+        else if ( key.equals( LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_METHOD_TYPE_PRIMARY ) )
+        {
+            // 外部DoHサーバーの問い合わせに使用するHTTPメソッドタイプを設定.
+            String primaryDoHServerHttpMethodType = value;
+            setOutboundDoHQueryHttpMethodType(primaryDoHServerHttpMethodType);
+        }
+        else if ( key.equals( LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_CONTENT_TYPE_PRIMARY ) )
+        {
+            // 外部DoHサーバーの問い合わせに使用するHTTP Contentタイプを設定.
+            String primaryDoHServerHttpContentType = value;
+            setOutboundDoHQueryHttpContentType(primaryDoHServerHttpContentType);
+        }
+        else if ( key.equals(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_ACCEPT_TYPE_PRIMARY) )
+        {
+            // 外部DoHサーバーの問い合わせに使用するHTTP Acceptタイプを設定.
+            String primaryDoHServerHttpAcceptType = value;
+            setOutboundDoHQueryHttpAcceptType(primaryDoHServerHttpAcceptType);
+        }
+        else
+        {
+            // 本クラスの規定パラメータ以外が指定された.
+            // サブクラスでキャッチされる可能性があるから何もせずにスルーする.
+        }
+    }
+
+
+    // 必須パラメータキーの一覧を取得する.
+    public List<String> getRequiredParameterKeys() throws DNSServiceCommonException
+    {
+
+        List<String> list = new ArrayList<String>();
+
+        list.add( LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_HOST_PRIMARY );
+        list.add( LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_PORT_PRIMARY );
+
+        return list;
+    }
+
 
 
 }

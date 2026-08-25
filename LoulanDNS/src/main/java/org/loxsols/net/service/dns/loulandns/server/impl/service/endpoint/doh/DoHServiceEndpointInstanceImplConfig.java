@@ -126,7 +126,7 @@ public class DoHServiceEndpointInstanceImplConfig implements WebServerFactoryCus
     @Override
     public void customize(ConfigurableWebServerFactory factory) {
         // ソースコード内で直接ポート番号を指定
-        factory.setPort(58080);
+        // factory.setPort(58080);
     }
 
     // Configurationクラス内のネストクラスとしてフィルターを定義

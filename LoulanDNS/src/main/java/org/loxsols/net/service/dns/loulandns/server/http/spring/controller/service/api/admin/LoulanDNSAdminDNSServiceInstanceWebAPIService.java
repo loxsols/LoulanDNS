@@ -263,6 +263,12 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
             memo = existDNSServiceInstance.getMemo();
         }
 
+        if ( recordStatus == null)
+        {
+            // 本メソッドの引数がnullの場合は既存レコードの情報を利用する.
+            recordStatus = existDNSServiceInstance.getRecordStatus();
+        }
+
         // ------------------------------------
         // ここからDNSServiceInstanceのファクトリクラスからオブジェクトを新規生成してsaveする.
         // ----

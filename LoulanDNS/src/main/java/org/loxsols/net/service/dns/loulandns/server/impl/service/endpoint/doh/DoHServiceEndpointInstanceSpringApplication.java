@@ -134,6 +134,7 @@ public class DoHServiceEndpointInstanceSpringApplication
     public static void main(String[] args)
     {
 
+        /*
         try
         {
             Thread.sleep(5000);
@@ -142,6 +143,7 @@ public class DoHServiceEndpointInstanceSpringApplication
         {
             exception.printStackTrace();
         }
+        */
 
         SpringApplication.run(DoHServiceEndpointInstanceImplConfig.class, args);
     }

@@ -15,7 +15,22 @@ public interface IDNSResolverInstance
 
 
     // 初期化メソッド.
-    public void init(Properties properties ) throws DNSServiceCommonException;
+    public void init(Properties properties) throws DNSServiceCommonException;
+
+    // パラメータを設定する.
+    public void setProperty(String key, String value) throws DNSServiceCommonException;
+
+    // 現在のパラメータの設定値を確認する.
+    public String getProperty(String key) throws DNSServiceCommonException;
+
+
+    // 必須パラメータキーの一覧を取得する.
+    public List<String> getRequiredParameterKeys() throws DNSServiceCommonException;
+
+    // オプションパラメータキーの一覧を取得する.
+    public List<String> getOptionalParameterKeys() throws DNSServiceCommonException;
+
+
 
     // DNSクエリ(クエリ部)を処理してDNSレスポンスメッセージを返す.
     public IDNSResponseMessage resolve(IDNSQueryPart dnsQueryPart) throws DNSServiceCommonException;

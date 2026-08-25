@@ -35,8 +35,12 @@ public interface IDNSMessageFactory
 
     // 問い合わせに対する単一のリソースレコード応答メッセージを作成する.
     public IDNSResponseMessage createSimpleResponseDNSMesssage(String qname, int qtype, int qclass, String rname, int rtype, int rclass, int rTTL, byte[] rdata) throws DNSServiceCommonException;
+    
 
     public IDNSProtocolModelInstanceFactory getDNSProtocolModelInstanceFactory() throws DNSServiceCommonException;
+
+
+
 
 }
 

@@ -41,6 +41,31 @@ public abstract class DNSResolverInstanceBaseImpl implements IDNSResolverInstanc
     }
 
 
+    // 初期化メソッド.
+    public void init(Properties properties) throws DNSServiceCommonException
+    {
+        // 必須パラメータが全て指定されているかを確認する.
+        List<String> requiredKeys = getRequiredParameterKeys();
+        for(String reqKey : requiredKeys )
+        {
+            if ( properties.containsKey(reqKey) == false )
+            {
+                // 必須パラメータが指定されていない.
+                String msg = String.format("Failed to init DNSResolverInstance. Required parameter is not specified. required-key=%s", reqKey);
+                DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+                throw exception;
+            }            
+        }
+ 
+        // プロパティを設定する.
+        for( Object key : properties.keySet() )
+        {
+            String value = properties.getProperty((String)key);
+            this.setProperty((String)key, value);
+        }
+    }
+
+
 
 
     // DNSクエリ(クエリ部)を処理してDNSレスポンスメッセージを返す.

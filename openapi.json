@@ -1,0 +1,3265 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/admin/api/user/update/user": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-user-web-api-service"
+        ],
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "UserPassword",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/user/create/user": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-user-web-api-service"
+        ],
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "UserPassword",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "101"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-instance/{dnsServiceInstanceID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceInstance_1",
+        "parameters": [
+          {
+            "name": "dnsServiceInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-instance-property/{dnsServiceInstancePropertyID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsServiceInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-endpoint-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceEndpointInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-endpoint-instance/{dnsServiceEndpointInstanceID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceEndpointInstance_1",
+        "parameters": [
+          {
+            "name": "dnsServiceEndpointInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceID",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-endpoint-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceEndpointInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-service-endpoint-instance-property/{dnsServiceEndpointInstancePropertyID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSServiceEndpointInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsServiceEndpointInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-resolver-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSResolverInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-resolver-instance/{DNSResolverInstanceID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSResolverInstance_1",
+        "parameters": [
+          {
+            "name": "DNSResolverInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverTypeCode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-resolver-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSResolverInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/update/dns-resolver-instance-property/{dnsResolverInstancePropertyID}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "updateDNSResolverInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsResolverInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyValue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/put/dns-service-instance-property/{UserName}/{DNSServiceInstanceName}/{key}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "putDNSServiceInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/put/dns-service-endpoint-instance-property/{UserName}/{DNSServiceEndpointInstanceName}/{key}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "putDNSServiceEndpointInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/put/dns-resolver-instance-property/{UserName}/{DNSResolverInstanceName}/{key}": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "putDNSResolverInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-service-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSServiceInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceTypeCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-service-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSServiceInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyValue",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyExplain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-service-endpoint-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSServiceEndpointInstanceInfo",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceExplain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointTypeCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-service-endpoint-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSServiceEndpointInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyValue",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyExplain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-resolver-instance": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSResolverInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceExplain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverTypeCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/create/dns-resolver-instance-property": {
+      "put": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "createDNSResolverInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyKey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyValue",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyExplain",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RecordStatus",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Memo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/user/list/user": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-user-web-api-service"
+        ],
+        "operationId": "listUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/user/get/user": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-user-web-api-service"
+        ],
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/list/dns-service-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "listDNSServiceInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/list/dns-service-endpoint-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "listDNSServiceEndpointInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/list/dns-resolver-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "listDNSResolverInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-instance/{dnsServiceInstanceID}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceInstance_1",
+        "parameters": [
+          {
+            "name": "dnsServiceInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-instance-property/{dnsServiceInstancePropertyID}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceInstanceProperty",
+        "parameters": [
+          {
+            "name": "dnsServiceInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-instance-property/{UserName}/{DNSServiceInstanceName}/{DNSServiceInstancePropertyKey}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-instance-properties": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceInstanceProperties",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-endpoint-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceEndpointInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-endpoint-instance/{dnsServiceEndpointInstanceID}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceEndpointInstance_1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-endpoint-instance-property/{dnsServiceEndpointInstancePropertyID}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceEndpointInstanceProperty",
+        "parameters": [
+          {
+            "name": "dnsServiceEndpointInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-endpoint-instance-property/{UserName}/{DNSServiceEndpointInstanceName}/{DNSServiceEndpointInstancePropertyKey}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceEndpointInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-service-endpoint-instance-properties": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSServiceEndpointInstanceProperties",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-resolver-instance": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSResolverInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-resolver-instance-property/{dnsResolverInstancePropertyID}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSResolverInstanceProperty",
+        "parameters": [
+          {
+            "name": "dnsResolverInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-resolver-instance-property/{UserName}/{DNSResolverInstanceName}/{DNSResolverInstancePropertyKey}": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSResolverInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/get/dns-resolver-instance-properties": {
+      "get": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "getDNSResolverInstanceProperties",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/api/user/delete/user": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-user-web-api-service"
+        ],
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-instance": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-instance/{dnsServiceInstanceID}": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceInstance_1",
+        "parameters": [
+          {
+            "name": "dnsServiceInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-instance-property": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-instance-property/{dnsServiceInstancePropertyID}": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsServiceInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-endpoint-instance": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceEndpointInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-endpoint-instance/{dnsServiceEndpointInstanceID}": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceEndpointInstance_1",
+        "parameters": [
+          {
+            "name": "dnsServiceEndpointInstanceID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-endpoint-instance-property": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceEndpointInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSServiceEndpointInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-service-endpoint-instance-property/{dnsServiceEndpointInstancePropertyID}": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSServiceEndpointInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsServiceEndpointInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-resolver-instance": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSResolverInstance",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-resolver-instance-property": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSResolverInstanceProperty",
+        "parameters": [
+          {
+            "name": "UserName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstanceName",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DNSResolverInstancePropertyKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin/api/dns/service/delete/dns-resolver-instance-property/{dnsResolverInstancePropertyID}": {
+      "delete": {
+        "tags": [
+          "loulan-dns-admin-dns-service-instance-web-api-service"
+        ],
+        "operationId": "deleteDNSResolverInstanceProperty_1",
+        "parameters": [
+          {
+            "name": "dnsResolverInstancePropertyID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DNSResolverInstanceInfo": {
+        "type": "object",
+        "properties": {
+          "dnsResolverInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsResolverInstanceName": {
+            "type": "string"
+          },
+          "dnsResolverInstanceExplain": {
+            "type": "string"
+          },
+          "dnsResolverTypeCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "dnsresolverPropertiesInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSResolverInstancePropertyInfo"
+            }
+          },
+          "dnsresolverInstanceName": {
+            "type": "string"
+          },
+          "dnsresolverInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsresolverInstanceExplain": {
+            "type": "string"
+          }
+        }
+      },
+      "DNSResolverInstancePropertyInfo": {
+        "type": "object",
+        "properties": {
+          "dnsResolverPropertyID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsResolverID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsResolverPropertyKey": {
+            "type": "string"
+          },
+          "dnsResolverPropertyValue": {
+            "type": "string"
+          },
+          "dnsResolverPropertyExplain": {
+            "type": "string"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dnsresolverInstancePropertyKey": {
+            "type": "string"
+          },
+          "dnsresolverInstancePropertyID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsresolverPropertyID": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DNSServiceEndpointInstanceInfo": {
+        "type": "object",
+        "properties": {
+          "dnsServiceEndpointInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceEndpointInstanceName": {
+            "type": "string"
+          },
+          "dnsServiceEndpointInstanceExplain": {
+            "type": "string"
+          },
+          "dnsServiceEndpointTypeCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dnsServiceEndpointInstanceProperties": {
+            "type": "array",
+            "writeOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "dnsserviceEndpointInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsserviceEndpointInstanceProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceEndpointInstancePropertyInfo"
+            }
+          },
+          "dnsserviceEndpointTypeCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsserviceEndpointInstanceExplain": {
+            "type": "string"
+          },
+          "dnsserviceInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsserviceEndpointInstanceName": {
+            "type": "string"
+          }
+        }
+      },
+      "DNSServiceEndpointInstancePropertyInfo": {
+        "type": "object",
+        "properties": {
+          "dnsServiceEndpointInstancePropertyID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceEndpointInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceEndpointInstancePropertyKey": {
+            "type": "string"
+          },
+          "dnsServiceEndpointInstancePropertyValue": {
+            "type": "string"
+          },
+          "dnsServiceEndpointInstancePropertyExplain": {
+            "type": "string"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dnsserviceEndpointInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsserviceEndpointInstancePropertyKey": {
+            "type": "string"
+          },
+          "dnsserviceEndpointInstancePropertyID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsserviceEndpointInstancePropertyValue": {
+            "type": "string"
+          },
+          "dnsserviceEndpointInstancePropertyExplain": {
+            "type": "string"
+          }
+        }
+      },
+      "DNSServiceInstanceInfo": {
+        "type": "object",
+        "properties": {
+          "dnsServiceInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceInstanceName": {
+            "type": "string"
+          },
+          "dnsServiceInstanceExplain": {
+            "type": "string"
+          },
+          "dnsServiceTypeCode": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsResolverInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dnsServiceInstanceProperties": {
+            "type": "array",
+            "writeOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+            }
+          },
+          "dnsResolverInstanceInfo": {
+            "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+          },
+          "dnsServiceEndpointInstanceInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+            }
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "dnsserviceInstanceProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceInstancePropertyInfo"
+            }
+          },
+          "dnsserviceEndpointInstanceInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceEndpointInstanceInfo"
+            }
+          },
+          "dnsserviceInstanceExplain": {
+            "type": "string"
+          },
+          "dnsserviceInstanceName": {
+            "type": "string"
+          },
+          "dnsserviceInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsresolverInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsresolverInstanceInfo": {
+            "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+          },
+          "dnsresolverInfo": {
+            "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+          }
+        }
+      },
+      "DNSServiceInstancePropertyInfo": {
+        "type": "object",
+        "properties": {
+          "dnsServiceInstancePropertyID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceInstanceID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dnsServiceInstancePropertyKey": {
+            "type": "string"
+          },
+          "dnsServiceInstancePropertyValue": {
+            "type": "string"
+          },
+          "dnsServiceInstancePropertyExplain": {
+            "type": "string"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserGroupInfo": {
+        "type": "object",
+        "properties": {
+          "userGroupID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userGroupName": {
+            "type": "string"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userGroupPrivilegeInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupPrivilegeInfo"
+            }
+          },
+          "administrator": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserGroupMappingInfo": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userGroupID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userGroupInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupInfo"
+            }
+          }
+        }
+      },
+      "UserGroupPrivilegeInfo": {
+        "type": "object",
+        "properties": {
+          "userGroupPrivilegeID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userGroupID": {
+            "type": "string"
+          },
+          "dnsInfoMaskValue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userInfoMaskValue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "systemInfoMaskValue": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "administratorPrivilege": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userPassword": {
+            "type": "string"
+          },
+          "recordStatus": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "memo": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updateDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "userGroupMappingInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserGroupMappingInfo"
+            }
+          },
+          "dnsServiceInstanceInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+            }
+          },
+          "dnsResolverInstanceInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSResolverInstanceInfo"
+            }
+          },
+          "dnsserviceInstanceInfoList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DNSServiceInstanceInfo"
+            }
+          },
+          "administrator": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,7 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.IDNSMessageFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
-
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
@@ -41,6 +42,10 @@ public abstract class DNSServiceEndpointInstanceImplBase implements IDNSServiceE
 
     String userName;
     String dnsServiceInstanceName;
+
+    boolean dnsEndpointServiceTaskIgnoreErrorFlag = false;
+
+
 
     Properties propeties = new Properties();
 
@@ -84,6 +89,17 @@ public abstract class DNSServiceEndpointInstanceImplBase implements IDNSServiceE
     public void setDNSMessageFactory(IDNSMessageFactory instance)
     {
         this.dnsMessageFactory = instance;
+    }
+
+
+
+    protected ILoulanDNSLoggerFactory loggerFactoryInstance;
+
+    @Autowired
+    @Qualifier("loulanDNSLoggerFactoryImpl")
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+        this.loggerFactoryInstance = instance;
     }
 
 
@@ -228,6 +244,17 @@ public abstract class DNSServiceEndpointInstanceImplBase implements IDNSServiceE
 
         setDNSServiceInstanceName(dnsServiceInstanceName);
 
+
+        // (オプション)エンドポイントタスクが、エラーを無視するかどうか.
+        String endpointTaskIgnoreError = properties.getProperty( LoulanDNSConstants.PROP_KEY_SERVICE_ENDPOINT_TASK_IGNORE_ERROR );
+        if ( endpointTaskIgnoreError != null && endpointTaskIgnoreError.isEmpty() == false )
+        {
+            // オプションパラメータなので設定値が指定されている場合にのみ設定する.
+            boolean endpointTaskIgnoreErrorFlg = Boolean.parseBoolean(endpointTaskIgnoreError);
+            setDNSEndpointServiceTaskIgnoreError(endpointTaskIgnoreErrorFlg);
+        }
+
+
         // DNSサービスインスタンスを登録する.
         initDNSServiceInstance( getUserName(), getDNSServiceInstanceName() );
 
@@ -298,6 +325,57 @@ public abstract class DNSServiceEndpointInstanceImplBase implements IDNSServiceE
     {
         return this.dnsServiceInstanceName;
     }
+
+
+    /**
+     * エンドポイントサービスがエラーを検知した際にそれを無視するかを設定する.
+     * 
+     * @param flg
+     * @throws DNSServiceCommonException
+     */
+    public void setDNSEndpointServiceTaskIgnoreError(boolean flg) throws DNSServiceCommonException
+    {
+        this.dnsEndpointServiceTaskIgnoreErrorFlag = flg;
+    } 
+
+    /**
+     * エンドポイントサービスがエラーを検知した際にそれを無視するかを返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public boolean getDNSEndpointServiceTaskIgnoreError() throws DNSServiceCommonException
+    {
+        return this.dnsEndpointServiceTaskIgnoreErrorFlag;
+    } 
+
+
+    /**
+     * LoulanDNSのロガークラスを取得する.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public ILoulanDNSLogger getLogger() throws DNSServiceCommonException
+    {
+
+        String loggerName = "DNSServiceEndpointInstanceImplBase";
+        Properties loggerProperties = new Properties();
+
+        if ( loggerFactoryInstance == null )
+        {
+            String msg = String.format("Failed to get Logger. loggerFactoryInstance is null.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+        ILoulanDNSLogger logger = loggerFactoryInstance.getOrCreateLogger(loggerName, propeties);
+        return logger;
+    }
+
+
+
+
 
     public DNSServiceInstanceInfo getDNSServiceInstanceInfo() throws DNSServiceCommonException
     {

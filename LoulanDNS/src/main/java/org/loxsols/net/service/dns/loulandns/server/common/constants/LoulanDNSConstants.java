@@ -248,6 +248,9 @@ public class LoulanDNSConstants
     // --				205	: DoH(DNS over HTTPS)問い合わせ
     public static final int CONST_DNS_RESOLVER_TYPE_OUTBOUND_DOH = 205;
 
+    // --				501	: DNS-Subway SSHトンネルGW問い合わせ
+    public static final int CONST_DNS_RESOLVER_TYPE_OUTBOUND_DNS_SUBWAY_SSH_TUNNEL_GW = 501;
+
 
 
     // ******************************************
@@ -275,9 +278,16 @@ public class LoulanDNSConstants
     public static final String PROP_KEY_RESOLVER_OUTBOUND_DOH_SERVER_URI_PRIMARY = "loulan.dns.resolver.outbound.server.doh.uri.primary";
 
     // 外部DoHサーバー参照用リゾルバの参照用HTTPメソッドタイプ(プライマリ)
-    // "loulan.dns.resolver.outbound.server.doh.http.methodtype.primary"
-    public static final String PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_METHOD_TYPE_PRIMARY = "loulan.dns.resolver.outbound.server.doh.http.methodtype.primary";
+    // "loulan.dns.resolver.outbound.server.doh.http.method-type.primary"
+    public static final String PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_METHOD_TYPE_PRIMARY = "loulan.dns.resolver.outbound.server.doh.http.method-type.primary";
 
+    // 外部DoHサーバー参照用リゾルバの参照用HTTPコンテントタイプ(プライマリ)
+    // "loulan.dns.resolver.outbound.server.doh.http.content-type.primary"
+    public static final String PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_CONTENT_TYPE_PRIMARY = "loulan.dns.resolver.outbound.server.doh.http.content-type.primary";
+
+    // 外部DoHサーバー参照用リゾルバの参照用HTTPアクセプトタイプ(プライマリ)
+    // "loulan.dns.resolver.outbound.server.doh.http.accept-type.primary"
+    public static final String PROP_KEY_RESOLVER_OUTBOUND_DOH_HTTP_ACCEPT_TYPE_PRIMARY = "loulan.dns.resolver.outbound.server.doh.http.accept-type.primary";
 
 
     // ******************************************
@@ -363,6 +373,11 @@ public class LoulanDNSConstants
     // ******************************************
     // 以下、DNSサービスエンドポイントのパラメータ設定用キー
     // ******************************************
+
+    //----------------- エンドポイント共通パラメータ -----------------------
+    // エンドポイントサービスの実行中に生じたエラーを無視するか.
+    // "loulan.dns.service.endpoint.task.ignore-error"
+    public static String PROP_KEY_SERVICE_ENDPOINT_TASK_IGNORE_ERROR = "loulan.dns.service.endpoint.task.ignore-error";
 
 
     //----------------- UDPサービスエンドポイント -----------------------

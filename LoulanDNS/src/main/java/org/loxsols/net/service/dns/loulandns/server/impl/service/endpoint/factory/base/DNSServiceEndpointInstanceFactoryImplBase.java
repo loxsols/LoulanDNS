@@ -91,6 +91,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.launcher.factory.IDynamicServiceLauncherFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -141,6 +142,17 @@ public abstract class DNSServiceEndpointInstanceFactoryImplBase implements IDNSS
     {
       this.dynamicServiceLauncherFactory = instance;
     } 
+
+
+    ILoulanDNSLoggerFactory loulanDNSLoggerFactory;
+
+    @Autowired
+    @Qualifier("loulanDNSLoggerFactoryImpl")
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+      loulanDNSLoggerFactory = instance;
+    }
+
 
   
     /**
@@ -267,6 +279,7 @@ public abstract class DNSServiceEndpointInstanceFactoryImplBase implements IDNSS
             UDPServiceEndpointInstanceImpl instance = new UDPServiceEndpointInstanceImpl();
             instance.setDNSMessageFactory(dnsMessageFactoryImpl);
             instance.setDNSServiceInstanceFactory(dnsServiceInstanceFactoryImpl);
+            instance.setLoulanDNSLoggerFactory( loulanDNSLoggerFactory );
 
             endpointInstance = instance;
         }
@@ -277,6 +290,7 @@ public abstract class DNSServiceEndpointInstanceFactoryImplBase implements IDNSS
             instance.setDNSMessageFactory(dnsMessageFactoryImpl);
             instance.setDNSServiceInstanceFactory(dnsServiceInstanceFactoryImpl);
             instance.setDynamicServiceLauncherFactory(dynamicServiceLauncherFactory);
+            instance.setLoulanDNSLoggerFactory( loulanDNSLoggerFactory );
 
             endpointInstance = instance;
         }

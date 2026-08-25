@@ -114,8 +114,8 @@ public class DynamicServiceLauncherServiceApplicationConfig
 
 
 
-    @Bean( name="springCloundAppDeployer" )
-    AppDeployer configSpringCloundAppDeployer() throws LoulanDNSSystemServiceException
+    @Bean( name="springCloudAppDeployer" )
+    AppDeployer configSpringCloudAppDeployer() throws LoulanDNSSystemServiceException
     {
         LocalDeployerProperties properties = new LocalDeployerProperties();
 

@@ -7,6 +7,8 @@ import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolErrorRCodeException;
+import org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolRcodeErrorSERVFAILException;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
@@ -209,9 +211,20 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
         getLoulanDNSLogger().debug(String.format("DNSQuery is arrived. DNSQuery=%s", dnsQuestionMessage.toString()) );
 
         IDNSResolverInstance dnsResolverInstance = getDNSResolverInstance();
-        IDNSResponseMessage responseMessage = dnsResolverInstance.resolve(dnsQuestionMessage);
 
-        getLoulanDNSLogger().debug(String.format("DNSQuery is proccessed. DNSQuery=%s, DNSResponse=%s", dnsQuestionMessage.toString(), responseMessage.toString() ) );
+        IDNSResponseMessage responseMessage;
+        try
+        {
+            responseMessage = dnsResolverInstance.resolve(dnsQuestionMessage);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            // リゾルバ層で生じたエラーは、サービス層ではSERVFAILのDNSエラーを表す例外クラスに変換してスローする.
+            String msg = String.format("Failed to call resolver instance. DNSQuery=%s", dnsQuestionMessage.toString() );
+            DNSProtocolRcodeErrorSERVFAILException exception = new DNSProtocolRcodeErrorSERVFAILException(msg, cause, dnsQuestionMessage );
+
+            throw exception;
+        }
 
         return responseMessage;
 

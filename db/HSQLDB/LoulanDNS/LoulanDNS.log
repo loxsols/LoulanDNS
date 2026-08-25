@@ -1,32 +1,26 @@
-/*C12*/SET SCHEMA PUBLIC
-INSERT INTO COMMON_SYSTEM_LOG VALUES(150,'[2026/06/19 03:42:38.798 JST][DEBUG][http-nio-58080-exec-1][2122122100082140045]','DNSQuery is arrived. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@3b8d0651','2026/06/19 03:42:38.798 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:42:38.798 JST','2026/06/19 03:42:38.798 JST')
+/*C4*/SET SCHEMA PUBLIC
+INSERT INTO USER VALUES(88888,'admin','password',101,'\u7ba1\u7406\u8005','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-INSERT INTO COMMON_SYSTEM_LOG VALUES(151,'[2026/06/19 03:42:38.923 JST][DEBUG][http-nio-58080-exec-1][-8970938711736967667]','DNSQuery is proccessed. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@3b8d0651, DNSResponse=--------------------------------------\u000d\u000aHeader Section\u000d\u000aRCode = 8\u000d\u000aQDCount = 1\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000d\u000a--------------------------------------\u000a\u000d\u000aQuestion Section\u000a\u000d\u000aQDCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000aqname : google.co.jp.\u000a\u000d\u000a--------------------------------------\u000a\u000d\u000aAnswer Section\u000a\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000arname : google.co.jp.\u000a\u000d\u000a','2026/06/19 03:42:38.923 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:42:38.923 JST','2026/06/19 03:42:38.923 JST')
+INSERT INTO USER_GROUP VALUES(88888,'admin',101,'\u7ba1\u7406\u8005\u30b0\u30eb\u30fc\u30d7','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-INSERT INTO COMMON_SYSTEM_LOG VALUES(152,'[2026/06/19 03:42:58.515 JST][DEBUG][http-nio-58080-exec-3][-1126743316017643345]','DNSQuery is arrived. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@4e4c1033','2026/06/19 03:42:58.515 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:42:58.515 JST','2026/06/19 03:42:58.515 JST')
+INSERT INTO USER_GROUP_PRIVILEGE VALUES(0,88888,300,300,300,101,'\u7ba1\u7406\u8005\u30b0\u30eb\u30fc\u30d7\u306e\u6a29\u9650','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-INSERT INTO COMMON_SYSTEM_LOG VALUES(153,'[2026/06/19 03:42:58.599 JST][DEBUG][http-nio-58080-exec-3][8031172631603233634]','DNSQuery is proccessed. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@4e4c1033, DNSResponse=--------------------------------------\u000d\u000aHeader Section\u000d\u000aRCode = 8\u000d\u000aQDCount = 1\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000d\u000a--------------------------------------\u000a\u000d\u000aQuestion Section\u000a\u000d\u000aQDCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000aqname : google.co.jp.\u000a\u000d\u000a--------------------------------------\u000a\u000d\u000aAnswer Section\u000a\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000arname : google.co.jp.\u000a\u000d\u000a','2026/06/19 03:42:58.599 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:42:58.599 JST','2026/06/19 03:42:58.599 JST')
+INSERT INTO DNS_SERVICE_INSTANCE VALUES(88888,88888,'default','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30b5\u30fc\u30d3\u30b9\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9',0,88888,101,'\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30b5\u30fc\u30d3\u30b9\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-INSERT INTO COMMON_SYSTEM_LOG VALUES(154,'[2026/06/19 03:43:36.902 JST][DEBUG][http-nio-58080-exec-5][-8788568700560020438]','DNSQuery is arrived. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@1757a221','2026/06/19 03:43:36.902 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:43:36.902 JST','2026/06/19 03:43:36.902 JST')
+INSERT INTO DNS_SERVICE_ENDPOINT_INSTANCE VALUES(88888,88888,'default-endpoint','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30b5\u30fc\u30d3\u30b9\u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9',10101,101,'\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30b5\u30fc\u30d3\u30b9\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-INSERT INTO COMMON_SYSTEM_LOG VALUES(155,'[2026/06/19 03:43:36.963 JST][DEBUG][http-nio-58080-exec-5][3504183327821087165]','DNSQuery is proccessed. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@1757a221, DNSResponse=--------------------------------------\u000d\u000aHeader Section\u000d\u000aRCode = 8\u000d\u000aQDCount = 1\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000d\u000a--------------------------------------\u000a\u000d\u000aQuestion Section\u000a\u000d\u000aQDCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000aqname : google.co.jp.\u000a\u000d\u000a--------------------------------------\u000a\u000d\u000aAnswer Section\u000a\u000d\u000aANCount = 1\u000d\u000a--------------------------------------\u000a\u000d\u000arname : google.co.jp.\u000a\u000d\u000a','2026/06/19 03:43:36.963 JST',NULL,NULL,NULL,101,NULL,'2026/06/19 03:43:36.963 JST','2026/06/19 03:43:36.963 JST')
+INSERT INTO DNS_SERVICE_ENDPOINT_INSTANCE_PROPERTIES VALUES(8888801,88888,'loulan.dns.user.name','admin','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8\u306e\u30e6\u30fc\u30b6\u540d',101,'memo','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
 COMMIT
-DISCONNECT
-/*C13*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C14*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C15*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C16*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C17*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C18*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C19*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C20*/SET SCHEMA PUBLIC
-DISCONNECT
-/*C21*/SET SCHEMA PUBLIC
+INSERT INTO DNS_SERVICE_ENDPOINT_INSTANCE_PROPERTIES VALUES(8888802,88888,'loulan.dns.service.instance.name','default','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8\u304cbind\u3059\u308bDNS\u30b5\u30fc\u30d3\u30b9\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9\u540d',101,'memo','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
+INSERT INTO DNS_SERVICE_ENDPOINT_INSTANCE_PROPERTIES VALUES(8888803,88888,'loulan.dns.service.endpoint.udp.address','0.0.0.0','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8\u304cbind\u3059\u308bIP\u30a2\u30c9\u30ec\u30b9',101,'memo','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
+INSERT INTO DNS_SERVICE_ENDPOINT_INSTANCE_PROPERTIES VALUES(8888804,88888,'loulan.dns.service.endpoint.udp.port','50053','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30a8\u30f3\u30c9\u30dd\u30a4\u30f3\u30c8\u304cbind\u3059\u308bUDP\u30dd\u30fc\u30c8\u756a\u53f7',101,'memo','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
+INSERT INTO DNS_RESOLVER_INSTANCE VALUES(88888,88888,'default-resolver','\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30ea\u30be\u30eb\u30d0\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9',201,101,'\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30ea\u30be\u30eb\u30d0\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
+INSERT INTO DNS_RESOLVER_INSTANCE_PROPERTIES VALUES(88888001,88888,'loulan.dns.resolver.outbound.server.host.primary','8.8.8.8','key(loulan.dns.resolver.outbound.server.host.primary)=value(8.8.8.8)',101,'\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30ea\u30be\u30eb\u30d0\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9\u306e\u5916\u90e8\u554f\u3044\u5408\u308f\u305b\u7528DNS\u30b5\u30fc\u30d0\u30fc(\u30d7\u30e9\u30a4\u30de\u30ea)','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
+INSERT INTO DNS_RESOLVER_INSTANCE_PROPERTIES VALUES(88888002,88888,'loulan.dns.resolver.outbound.server.port.primary','53','key(loulan.dns.resolver.outbound.server.port.primary)=value(53)',101,'\u30c7\u30d5\u30a9\u30eb\u30c8DNS\u30ea\u30be\u30eb\u30d0\u30a4\u30f3\u30b9\u30bf\u30f3\u30b9\u306e\u5916\u90e8\u554f\u3044\u5408\u308f\u305b\u7528DNS\u30b5\u30fc\u30d0\u30fc(\u30d7\u30e9\u30a4\u30de\u30ea)','2024/10/01 00:00:00.000 JST','2024/10/01 00:00:00.000 JST')
+COMMIT
 DISCONNECT

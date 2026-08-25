@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -21,6 +22,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.xbill.DNS.ZoneTransferException;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.repository.UserRepository;
+import org.loxsols.net.service.dns.loulandns.app.spring.base.config.LoulanDNSBaseApplicationConfig;
+import org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.test.LoulanDNSEndpointServiceApplicationTest;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 
@@ -63,6 +66,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.controller")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.common.security")
 @ComponentScan("org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider")
+@Import(LoulanDNSBaseApplicationConfig.class)
 public class SpringTestRunnerCommandApplicationConfig
 {
 
@@ -196,6 +200,15 @@ public class SpringTestRunnerCommandApplicationConfig
     {
         LoulanDNSLogicalDBServiceTest testImpl = new LoulanDNSLogicalDBServiceTest();
         
+        return testImpl;
+    }
+
+
+    // 2026/08/10 試行中 
+    @Bean
+    LoulanDNSEndpointServiceApplicationTest configLoulanDNSEndpointServiceApplicationTest() throws DNSServiceCommonException
+    {
+        LoulanDNSEndpointServiceApplicationTest testImpl = new LoulanDNSEndpointServiceApplicationTest();
         return testImpl;
     }
 

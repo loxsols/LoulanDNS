@@ -93,6 +93,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -135,6 +136,15 @@ public class DNSServiceEndpointInstanceFactoryImpl extends SimpleDNSServiceEndpo
     @Autowired
     @Qualifier("dnsServiceInstanceFactoryImpl")
     public IDNSServiceInstanceFactory dnsServiceInstanceFactory;
+
+
+    @Autowired
+    @Qualifier("loulanDNSLoggerFactoryImpl")
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+        super.setLoulanDNSLoggerFactory(instance);
+    }
+
 
 
     LoulanDNSUtils loulanDNSUtils = new LoulanDNSUtils();

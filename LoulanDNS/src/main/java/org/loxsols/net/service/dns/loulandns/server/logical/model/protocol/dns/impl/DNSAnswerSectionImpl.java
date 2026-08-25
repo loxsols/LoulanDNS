@@ -111,7 +111,7 @@ public class DNSAnswerSectionImpl implements IDNSAnswerSection
             IDNSResourceRecord rr = new DNSResourceRecordImpl();
             int rrBytesSize = rr.setDNSResourceRecordBytes(rrBytes);
 
-            // ドメイン名圧縮が適用されているかを判定.
+            // ドメイン名圧縮(RFC 1035のラベル圧縮機能)が適用されているかを判定.
             if ( protocolUtils.isCompressedDomainName( rrBytes ) == true )
             {
                 // ドメイン名圧縮が適用されている場合は、DNSメッセージ先頭からのオフセット位置の文字列を使用する必要がある.
@@ -125,20 +125,25 @@ public class DNSAnswerSectionImpl implements IDNSAnswerSection
 
                 int offset = protocolUtils.calcCompressedDomainNameOffset( rrBytes );
 
-                // DNSメッセージ全体の先頭からのオフセット位置にあるDNS名を解析する.
-                // TODO : ドメイン名圧縮の多段指定には対応していない.
-                byte[] prevRRBytes = Arrays.copyOfRange(fullDNSMessageBytes, offset, fullDNSMessageBytes.length - 1 );
+                // // DNSメッセージ全体の先頭からのオフセット位置にあるDNS名を解析する.
+                // // TODO : ドメイン名圧縮の多段指定には対応していない.
+                // byte[] prevRRBytes = Arrays.copyOfRange(fullDNSMessageBytes, offset, fullDNSMessageBytes.length - 1 );
                 
-                if ( protocolUtils.isCompressedDomainName( prevRRBytes) == true )
-                {
-                    // TODO : ドメイン名圧縮の多段指定には対応していない. とりあえず例外をスローする.
-                    String msg = String.format("Not supported for multi steps of Compressed DomainName.");
-                    DNSServiceCommonException exception = new DNSServiceCommonException(msg);
-                    throw exception;
-                }
+                // if ( protocolUtils.isCompressedDomainName( prevRRBytes) == true )
+                // {
+                //     // TODO : ドメイン名圧縮の多段指定には対応していない. とりあえず例外をスローする.
+                //     String msg = String.format("Not supported for multi steps of Compressed DomainName.");
+                //     DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+                //     throw exception;
+                // }
 
                 // ドメイン名圧縮されている場合のみここでdnameを設定する.
-                String dname = protocolUtils.parseDomainName( prevRRBytes );
+                // String dname = protocolUtils.parseDomainName( prevRRBytes );
+
+                // ドメイン名圧縮されている場合のみここでdnameを設定する.
+                String dname = protocolUtils.parseDomainName(offset, fullDNSMessageBytes);
+
+
                 rr.setDNSResourceName( dname );
             }
         

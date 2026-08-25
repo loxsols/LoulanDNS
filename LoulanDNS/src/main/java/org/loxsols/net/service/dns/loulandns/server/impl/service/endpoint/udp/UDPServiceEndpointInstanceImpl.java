@@ -36,7 +36,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.xbill.DNS.tools.*;
 import org.xbill.DNS.ZoneTransferException;
@@ -75,6 +76,8 @@ import org.xbill.DNS.SimpleResolver;
 
 
 import org.loxsols.net.service.dns.loulandns.server.common.constants.*;
+import org.loxsols.net.service.dns.loulandns.server.common.constants.messages.LoulanDNSMessageConstants;
+import org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolErrorRCodeException;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceInsufficientDNSRequestException;
 import org.loxsols.net.service.dns.loulandns.server.common.InsufficientDNSMessageException;
@@ -87,7 +90,10 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.message.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -122,6 +128,15 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     public void setDNSMessageFactory(IDNSMessageFactory instance)
     {
         super.setDNSMessageFactory(instance);
+    }
+
+
+    
+    @Autowired
+    @Qualifier("loulanDNSLoggerFactoryImpl")
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+      super.setLoulanDNSLoggerFactory(instance);
     }
 
   
@@ -212,6 +227,8 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
       SocketAddress socketAddress = getUDPServiceSocketAddress();
 
       DatagramSocket sock;
+
+      ILoulanDNSLogger logger = getLogger();
       
       try
       {
@@ -238,12 +255,18 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         {
           // タスク状態が終了待ち状態になっているため、本タスクを終了する.
 
+          // INFO-100101 : "Endpoint Service Task is going to suspend status.";
+          logger.info(LoulanDNSMessageConstants.INFO_100101, LoulanDNSMessageConstants.INFO_100101_MSG);
+
           // ソケットをクリアする.
           sock.disconnect();
           sock.close();
 
           // タスク状態を停止状態に設定する.
           setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+          // INFO-100102 : "Endpoint Service Task is suspended.";
+          logger.info(LoulanDNSMessageConstants.INFO_100102, LoulanDNSMessageConstants.INFO_100102_MSG);
 
           return;
         }
@@ -261,11 +284,37 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         catch(IOException cause)
         {
 
+          String msg = String.format("Failed to receive DNS Query Message on DNS UDP Service Endpoint. userName=%s, serviceInstanceName=%s, address=%s, port=%d.", getUserName(), getDNSServiceInstanceName(), getUDPServiceSocketAddress(), getUDPServiceEndpointPort() );
+          DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+
+          // TODO :　当面は例外を標準出力する.
+          exception.printStackTrace();
+
+          // ERROR-800101 : "I/O error.";
+          logger.error(LoulanDNSMessageConstants.ERROR_800101, LoulanDNSMessageConstants.ERROR_800101_MSG, exception);
+
+          if ( getDNSEndpointServiceTaskIgnoreError() )
+          {
+            // IgnoreErrorフラグが設定されている場合はエラーを無視して続行する.
+            continue;
+          }
+
+
+          // IgnoreErrorフラグがセットされていない場合は、ソケットを閉じてEndpointサービスタスクを終了する.
+
+          // INFO-100198 : "Endpoint Service Task is going to accidentaly STOP.";
+          logger.info(LoulanDNSMessageConstants.INFO_100198, LoulanDNSMessageConstants.INFO_100198_MSG);
+
+          // ソケットをクリアする.
           sock.disconnect();
           sock.close();
 
-          String msg = String.format("Failed to receive DNS Query Message on DNS UDP Service Endpoint. userName=%s, serviceInstanceName=%s, address=%s, port=%d.", getUserName(), getDNSServiceInstanceName(), getUDPServiceSocketAddress(), getUDPServiceEndpointPort() );
-          DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+          // タスク状態を停止状態に設定する.
+          setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+          // INFO-100199 : "Endpoint Service Task is accidentaly STOPPED.";
+          logger.info(LoulanDNSMessageConstants.INFO_100199, LoulanDNSMessageConstants.INFO_100199_MSG);
+
           throw exception;
         }
 
@@ -284,31 +333,115 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         {
           dnsMessage = parseDNSPacketBytes(dnsMessageBytes);
         }
+        catch(InsufficientDNSMessageException exception)
+        {
+          // 受信したDNSリクエストパケットが不十分なサイズで処理できない.
+          // TCPでは追加受信すべきだが、UDPでは追加受信せずにエラーを返却すべき.
+
+          // TODO : 当面は標準出力でも例外を出力する.
+          exception.printStackTrace();
+
+          // ERROR-100101 : "Invalid DNS Question Messagge.";
+          logger.error(LoulanDNSMessageConstants.ERROR_100101, LoulanDNSMessageConstants.ERROR_100101_MSG, exception);
+
+
+          if ( getDNSEndpointServiceTaskIgnoreError() )
+          {
+            // IgnoreErrorフラグが設定されている場合はエラーを無視して続行する.
+            continue;
+          }
+
+
+          // 例外を上位層にスローして処理を停止する.
+
+          // IgnoreErrorフラグがセットされていない場合は、ソケットを閉じてEndpointサービスタスクを終了する.
+          // INFO-100198 : "Endpoint Service Task is going to accidentaly STOP.";
+          logger.info(LoulanDNSMessageConstants.INFO_100198, LoulanDNSMessageConstants.INFO_100198_MSG);
+
+          // ソケットをクリアする.
+          sock.disconnect();
+          sock.close();
+
+          // タスク状態を停止状態に設定する.
+          setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+          // INFO-100199 : "Endpoint Service Task is accidentaly STOPPED.";
+          logger.info(LoulanDNSMessageConstants.INFO_100199, LoulanDNSMessageConstants.INFO_100199_MSG);
+
+          throw exception;
+
+        }
         catch(DNSServiceCommonException exception)
         {
 
-            if ( exception instanceof InsufficientDNSMessageException )
-            {
-              // 正常系 : 受信したDNSリクエストパケットが不十分なので追加受信する.
-              continue;
-            }
+          // DNSメッセージ解析時に想定外のエラーが発生した.
 
-            // DNSメッセージ解析時に想定外のエラーが発生した.
-            // 例外を上位層にスローして処理を停止する.
-            // TODO : ログに例外を吐き出しつつ処理自体は続行するのが望ましい.
-            sock.disconnect();
-            sock.close();
+          // TODO : 当面は標準出力でも例外を出力する.
+          exception.printStackTrace();
 
-            throw exception;
+          // ERROR-100101 : "Invalid DNS Question Messagge.";
+          logger.error(LoulanDNSMessageConstants.ERROR_100101, LoulanDNSMessageConstants.ERROR_100101_MSG, exception);
+
+          if ( getDNSEndpointServiceTaskIgnoreError() )
+          {
+            // IgnoreErrorフラグが設定されている場合はエラーを無視して続行する.
+            continue;
+          }
+
+          // 例外を上位層にスローして処理を停止する.
+
+          // IgnoreErrorフラグがセットされていない場合は、ソケットを閉じてEndpointサービスタスクを終了する.
+          // INFO-100198 : "Endpoint Service Task is going to accidentaly STOP.";
+          logger.info(LoulanDNSMessageConstants.INFO_100198, LoulanDNSMessageConstants.INFO_100198_MSG);
+
+          // ソケットをクリアする.
+          sock.disconnect();
+          sock.close();
+
+          // タスク状態を停止状態に設定する.
+          setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+          // INFO-100199 : "Endpoint Service Task is accidentaly STOPPED.";
+          logger.info(LoulanDNSMessageConstants.INFO_100199, LoulanDNSMessageConstants.INFO_100199_MSG);
+
+          throw exception;
         }
 
         if ( protocolUtils.isDNSQuestionMessage(dnsMessage) == false )
         {
           // 受信したDNSメッセージはDNS問い合わせメッセージではない.
-          sock.close();
 
           String msg = String.format("Not DNS Question Message. DNS message is %s.", dnsMessage );
           DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+
+          // TODO : 当面は標準出力にも例外を出力しておく.
+          exception.printStackTrace();
+
+          // ERROR-100201 : Invalid DNS Response Messagge.
+          logger.error(LoulanDNSMessageConstants.ERROR_100201, LoulanDNSMessageConstants.ERROR_100201_MSG, exception);
+
+          if ( getDNSEndpointServiceTaskIgnoreError() )
+          {
+            // IgnoreErrorフラグが設定されている場合はエラーを無視して続行する.
+            continue;
+          }
+
+          // 例外を上位層にスローして処理を停止する.
+
+          // IgnoreErrorフラグがセットされていない場合は、ソケットを閉じてEndpointサービスタスクを終了する.
+          // INFO-100198 : "Endpoint Service Task is going to accidentaly STOP.";
+          logger.info(LoulanDNSMessageConstants.INFO_100198, LoulanDNSMessageConstants.INFO_100198_MSG);
+
+          // ソケットをクリアする.
+          sock.disconnect();
+          sock.close();
+
+          // タスク状態を停止状態に設定する.
+          setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+          // INFO-100199 : "Endpoint Service Task is accidentaly STOPPED.";
+          logger.info(LoulanDNSMessageConstants.INFO_100199, LoulanDNSMessageConstants.INFO_100199_MSG);
+
           throw exception;
         }
 
@@ -326,41 +459,22 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         // DNSメッセージの終端まで受信したのでカウンタを0に設定する.
         totalReceivedSize = 0;
 
+
         // DNSサービスインスタンス経由でDNS問い合わせを実行する.
-        IDNSResponseMessage dnsResponseMessage = serveDNSQuery(dnsQuestionMessage);
+        // 以下の処理はスレッド内で並列実行する.
 
-        // DNSレスポンスを返却する.
-        byte[] dnsResponseBytes = dnsResponseMessage.getDNSMessageBytes();
-        DatagramPacket responsePacket = new DatagramPacket( dnsResponseBytes, dnsResponseBytes.length );
+        UDPServiceThreadTask serviceThreadTask = new UDPServiceThreadTask(sock, recvPacket, dnsQuestionMessage, logger);
+        Thread thread = new Thread(serviceThreadTask);
+        thread.start();
 
-        InetAddress clientAddress = recvPacket.getAddress();
-        responsePacket.setAddress(clientAddress);
+        // TODO : スレッド内で発生したエラーのうち、致命的なものを補足して上位層にスローする処理が未実装.
 
-        int clientPort = recvPacket.getPort();
-        responsePacket.setPort(clientPort);
-
-        try
-        {
-          sock.send( responsePacket );
-        }
-        catch(IOException cause)
-        {
-          
-          sock.disconnect();
-          sock.close();
-
-          String msg = String.format("Failed to send DNS Response Message on DNS UDP Service Endpoint. userName=%s, serviceInstanceName=%s, address=%s, port=%d.", getUserName(), getDNSServiceInstanceName(), getUDPServiceSocketAddress(), getUDPServiceEndpointPort() );
-          DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
-          throw exception;
-        }
 
       }
 
 
+
     }
-
-
-
 
 
 
@@ -414,6 +528,130 @@ public class UDPServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     }
 
 
+
+    class UDPServiceThreadTask implements Runnable
+    {
+
+      DatagramSocket sock;
+      DatagramPacket recvPacket;
+
+      IDNSQuestionMessage dnsQuestionMessage;
+      ILoulanDNSLogger logger;
+
+      DNSServiceCommonException failedTaskException = null;
+
+      public UDPServiceThreadTask(DatagramSocket sock, DatagramPacket recvPacket, IDNSQuestionMessage dnsQuestionMessage, ILoulanDNSLogger logger)
+      {
+        this.sock = sock;
+        this.recvPacket = recvPacket;
+        this.dnsQuestionMessage = dnsQuestionMessage;
+        this.logger = logger;
+      }
+
+      public boolean isFailed()
+      {
+        if ( failedTaskException == null )
+        {
+          return false;
+        }
+
+        return true;
+      }
+
+      public DNSServiceCommonException getFialedTaskException()
+      {
+        return this.failedTaskException;
+      }
+
+      public void run()
+      {
+
+        try
+        {
+
+            // DNSサービスインスタンス経由でDNS問い合わせを実行する.
+            IDNSResponseMessage dnsResponseMessage;
+            
+            try
+            {
+              dnsResponseMessage = serveDNSQuery(dnsQuestionMessage);
+            }
+            catch(DNSProtocolErrorRCodeException cause)
+            {
+              // DNSエラーメッセージを返却すべき例外事象が発生した.
+              // 最上位層であるEndpointサービスにおいて例外を処理しつつ、DNSクライアントにはRCODEが0以外(ERROR)のDNSレスポンスを返却する.
+              
+              // TODO : 当面は例外を標準出力例外にも出力する.
+              cause.printStackTrace();
+
+              // WARN-200101 : "DNS protocol error is happend."
+              logger.warn(LoulanDNSMessageConstants.WARN_200101, LoulanDNSMessageConstants.WARN_200101_MSG, cause);
+
+              
+              // クライアントにはRCODEが0以外(エラー)のDNSレスポンスメッセージを返却する.
+              dnsResponseMessage = cause.createDNSErrorResponseMessage();
+
+            }
+
+            // DNSレスポンスを返却する.
+            byte[] dnsResponseBytes = dnsResponseMessage.getDNSMessageBytes();
+            DatagramPacket responsePacket = new DatagramPacket( dnsResponseBytes, dnsResponseBytes.length );
+
+            InetAddress clientAddress = recvPacket.getAddress();
+            responsePacket.setAddress(clientAddress);
+
+            int clientPort = recvPacket.getPort();
+            responsePacket.setPort(clientPort);
+
+            try
+            {
+              sock.send( responsePacket );
+            }
+            catch(IOException cause)
+            {
+
+              String msg = String.format("Failed to send DNS Response Message on DNS UDP Service Endpoint. userName=%s, serviceInstanceName=%s, address=%s, port=%d.", getUserName(), getDNSServiceInstanceName(), getUDPServiceSocketAddress(), getUDPServiceEndpointPort() );
+              DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+
+              // TODO :　当面は例外を標準出力する.
+              exception.printStackTrace();
+
+              // ERROR-800101 : "I/O error.";
+              logger.error(LoulanDNSMessageConstants.ERROR_800101, LoulanDNSMessageConstants.ERROR_800101_MSG, exception);
+
+
+              if ( getDNSEndpointServiceTaskIgnoreError() )
+              {
+                // IgnoreErrorフラグが設定されている場合はエラーを無視して続行する.
+                return;
+              }
+
+              // IgnoreErrorフラグがセットされていない場合は、ソケットを閉じてEndpointサービスタスクを終了する.
+              // INFO-100198 : "Endpoint Service Task is going to accidentaly STOP.";
+              logger.info(LoulanDNSMessageConstants.INFO_100198, LoulanDNSMessageConstants.INFO_100198_MSG);
+
+              // ソケットをクリアする.
+              sock.disconnect();
+              sock.close();
+
+              // タスク状態を停止状態に設定する.
+              setDNSEndpointServiceTaskStatus( LoulanDNSConstants.CONST_TASK_STATUS_INVACTIVE_DNS_SERVICE_ENDPOINT );
+
+              // INFO-100199 : "Endpoint Service Task is accidentaly STOPPED.";
+              logger.info(LoulanDNSMessageConstants.INFO_100199, LoulanDNSMessageConstants.INFO_100199_MSG);
+
+              throw exception;
+            }
+
+          }
+          catch(DNSServiceCommonException cause)
+          {
+            this.failedTaskException = cause;
+          }
+
+      }
+
+    }
 
 
 }

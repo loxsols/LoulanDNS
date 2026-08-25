@@ -1,6 +1,8 @@
 package org.loxsols.net.service.dns.loulandns.server.common.util;
 
 
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.Inet4Address;
@@ -252,14 +254,24 @@ public class LoulanDNSProtocolUtils
             throw exception;
         }
 
-        boolean ret = false;
-        // ドメイン名の先頭2bitが11の場合、ドメイン名は圧縮されている.
-        if ( ( dname[0] & 0b11000000) == 0b11000000 )
-        {
-            ret = true;
-        }
+        int len = 0xff & dname[0];
+        boolean ret = isCompressedDomainNameLabelLen(len);
 
-        // LoulanDNSDebugUtils.printDebug( this.getClass(), "isCompressedDomainName()", String.format("dname[0]=0x%X, ret=%b", dname[0], ret));
+        LoulanDNSDebugUtils.printDebug( this.getClass(), "isCompressedDomainName()", String.format("dname[0]=0x%X, ret=%b", dname[0], ret));
+
+        return ret;
+    }
+
+// ドメイン名が圧縮されているかを判定する.
+    // (ドメイン名圧縮とは複数のリソースレコードで繰り返し出現するラベルを一か所に集約して表現する方法)
+    public boolean isCompressedDomainNameLabelLen(int len) throws MalformedDomainNameException
+    {
+        boolean ret = false;
+        // ラベル長値の先頭2bitが11の場合、ドメイン名は圧縮されている.
+        if ( ( len & 0b11000000) == 0b11000000 )
+        {
+             ret = true;
+        }
 
         return ret;
     }
@@ -279,8 +291,12 @@ public class LoulanDNSProtocolUtils
 
         // dnameの先頭2byteのうち、下位14bitがオフセット値.
         //   オフセット値の最大値は理論上は16383(2^14 - 1)だが、この値を信用するとおそらく領域外読み込みの脆弱性の原因となるだろう.
-        int offset = ( ( dname[0] & 0b00111111 ) << 8 ) | dname[1];
-
+        // int offset = ( ( dname[0] & 0b00111111 ) << 8 ) | dname[1];
+        int len = 0xff & dname[0];
+        len = len & 0b00111111;
+        int offset = len << 8;
+        offset = offset | (0xff & dname[1] );
+        offset = 0xffff & offset;
 
         // オフセット値はDNSメッセージの先頭からの値なので、少なくともヘッダーセクションのサイズは越えなければならない.
         if ( offset < DNSProtocolConstants.SIZE_OF_DNS_HEADER_SECION )
@@ -329,6 +345,7 @@ public class LoulanDNSProtocolUtils
     }
 
 
+    /*
     // DNSクエリ文字列を解析する.
     //  TODO : 日本語ドメイン名(マルチバイト文字)に非対応.
     public String parseDomainName(byte[] dname) throws MalformedDomainNameException
@@ -366,10 +383,13 @@ public class LoulanDNSProtocolUtils
                 break;
             }
 
+
             if ( len > DNSProtocolConstants.MAX_DOMAIN_NAME_LABEL_LENGTH )
             {
                 // ドメイン名中のラベル文字列の最大長(63文字)を超過している.
-                String msg = String.format("Excess size of Domain Name Label : length=%d", len);
+                String dnameHexString = toDebugHexString( dname );
+                
+                String msg = String.format("Excess size of Domain Name Label. length(%d) is over %d. index=%d, dname-bytes=%s", len, DNSProtocolConstants.MAX_DOMAIN_NAME_LABEL_LENGTH, i, dnameHexString);
                 MalformedDomainNameException execption = new MalformedDomainNameException(msg);
                 throw execption; 
             }
@@ -425,6 +445,256 @@ public class LoulanDNSProtocolUtils
 
 
         return dnameString;
+    }
+    */
+
+
+    // 2026/08/19 : 非推奨メソッド. 
+    // ラベル圧縮ポインター対応版のparseDomainName(int labelOffset, byte[] fullDNSMessageBytes)に実質的な処理を移した.
+    // 本メソッドのI/Fは互換性維持のために残しておく.
+    // DNSクエリ文字列を解析する.
+    //  TODO : 日本語ドメイン名(マルチバイト文字)に非対応.
+    public String parseDomainName(byte[] dname) throws MalformedDomainNameException
+    {
+        String dnameStr = parseDomainName(0, dname);
+        return dnameStr;
+    }
+
+
+    /*
+    // DNSクエリ文字列を解析する.
+    // ラベル圧縮ポインター対応版
+    public String parseDomainName(int offset, byte[] fullDNSMessageBytes) throws MalformedDomainNameException
+    {
+        //  ドメイン名の構造 | 長さ(1byte) | ASCII文字列(.を含まない) | 長さ(1byte) | ASCII文字列(.を含まない)  | ... | 終端NULL文字 |
+        StringBuffer buffer = new StringBuffer();
+
+        byte[] dname = new byte[ fullDNSMessageBytes.length - offset ];
+        System.arraycopy(fullDNSMessageBytes, offset, dname, 0, dname.length );
+
+        int i = 0;
+        boolean isTerminated = false;
+        while(i < dname.length )
+        {
+
+            int len = 0x00ff & ( dname[i] );
+
+            if ( len == DNSProtocolConstants.ASCII_CODE_NULL )
+            {
+                // ドメイン名の終端(NULL文字)に達した.
+                isTerminated = true;
+                break;
+            }
+
+            String label = parseDomainNameLabel(offset + i, fullDNSMessageBytes);
+            buffer.append(label);
+            buffer.append(".");
+
+            byte[] head = new byte[]{ fullDNSMessageBytes[offset + i], fullDNSMessageBytes[offset + i + 1] };
+            if ( isCompressedDomainName( head ) == true)
+            {
+                // ドメイン名圧縮している場合は、オフセットを2byteだけインクリメントする.
+                i += 2;
+            }
+            else
+            {
+                i += len + 1;
+            }
+
+        }
+
+        String dnameString = buffer.toString();
+
+
+        LoulanDNSDebugUtils.printDebug( this.getClass(), "parseDomainName()", String.format("dnameString=%s", dnameString) );
+
+
+
+        if (isTerminated == false)
+        {
+            // NULL終端していない.
+            String msg = String.format("Specified Domain Name is not NULL terminated. dname=%s, i=%d, dname.length=%d, offset=%d", dnameString, i, dname.length, offset );
+            MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            throw execption; 
+        }
+
+
+        if ( dnameString.length() > DNSProtocolConstants.MAX_DOMAIN_NAME_LENGTH )
+        {
+            // FQDN名の最大長(254文字)を超過している.
+            String msg = String.format("Excess size of FQDN : length=%d, dname=%s", dnameString.length(), dnameString );
+            MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            throw execption; 
+        }
+
+
+
+        // TODO : 日本語ドメイン(マルチバイト文字)の可能性があるため、以下の実装はコメントアウトする.
+        // 正規表現でドメイン名を判定する.
+        // Matcher matcher = DNSProtocolConstants.REGULAR_EXPRESSION_PATTERN_OF_DOMAIN_NAME.matcher( dnameString );
+        // if ( matcher.matches() == false )
+        // {
+        //    // ドメイン名として使用できない文字が含まれている.
+        //    String msg = String.format("Invalid Domain Name. dname=%s", dnameString );
+        //    MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+        //    throw execption; 
+        // }
+
+
+        return dnameString;
+
+
+    }
+    */
+
+
+    // DNSクエリ文字列を解析する.
+    // ラベル圧縮ポインター対応版
+    public String parseDomainName(int offset, byte[] fullDNSMessageBytes) throws MalformedDomainNameException
+    {
+        //  ドメイン名の構造 | 長さ(1byte) | ASCII文字列(.を含まない) | 長さ(1byte) | ASCII文字列(.を含まない)  | ... | 終端NULL文字 |
+        StringBuffer buffer = new StringBuffer();
+
+        int i = 0;
+        boolean isTerminated = false;
+        while(i + offset < fullDNSMessageBytes.length )
+        {
+            byte[] head = new byte[]{ fullDNSMessageBytes[i + offset], fullDNSMessageBytes[i + offset + 1] };
+
+            int len = 0x00ff & ( head[0] );
+            if ( len == DNSProtocolConstants.ASCII_CODE_NULL )
+            {
+                // ドメイン名の終端(NULL文字)に達した.
+                isTerminated = true;
+                break;
+            }
+
+            String label = parseDomainNameLabel(offset + i, fullDNSMessageBytes);
+            buffer.append(label);
+            buffer.append(".");
+
+            if ( isCompressedDomainName( head ) == true)
+            {
+                // ドメイン名圧縮している場合は、オフセットを2byteだけインクリメントする.
+                i += 2;
+            }
+            else
+            {
+                i += len + 1;
+            }
+
+        }
+
+        String dnameString = buffer.toString();
+
+        // LoulanDNSDebugUtils.printDebug( this.getClass(), "parseDomainName()", String.format("dnameString=%s", dnameString) );
+
+        if (isTerminated == false)
+        {
+            // NULL終端していない.
+            String msg = String.format("Specified Domain Name is not NULL terminated. dname=%s, i=%d, offset=%d", dnameString, i, offset );
+            MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            throw execption; 
+        }
+
+
+        if ( dnameString.length() > DNSProtocolConstants.MAX_DOMAIN_NAME_LENGTH )
+        {
+            // FQDN名の最大長(254文字)を超過している.
+            String msg = String.format("Excess size of FQDN : length=%d, dname=%s", dnameString.length(), dnameString );
+            MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            throw execption; 
+        }
+
+
+
+        // TODO : 日本語ドメイン(マルチバイト文字)の可能性があるため、以下の実装はコメントアウトする.
+        // 正規表現でドメイン名を判定する.
+        // Matcher matcher = DNSProtocolConstants.REGULAR_EXPRESSION_PATTERN_OF_DOMAIN_NAME.matcher( dnameString );
+        // if ( matcher.matches() == false )
+        // {
+        //    // ドメイン名として使用できない文字が含まれている.
+        //    String msg = String.format("Invalid Domain Name. dname=%s", dnameString );
+        //    MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+        //    throw execption; 
+        // }
+
+
+        return dnameString;
+
+    }
+
+
+
+    // DNSラベル文字列単体を解析する.
+    // ラベル圧縮ポインター対応版
+    public String parseDomainNameLabel(int labelOffset, byte[] fullDNSMessageBytes) throws MalformedDomainNameException
+    {
+        //  ラベルの構造
+        // | 長さ(1byte) | ASCII文字列(.を含まない) | 終端NULL文字 |
+        //     or
+        // | 圧縮フラグ(2bit)0b11 | ポインタ(14bit) |
+
+        byte[] headBytes = new byte[]{ fullDNSMessageBytes[labelOffset], fullDNSMessageBytes[labelOffset + 1] };
+
+        // ドメイン名圧縮(RFC 1035のラベル圧縮機能)が適用されているかを判定.
+        if ( isCompressedDomainName( headBytes ) == true )
+        {
+            int pointerOffset = calcCompressedDomainNameOffset( headBytes );
+            if ( pointerOffset ==  labelOffset )
+            {
+                // DNSラベル圧縮ポインターのオフセット値がループしている(自分自身を指している).
+                String headBytesHexString = toDebugHexString( headBytes );
+
+                String msg = String.format("DNS Label compression pointer is not valid, same offset. pointerOffset=%d, labelOffset=%d, headBytes=%d", pointerOffset, labelOffset, headBytesHexString );
+                MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+                throw execption; 
+            }
+
+            String label = parseDomainNameLabel(pointerOffset, fullDNSMessageBytes);
+            return label;
+        }
+
+        int len = 0x00ff & ( headBytes[0] );
+        if ( len > DNSProtocolConstants.MAX_DOMAIN_NAME_LABEL_LENGTH )
+        {
+            // ドメイン名中のラベル文字列の最大長(63文字)を超過している.
+            String headBytesHexString = toDebugHexString( headBytes );
+                
+            String msg = String.format("Excess size of Domain Name Label. length(%d) is over %d. index=%d, headBytesHexString=%s", len, DNSProtocolConstants.MAX_DOMAIN_NAME_LABEL_LENGTH, headBytesHexString);
+            MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            throw execption; 
+        }
+
+            // if ( i + len + 1 > DNSProtocolConstants.MAX_DOMAIN_NAME_LENGTH )
+            // {
+            //     // FQDN名の最大長(254文字)を超過している.
+            //     String msg = String.format("Excess size of FQDN : length=%d", i + len + 1);
+            //     MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+            //     throw execption; 
+            // }
+
+
+        byte[] labelBytes = new byte[len];
+        System.arraycopy(fullDNSMessageBytes, labelOffset + 1, labelBytes, 0, len);
+
+        Charset charset = getCharsetForParseDomainName();
+        String label = new String(labelBytes, charset );
+
+        
+        // TODO : 日本語ドメイン(マルチバイト文字)の可能性があるため、以下の実装はコメントアウトする.
+        // 正規表現でドメイン名を判定する.
+        // Matcher matcher = DNSProtocolConstants.REGULAR_EXPRESSION_PATTERN_OF_DOMAIN_NAME.matcher( label );
+        // if ( matcher.matches() == false )
+        // {
+        //    // ドメイン名として使用できない文字が含まれている.
+        //    String msg = String.format("Invalid Domain Name. label=%s", label );
+        //    MalformedDomainNameException execption = new MalformedDomainNameException(msg);
+        //    throw execption; 
+        // }
+
+        return label;
+
     }
 
 
@@ -1605,6 +1875,9 @@ public class LoulanDNSProtocolUtils
         if( isDNSQuestionMessage(dnsMessage) == false )
         {
             // 指定されたDNSメッセージは問い合わせメッセージの要件を満たしていない.
+            String msg = String.format("Failed to convert to DNSQuesitonMessage from DNSMessage. dnsMessage=%s", dnsMessage.toString() );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
         }
 
 
@@ -1666,6 +1939,64 @@ public class LoulanDNSProtocolUtils
 
 
     /**
+     * 汎用DNSメッセージクラス(IDNSMessage)がDNSレスポンスメッセージの要件を充足しているかを判定する.
+     * 
+     * @param dnsMessage
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public boolean isDNSResponseMessage(IDNSMessage dnsMessage) throws DNSServiceCommonException
+    {
+        IDNSHeaderSection dnsHeader = dnsMessage.getDNSHeaderSection();
+        if ( dnsHeader.getBooleanQR() == false )
+        {
+            // QR （Query Response）が0(false)なのでリクエストメッセージ
+            // falseで復帰する.
+            return false;
+        }
+
+
+        return true;
+
+    }
+
+
+
+
+    /**
+     * 汎用DNSメッセージクラス(IDNSMessage)をDNSレスポンスメッセージクラス(IDNSResponseMessage)に変換する.
+     * 
+     * @param dnsMessage
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public IDNSResponseMessage toDNSResponseMessage(IDNSMessage dnsMessage) throws DNSServiceCommonException
+    {
+        if( isDNSResponseMessage(dnsMessage) == false )
+        {
+            // 指定されたDNSメッセージはレスポンスメッセージの要件を満たしていない.
+            String msg = String.format("Failed to convert to DNSResponseMessage from DNSMessage. dnsMessage=%s", dnsMessage.toString() );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+
+        // SimpleDNSProtocolModelInstanceFactoryImplをファクトリクラスとして使用すれば、SpringのDIを使用しない.
+        IDNSProtocolModelInstanceFactory dnsProtocolModelInstanceFactory 
+                                = getSimpleDNSProtocolModelInstanceFactory();
+
+            
+        // 一旦、DNS電文をbyte配列にしてから再度問い合わせメッセージに変換する.
+        IDNSResponseMessage dnsResponseMessage = new DNSResponseMessageImpl(dnsProtocolModelInstanceFactory);
+        dnsResponseMessage.setDNSMessageBytes( dnsMessage.getDNSMessageBytes() );
+
+        return dnsResponseMessage;
+
+    }
+
+
+
+    /**
      * IDNSProtocolModelInstanceFactoryをSpringのDIを用いずにシンプルに取得する.
      * 
      * @return
@@ -1678,6 +2009,73 @@ public class LoulanDNSProtocolUtils
                                 = new SimpleDNSProtocolModelInstanceFactoryImpl();
 
         return dnsProtocolModelInstanceFactory;
+    }
+
+
+    /**
+     * DNSメッセージのインスタンスをコピーして新規に作成する.
+     * 
+     * @param dnsMessage
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public IDNSMessage copyDNSMessageInstance(IDNSMessage message) throws DNSServiceCommonException
+    {
+        IDNSProtocolModelInstanceFactory factory = getSimpleDNSProtocolModelInstanceFactory();
+        IDNSMessage newMessage = factory.createDNSMesssageInstance();
+
+        // DNSメッセージをbyte配列レベルでコピーして新規生成する.
+        newMessage.setDNSMessageBytes( message.getDNSMessageBytes() );
+        return newMessage;
+    }
+
+
+    /**
+     * DNS問い合わせメッセージのインスタンスをコピーする.
+     * 
+     * @param questionMessage
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public IDNSQuestionMessage copyDNSQuestionMessageInstance(IDNSQuestionMessage message) throws DNSServiceCommonException
+    {
+        IDNSMessage newMessage = copyDNSMessageInstance(message);
+        IDNSQuestionMessage newQuestionMessage = toDNSQuestionMessage(newMessage);
+
+        return newQuestionMessage;
+    }
+
+
+    /**
+     * DNSレスポンスメッセージのインスタンスをコピーする.
+     * 
+     * @param questionMessage
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public IDNSResponseMessage copyDNSResponseMessageInstance(IDNSResponseMessage message) throws DNSServiceCommonException
+    {
+        IDNSMessage newMessage = copyDNSMessageInstance(message);
+        IDNSResponseMessage newResponseMessage = toDNSResponseMessage(newMessage);
+
+        return newResponseMessage;
+
+    }
+
+
+    /**
+     * DNS問い合わせメッセージを基にレスポンスメッセージを生成する.
+     * 
+     */
+    public IDNSResponseMessage createDNSResponseMessageFromQuestionMessage(IDNSQuestionMessage questionMessage) throws DNSServiceCommonException
+    {
+        IDNSProtocolModelInstanceFactory  factory = getSimpleDNSProtocolModelInstanceFactory();
+        IDNSResponseMessage responseMessage = factory.createDNSResponseMessageInstance();
+
+        // AnswerセクションとAuthorityセクションは空の状態で返却する.
+        responseMessage.init( questionMessage.getDNSHeaderSection(), questionMessage.getDNSQuestionSection(), null);
+
+        return responseMessage;
     }
 
 

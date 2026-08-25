@@ -72,7 +72,7 @@ set VALUE=%7
 
 
 
-call %CURL_CMD% -X PUT localhost:8080/admin/api/dns/service/put/dns-resolver-instance-property/%TARGET_USER%/%SERVICE_INSTANCE%/%KEY% -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD% -d "value=%VALUE%"
+call %CURL_CMD% -X PUT localhost:%SERVER_PORT%/admin/api/dns/service/put/dns-resolver-instance-property/%TARGET_USER%/%SERVICE_INSTANCE%/%KEY% -u %LOGIN_USER_NAME%:%LOGIN_PASSWORD% -d "value=%VALUE%"
 
 
 

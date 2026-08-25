@@ -1,0 +1,22 @@
+# DB接続情報 (HSQLDB)
+
+## Setting Name
+LoulanDNS
+
+## Type
+HSQL Database Engine Standalone 
+
+## Driver
+org.hsqldb.jdbc.JDBCDriver
+
+## URL
+jdbc:hsqldb:file:db\HSQLDB\LoulanDNS\LoulanDNS
+
+## User
+loulan 
+
+## Password
+loulan
+
+
+

@@ -41,6 +41,13 @@ public class DNSMessageTestUtils
 
     public byte[] createDNSQueryMessage(String name, int qtype, int qclass) throws MalformedDNSRequestException
     {
+        if ( name.endsWith(".") == false )
+        {
+            // ドメイン名がドット(".")記号で終端しない場合はドット記号を付け加える
+            name = name + ".";
+        }
+
+
         org.xbill.DNS.Name nameObj;
         try
         {

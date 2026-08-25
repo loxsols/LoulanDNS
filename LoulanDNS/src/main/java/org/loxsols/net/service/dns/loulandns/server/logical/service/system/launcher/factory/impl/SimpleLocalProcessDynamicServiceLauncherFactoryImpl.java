@@ -16,7 +16,7 @@ public class SimpleLocalProcessDynamicServiceLauncherFactoryImpl implements IDyn
 {
     public IDynamicServiceLauncher getOrCreateDynamicServiceLauncher() throws LoulanDNSSystemServiceException
     {
-        IDynamicServiceLauncher serviceLauncher = new SimpleProcessDynamicServiceLauncherImpl();
+        IDynamicServiceLauncher serviceLauncher = new SimpleLocalProcessDynamicServiceLauncherImpl();
         return serviceLauncher;
     }
 }

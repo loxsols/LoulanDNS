@@ -69,6 +69,7 @@ public class DNSResponseMessageImpl extends DNSMessageImpl implements IDNSMessag
         IDNSHeaderSection headerSection = getDNSProtocolModelInstanceFactory().createDNSHeaderSectionInstance();
         headerSection.init(id, true, 0, false, false, false, false, false, false, false, 0, 1, rrSet.size(), 0, 0 );
 
+
         IDNSQuestionSection questionSection = getDNSProtocolModelInstanceFactory().createSimpleDNSQuestionSectionInstance(qname, qtype, qclass);
 
         IDNSAnswerSection answerSection = getDNSProtocolModelInstanceFactory().createDNSAnswerSectionInstance();
@@ -93,7 +94,8 @@ public class DNSResponseMessageImpl extends DNSMessageImpl implements IDNSMessag
         this.setDNSAuthoritySection( authoritySection );
         this.setDNSAdditionalSection( additionalSection );
 
-        validate();
+        // 2026/08/19 validate処理はここでは実行してはいけない. init処理はあくまでメッセージインスタンスを生成する処理.
+        // validate();
     }
 
 
@@ -113,6 +115,15 @@ public class DNSResponseMessageImpl extends DNSMessageImpl implements IDNSMessag
             String msg = String.format("Failed to build DNSResponseMessage instance : Header Section is null.");
             DNSServiceCommonException exception = new DNSServiceCommonException(msg);
             throw exception;
+        }
+
+        if ( getDNSHeaderSection().getBooleanQR() == false )
+        {
+            // DNSレスポンスなのに、QRが0(DNSクエリ).
+            String msg = String.format("Failed to build DNSResponseMessage instance : Header Section QR is not 1. QR=%d", getDNSHeaderSection().getQR() );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+
         }
 
 
@@ -183,6 +194,9 @@ public class DNSResponseMessageImpl extends DNSMessageImpl implements IDNSMessag
             out.println(String.format("RCode = %d", headerSection.getRCode()) );
             out.println(String.format("QDCount = %d", qdCount) );
             out.println(String.format("ANCount = %d", anCount) );
+            out.println(String.format("QR = %b", headerSection.getBooleanQR()) );
+            out.println(String.format("AA = %b", headerSection.getBooleanAA()) );
+            out.println(String.format("RA = %b", headerSection.getBooleanRA()) );
             out.println("--------------------------------------");
 
 

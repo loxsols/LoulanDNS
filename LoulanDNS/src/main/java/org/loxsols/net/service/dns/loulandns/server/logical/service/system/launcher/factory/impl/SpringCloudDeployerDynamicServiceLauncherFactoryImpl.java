@@ -30,7 +30,7 @@ public class SpringCloudDeployerDynamicServiceLauncherFactoryImpl implements IDy
      * @param instance
      */
     @Autowired
-    @Qualifier("springCloundAppDeployer")
+    @Qualifier("springCloudAppDeployer")
     public void setAppDeployer(AppDeployer instance)
     {
         this.appDeployer = instance;

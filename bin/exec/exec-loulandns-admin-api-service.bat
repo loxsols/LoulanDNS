@@ -53,7 +53,12 @@ java ^
 -Dloulan.dns.service.instance.default.instance.name=%DEFAULT_DNS_SERVICE_INSTANCE% ^
 -Dloulan.dns.service.instance.default.instance.user.name=%DEFAULT_USER_NAME% ^
 -Dspring.datasource.url="%SPRING_DATASOURCE_URL%" ^
--jar LoulanDNS\target\LoulanDNSAdminAPIService.jar 
+-jar LoulanDNS\target\LoulanDNSAdminAPIService.jar ^
+%* 
+
+
+
+
 
 
 

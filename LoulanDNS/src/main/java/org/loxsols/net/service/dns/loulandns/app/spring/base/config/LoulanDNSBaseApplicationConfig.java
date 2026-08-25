@@ -26,6 +26,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.xbill.DNS.ZoneTransferException;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.repository.UserRepository;
+import org.loxsols.net.service.dns.loulandns.client.IDNSMessageTransporter;
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 
@@ -210,6 +212,7 @@ public class LoulanDNSBaseApplicationConfig
     }
 
 
+
     @Bean( name="dnsServiceInstanceFactoryImpl" )
     IDNSServiceInstanceFactory configDNSServiceInstanceFactory() throws DNSServiceCommonException
     {
@@ -270,7 +273,7 @@ public class LoulanDNSBaseApplicationConfig
     }
 
 
-    @Bean( name="SpringCloundAppDeployer" )
+    @Bean( name="SpringCloudAppDeployer" )
     public AppDeployer getAppDeployer() throws DNSServiceCommonException
     {
         LocalDeployerProperties properties = new LocalDeployerProperties();

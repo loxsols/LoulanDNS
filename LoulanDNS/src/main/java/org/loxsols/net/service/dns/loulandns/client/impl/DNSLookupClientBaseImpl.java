@@ -2,6 +2,7 @@ package org.loxsols.net.service.dns.loulandns.client.impl;
 
 
 import static org.mockito.ArgumentMatchers.booleanThat;
+import static org.mockito.Mockito.calls;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -45,7 +46,7 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
 {
 
     InetAddress dnsServerAddress;
-    int dnsServerPort;
+    Integer dnsServerPort;
 
 
     IDNSMessageFactory dnsMessageFactory;
@@ -66,10 +67,26 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
     protected LoulanDNSCommonUtils commonUtils = new LoulanDNSCommonUtils();
 
 
+    Properties properties;
+
+
     public DNSLookupClientBaseImpl() throws DNSServiceCommonException
     {
         super();
     }
+
+
+    public void setProperties(Properties properteis) throws DNSServiceCommonException
+    {
+        this.properties = properteis;   
+    }
+
+    public Properties getProperties() throws DNSServiceCommonException
+    {
+        return this.properties;
+    }
+
+
 
 
     // 指定した条件でDNSの名前解決を行う.
@@ -102,12 +119,6 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
         // 本クラスに指定されているEDNSオプションを問い合わせメッセージに追加する.
         questionMessage = addEDNSOtpionsToDNSQuestionMessage(questionMessage);
 
-        HashMap<String,String> properties =new HashMap<String,String>();
-        properties.put(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS, this.getDNSServerAddress().getHostAddress() );
-        properties.put(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_PORT, Integer.toString( this.getDNSServerPort() ) );
-
-        messageTransporter.init(properties);
-
         IDNSResponseMessage responseMessage = messageTransporter.lookup(questionMessage);
         return responseMessage;
     }
@@ -117,6 +128,20 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
     // 本クラスの初期化処理.
     public void init(Properties properties) throws DNSClientCommonException
     {
+
+        // 一応、与えられたパラメータはすべて本クラス内に保持しておく.
+        try
+        {
+            setProperties(properties);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set DNSResolver properties.");
+            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
+            throw exception;
+        }
+
+
         // 外部問い合わせ用のDNSサーバーのIPアドレス.
         String serverAddressValue = (String)properties.get( LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS );
         if ( serverAddressValue != null )
@@ -161,6 +186,46 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
 
 
         // TODO : その他のEDNS拡張などのオプション指定はまだ実装していない.
+
+
+
+        // DNSメッセージトランスポーターにプロパティ値を設定する.
+        HashMap<String,String> messageTransporterProperties =new HashMap<String,String>();
+        messageTransporterProperties.put(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS, this.getDNSServerAddress().getHostAddress() );
+        messageTransporterProperties.put(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_PORT, Integer.toString( this.getDNSServerPort() ) );
+
+        // DoHサーバーのURLを設定する.
+        String dohServerFullURL = properties.getProperty( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_FULL_URL);
+        if ( dohServerFullURL != null && dohServerFullURL.isEmpty() == false )
+        {
+            messageTransporterProperties.put(  LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_FULL_URL, dohServerFullURL );
+        }
+
+
+        // DoHサーバーにアクセスするときに使用するHTTPメソッドタイプを設定する.
+        String dohServerMethodType = properties.getProperty( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_METHOD_TYPE );
+        if ( dohServerMethodType != null && dohServerMethodType.isEmpty() == false )
+        {
+            messageTransporterProperties.put(  LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_METHOD_TYPE, dohServerMethodType );
+        }
+
+        // DoHサーバーにアクセスするときに使用するHTTPのCONTENTタイプ (例 : application/dns-message )を設定する.
+        String dohServerContentType = properties.getProperty( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_CONTENT_TYPE );
+        if ( dohServerContentType != null && dohServerContentType.isEmpty() == false )
+        {
+            messageTransporterProperties.put(  LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_CONTENT_TYPE, dohServerContentType );
+        }
+
+        // DoHサーバーにアクセスするときに使用するHTTPのCONTENTタイプ (例 : application/dns-message )を設定する.
+        String dohServerAcceptType = properties.getProperty( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_ACCEPT_TYPE );
+        if ( dohServerAcceptType != null && dohServerAcceptType.isEmpty() == false )
+        {
+            messageTransporterProperties.put(  LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_ACCEPT_TYPE, dohServerAcceptType );
+        }
+
+
+        messageTransporter.init(messageTransporterProperties);
+
 
     }
 
@@ -213,9 +278,33 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
         return this.dnsServerAddress;
     }
 
+    public String getDNSServerAddressString()
+    {
+        InetAddress address = getDNSServerAddress();
+        String value = address.getHostAddress();
+        return value;
+    }
+
     public void setDNSServerAddress(InetAddress address) throws DNSClientCommonException
     {
         this.dnsServerAddress = address;
+
+        String value = getDNSServerAddressString();
+
+        if ( getDNSMessageTransporter() != null )
+        {
+            try
+            {
+                setMessageTransporterParameter(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_ADDRESS, value );
+            }
+            catch(DNSServiceCommonException cause)
+            {
+                String msg = String.format("Failed to set DNS Server Address. address=%s, value=%s",  address, value);
+                DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
+                throw exception;
+            }
+        }  
+
     }
 
     public void setDNSServerAddress(String addressString) throws DNSClientCommonException
@@ -237,9 +326,21 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
     }
 
 
-    public int getDNSServerPort() throws DNSClientCommonException
+    public Integer getDNSServerPort() throws DNSClientCommonException
     {
         return this.dnsServerPort;
+    }
+
+    public String getDNSServerPortString() throws DNSClientCommonException
+    {
+        Integer port = getDNSServerPort();
+        if ( port == null )
+        {
+            return null;
+        }
+
+        String value = port.toString();
+        return value;
     }
 
     public void setDNSServerPort(int port) throws DNSClientCommonException
@@ -252,6 +353,23 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
         }
 
         this.dnsServerPort = port;
+
+        if ( getDNSMessageTransporter() != null )
+        {
+            String value = getDNSServerPortString();
+            try
+            {
+                setMessageTransporterParameter(LoulanDNSClientConstants.PROP_KEY_DNS_SERVER_PORT, value);
+            }
+            catch(DNSServiceCommonException cause)
+            {
+                String msg = String.format("Failed to set DNS Server port. port=%d, value=%s",  port, value);
+                DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
+                throw exception;
+            }
+        }
+
+
     }
 
     public void setDNSServerPort(String portString) throws DNSClientCommonException
@@ -477,6 +595,21 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
     }
 
 
+
+    protected void setMessageTransporterParameter(String key, String value) throws DNSServiceCommonException
+    {
+        IDNSMessageTransporter  transporter = this.getDNSMessageTransporter();
+        if ( transporter == null )
+        {
+            String msg = String.format("Failed to set DNSMessageTransporter parameter, DNSMessageTransporter is null. key=%s, value=%s", key, value);
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+        transporter.setParamerter(key, value);     
+    }
+
+
     // 本クラスに設定されたEDNSオプションなどをDNS問い合わせメッセージに付加する.
     public IDNSQuestionMessage addEDNSOtpionsToDNSQuestionMessage(IDNSQuestionMessage questionMessage) throws DNSClientCommonException
     {
@@ -523,8 +656,17 @@ public abstract class DNSLookupClientBaseImpl implements IDNSLookupClient
                     pseudoRRSetList.add( ecsPseudoRR );
                 }
 
+
                 // EDNSのRRを追加.
-                IDNSResourceRecord rr = dnsResourceRecordFactory.createEDNSResourceRecord(ednsPayloadSize, ednsExtendedRCode, doFlag, reservedZ, pseudoRRSetList);
+                IDNSResourceRecordFactory rrFactory = getDNSResourceRecordFactory();
+                if ( rrFactory == null )
+                {
+                    String msg = String.format("Failed to add EDNS option to DNS message, caued ResourceRecordFactory  is not setup." );
+                    DNSClientCommonException exception = new DNSClientCommonException(msg);
+                    throw exception;
+                }
+
+                IDNSResourceRecord rr = rrFactory.createEDNSResourceRecord(ednsPayloadSize, ednsExtendedRCode, doFlag, reservedZ, pseudoRRSetList);
                 addRRList.add( rr );
             }
 

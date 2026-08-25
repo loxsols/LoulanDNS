@@ -45,6 +45,8 @@ public class SimpleDoHResolverImpl extends SimpleUDPResolverImpl implements IDNS
 
     URI dohServerURI;
     String dohServerHttpMethodType;
+    String dohServerHttpContentType;
+    String dohServerHttpAcceptType;
 
 
     public SimpleDoHResolverImpl() throws DNSServiceCommonException
@@ -60,8 +62,9 @@ public class SimpleDoHResolverImpl extends SimpleUDPResolverImpl implements IDNS
 
         // メッセージトランスポーターのみをDoHに変更する.
         // それ以外は基底クラスのUDPのものを使用する.
-        setDNSMessageTransporter( new SimpleDoHMessageTransporterImpl() );
-
+        // TODO : IDNSMessageTransporterのオブジェクト生成はファクトリクラスを使用する実装に変更したい.
+        SimpleDoHMessageTransporterImpl messageTransporter = new SimpleDoHMessageTransporterImpl();
+        setDNSMessageTransporter( messageTransporter );
     }
 
 
@@ -73,6 +76,11 @@ public class SimpleDoHResolverImpl extends SimpleUDPResolverImpl implements IDNS
     public void setDoHServerURI(URI uri) throws DNSClientCommonException
     {
         this.dohServerURI = uri;
+
+        SimpleDoHMessageTransporterImpl messageTransporter = 
+            (SimpleDoHMessageTransporterImpl)getDNSMessageTransporter();
+        messageTransporter.setDoHServerURL( getDoHServerURI().toString() );
+
     }
 
     public String getDoHServerHttpMethodType() throws DNSClientCommonException
@@ -83,6 +91,43 @@ public class SimpleDoHResolverImpl extends SimpleUDPResolverImpl implements IDNS
     public void setDoHServerHttpMethodType(String methodType) throws DNSClientCommonException
     {
         this.dohServerHttpMethodType = methodType;
+
+        SimpleDoHMessageTransporterImpl messageTransporter = 
+            (SimpleDoHMessageTransporterImpl)getDNSMessageTransporter();
+
+        messageTransporter.setHttpMethodType( this.getDoHServerHttpMethodType() );
+
+    }
+
+
+    public void setDoHServerHttpContentType(String contentType) throws DNSClientCommonException
+    {
+        this.dohServerHttpContentType = contentType;
+
+        SimpleDoHMessageTransporterImpl messageTransporter = 
+            (SimpleDoHMessageTransporterImpl)getDNSMessageTransporter();
+        messageTransporter.setHttpContentType( getDoHServerHttpContentType() );
+
+    }
+
+    public String getDoHServerHttpContentType() throws DNSClientCommonException
+    {
+        return this.dohServerHttpContentType;
+    }
+
+
+    public void setDoHServerHttpAcceptType(String acceptType) throws DNSClientCommonException
+    {
+        this.dohServerHttpAcceptType = acceptType;
+
+        SimpleDoHMessageTransporterImpl messageTransporter = 
+            (SimpleDoHMessageTransporterImpl)getDNSMessageTransporter();
+        messageTransporter.setHttpAcceptType( getDoHServerHttpAcceptType() );
+    }
+
+    public String getDoHServerHttpAcceptType() throws DNSClientCommonException
+    {
+        return this.dohServerHttpAcceptType;
     }
 
 

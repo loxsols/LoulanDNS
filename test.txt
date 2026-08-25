@@ -1,0 +1,95 @@
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=setDNSQueryBytes() : qclass(dec), msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=setDNSQueryBytes() : getDNSClassType(), msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryBytes() : , msg=dnameBytes.length=9, qname=cman.jp.
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryBytes() : , msg=dnameBytes.length=9, qname=cman.jp.
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtocolUtils, tag=isCompressedDomainName(), msg=dname[0]=0x0, ret=false
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtocolUtils, tag=isCompressedDomainName(), msg=dname[0]=0x0, ret=false
+[DEBUG] DNSResourceRescord.setDNSResourceRecordBytes() : DNS RR = , 41, 4096, 0, 12, 12
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtocolUtils, tag=isCompressedDomainName(), msg=dname[0]=0x0, ret=false
+8月 21, 2026 4:29:29 午後 org.hibernate.engine.jdbc.spi.SqlStatementLogger logStatement
+DEBUG: insert into common_system_log (common_system_log_occur_date,common_system_log_option1,common_system_log_option2,common_system_log_option3,common_system_log_record,common_system_log_tag,create_date,memo,record_status,update_date,common_system_log_id) values (?,?,?,?,?,?,?,?,?,?,default)
+WARNING: Use of the three-letter time zone ID "JST" is deprecated and it will be removed in a future release
+WARNING: Use of the three-letter time zone ID "JST" is deprecated and it will be removed in a future release
+WARNING: Use of the three-letter time zone ID "JST" is deprecated and it will be removed in a future release
+[DEBUG] SimpleDNSSubwayResolverImpl.resolve() dname=cman.jp., isDNSSubwayDomain(dname)=true
+[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() called.
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() rdata.length=4
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.impl.message.section.DNSQuestionSectionFactoryImpl, tag=createQueryRecord, msg=qtype=1, queryRecord.getDNSQueryType()=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=headerBytes.length=12
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryBytes() : , msg=dnameBytes.length=9, qname=cman.jp.
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=questionBytes.length=13
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=answerBytes.length=23
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=messageBytes.length=48
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : called.
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : bytes.length=48
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : hexString.length()=96
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : debugHexString is bellow.
+******************************
+9e 83 01 01 00 01 00 01 00 00 00 00 04 63 6d 61
+6e 02 6a 70 00 00 01 00 01 04 63 6d 61 6e 02 6a
+70 00 00 01 00 01 00 00 0e 10 00 04 7f 00 00 04
+
+******************************
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.client.impl.DNSSubwayResolverImpl, tag=DNS-Subway DNS Response message. hex=
+******************************
+9e 83 01 01 00 01 00 01 00 00 00 00 04 63 6d 61
+6e 02 6a 70 00 00 01 00 01 04 63 6d 61 6e 02 6a
+70 00 00 01 00 01 00 00 0e 10 00 04 7f 00 00 04
+
+******************************
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.client.impl.DNSSubwayResolverImpl, tag=DNS-Subway DNS Response message. header=, msg=QR=true, AA=false, RA=true,RCODE=0
+[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() gwAddress=127.0.0.4, rdata.length=4, response=--------------------------------------
+Header Section
+RCode = 0
+QDCount = 1
+ANCount = 1
+QR = true
+AA = false
+RA = true
+--------------------------------------
+--------------------------------------
+
+Question Section
+
+QDCount = 1
+--------------------------------------
+
+qname : cman.jp.
+
+--------------------------------------
+
+Answer Section
+
+ANCount = 1
+--------------------------------------
+
+rname : cman.jp.
+
+, headerDebugString=QR=true, AA=false, RA=true,RCODE=0
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=headerBytes.length=12
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryBytes() : , msg=dnameBytes.length=9, qname=cman.jp.
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQueryPartImpl, tag=getDNSQueryType() : this.qtype, msg=1
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=questionBytes.length=13
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=answerBytes.length=23
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSResponseMessageImpl, tag=getDNSMessageBytes(), msg=messageBytes.length=48
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : called.
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : bytes.length=12
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : hexString.length()=24
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : debugHexString is bellow.
+******************************
+4 3 8 f 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+******************************
+[DEBUG] class=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSHeaderSectionImpl, tag=setDNSHeaderBytes() headerBytes=
+******************************
+4 3 8 f 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0
+******************************
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : called.
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : bytes.length=501
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : hexString.length()=1002
+[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : debugHexString is bellow.
+******************************

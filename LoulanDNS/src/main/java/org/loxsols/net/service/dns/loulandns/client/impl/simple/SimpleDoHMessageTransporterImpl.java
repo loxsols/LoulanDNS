@@ -159,6 +159,15 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
 
     public void setHttpContentType(String contentType ) throws DNSClientCommonException
     {
+
+        if ( contentType == null )
+        {
+            String msg = String.format("Failed to set HTTP content type, caused by null. Specified HTTP content type is %s", contentType);
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+
+
         this.httpContentType = contentType;
     }
 
@@ -169,6 +178,14 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
 
     public void setHttpAcceptType(String acceptType ) throws DNSClientCommonException
     {
+
+        if ( acceptType == null )
+        {
+            String msg = String.format("Failed to set HTTP accept type, caused by null. Specified HTTP accept type is %s", acceptType);
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+
         this.httpAcceptType = acceptType; 
     }
 
@@ -247,13 +264,29 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
         {
             InetAddress serverHost = getServerAddress();
 
-            int serverPort = getServerPort();
+            Integer serverPort = getServerPort();
 
             // DoHサーバーのURLスキーム (オプション2)
             String urlScheme = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_URL_SCHEME );
 
+            if ( urlScheme == null || urlScheme.isEmpty() )
+            {
+                String msg = String.format("Failed to init remote DoH Server URL, because of urlScheme is not specified. urlScheme=%s, key=%s.", urlScheme, LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_URL_SCHEME );
+                DNSClientCommonException exception = new DNSClientCommonException(msg);
+                throw exception;
+            }
+
             // DoHサーバーのURLのコンテキストパス (オプション2)
             String urlContextPath = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_URL_CONTEXT_PATH );
+
+            if ( urlContextPath == null || urlContextPath.isEmpty() )
+            {
+                String msg = String.format("Failed to init remote DoH Server URL, because of urlContextPath is not specified. urlScheme=%s, key=%s.", urlContextPath, LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_URL_CONTEXT_PATH );
+                DNSClientCommonException exception = new DNSClientCommonException(msg);
+                throw exception;
+            }
+
+
 
             // 与えられたパラメータからフルURLを構築.
             fullURL = String.format("%s://%s:%d%s", urlScheme, serverHost, serverPort, urlContextPath );
@@ -265,14 +298,35 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
 
         // DoHサーバーのHTTPメソッドタイプ (必須)
         String httpMethodType = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_METHOD_TYPE );
+        if ( httpMethodType == null || httpMethodType.isEmpty() )
+        {
+            String msg = String.format("Failed to init remote DoH Server HTTP Method Type, because of httpMethodType is not specified. httpMethodType=%s, key=%s.", httpMethodType, LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_METHOD_TYPE );
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+
         setHttpMethodType(httpMethodType);
 
         // DoHサーバーのHTTPコンテントタイプ (必須)
         String httpContentType = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_CONTENT_TYPE );
+        if ( httpContentType == null || httpContentType.isEmpty() )
+        {
+            String msg = String.format("Failed to init remote DoH Server HTTP Content-Type, because of httpContentType is not specified. httpContentType=%s, key=%s.", httpContentType, LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_CONTENT_TYPE );
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+
         setHttpContentType(httpContentType);
     
         // DoHサーバーのHTTPアクセプトタイプ (必須)
-        String httpAcceptType = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_ACCEPT_TYPE );  
+        String httpAcceptType = properties.get( LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_ACCEPT_TYPE );          
+        if ( httpAcceptType == null || httpAcceptType.isEmpty() )
+        {
+            String msg = String.format("Failed to init remote DoH Server HTTP Accept-Type, because of httpAcceptType is not specified. httpAcceptType=%s, key=%s.", httpAcceptType, LoulanDNSClientConstants.PROP_KEY_DOH_SERVER_HTTP_ACCEPT_TYPE );
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+
         setHttpAcceptType(httpAcceptType);
 
     }
@@ -283,11 +337,37 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
         HttpClient httpClient = HttpClient.newHttpClient();
         
         String requestBody = toBase64String( wiredQuestionMessage );
+
+        // 2026/07/03 add : base64エンコーディングの末尾のパディング(4byteの倍数になるようにするための=記号)を消去する.
+        // CloudFlareのDoHサーバーはGET文字列の末尾が=記号の場合、HTTP/400エラーを返却するため.
+        if ( requestBody.endsWith("=") )
+        {
+            requestBody = requestBody.substring(0, requestBody.length()-1);
+        }
+        
+
         HttpRequest request;
 
         Properties headers = new Properties();
-        headers.put( LoulanDNSClientConstants.HTTP_HEADER_KEY_CONTENT_TYPE, getHttpContentType() );
-        headers.put( LoulanDNSClientConstants.HTTP_HEADER_KEY_ACCEPT_TYPE, getHttpAcceptType() );
+
+        String contentType = getHttpContentType();
+        if ( contentType == null || contentType.isEmpty() )
+        {
+            String msg = String.format("Faield to lookup DNS message, caused by not specifed HTTP Content-Type.");
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+        headers.put( LoulanDNSClientConstants.HTTP_HEADER_KEY_CONTENT_TYPE, contentType );
+
+        String acceptType = getHttpAcceptType();
+        if ( acceptType == null || acceptType.isEmpty() )
+        {
+            String msg = String.format("Faield to lookup DNS message, caused by not specifed HTTP Accept-Type.");
+            DNSClientCommonException exception = new DNSClientCommonException(msg);
+            throw exception;
+        }
+        headers.put( LoulanDNSClientConstants.HTTP_HEADER_KEY_ACCEPT_TYPE, acceptType );
+
         
         if ( getHttpMethodType().equals( LoulanDNSClientConstants.HTTP_METHOD_TYPE_GET) )
         {
@@ -364,6 +444,8 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
 
 
         URI buildedURI = buildQueryParameterURI(siteURI, queryParamProerties);
+
+        System.out.println( String.format("[DEBUG] SimpleDoHMessageTransporterImpl.lookupByGet() : buildedURI=%s, siteURI=%s", buildedURI.toString(), siteURI.toString() ) );
 
         HttpRequest.Builder builder = HttpRequest.newBuilder( buildedURI ).GET();
         for( var key : requestHeaders.keySet() )
@@ -492,6 +574,8 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
             throw exception;
         }
 
+
+
         return base64String;
     }
 
@@ -541,6 +625,8 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
             DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
             throw exception;
         }
+
+        System.out.println( String.format("[DEBUG] SimpleDoHMessageTransporter.buildQueryParameterURI() : uri=%s, originalURI=%s", uri, originalURI) );
 
         return uri;
     }
