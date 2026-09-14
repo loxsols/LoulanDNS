@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanCommonUtilityException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
 
@@ -27,9 +29,21 @@ public class DNSResolverInstanceInfo
     
     private List<DNSResolverInstancePropertyInfo> dnsResolverPropertiesInfoList;
 
-    public void setCreateDate(String createDate)
+    public void setCreateDate(String createDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        ZonedDateTime dateTime;
+        
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set DNSResolverInstanceInfo createDate. value=%s", createDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         setCreateDate(dateTime);
     }
 
@@ -39,9 +53,21 @@ public class DNSResolverInstanceInfo
     }
 
 
-    public void setUpdateDate(String updateDate)
+    public void setUpdateDate(String updateDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        ZonedDateTime dateTime;
+        
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set DNSResolverInstanceInfo updateDate. value=%s", updateDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         setUpdateDate( dateTime );
     }
 

@@ -251,21 +251,17 @@ public class DNSResolverInstanceFactoryImpl implements IDNSResolverInstanceFacto
         IDNSResolverInstance dnsResolverInstance;
 
 
-        // ------ DEBUG --------
-        for( var key : properties.keySet() )
-        {
-            String value = (String)properties.get(key);
-            String str = String.format("[DEBUG] DNSResolverInstanceFactoryImpl.createDNSResolverInstance() properties : %s=%s", key, value);
-            System.out.println( str );
-        }
-        // ---------------------
-
 
         // TODO : UDPリゾルバ以外のリゾルバのインスタンス化処理が未実装.
         if ( resolverType == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_UDP )
         {
             // -- 				201 : UDP(DNS)問い合わせ
             dnsResolverInstance = new UDPResolverInstanceImpl(properties);
+        }
+        else if ( resolverType == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_TCP )
+        {
+            // -- 				202 : TCP(DNS)問い合わせ
+            dnsResolverInstance = new TCPResolverInstanceImpl(properties);
         }
         else if (resolverType == LoulanDNSConstants.CONST_DNS_RESOLVER_TYPE_OUTBOUND_DOH )
         {

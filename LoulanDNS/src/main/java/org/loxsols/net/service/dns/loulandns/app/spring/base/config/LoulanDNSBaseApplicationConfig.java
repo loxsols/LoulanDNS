@@ -67,6 +67,10 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.endpoint.factory.*;
 
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.impl.*;
+
 
 
 /**
@@ -86,7 +90,7 @@ public class LoulanDNSBaseApplicationConfig
 {
 
     @Bean(name = "loulanDNSDBServiceImpl")
-    LoulanDNSDBService configLoulanDNSDBServiceImpl() throws IOException, ZoneTransferException
+    public LoulanDNSDBService configLoulanDNSDBServiceImpl() throws IOException, ZoneTransferException
     {
         LoulanDNSDBService dbService = new LoulanDNSDBService();
         return dbService;
@@ -94,7 +98,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean(name = "loulanDNSLogicalDBServiceImpl")
-    LoulanDNSLogicalDBService configLoulanDNSLogicalDBServiceImpl() throws IOException, ZoneTransferException
+    public LoulanDNSLogicalDBService configLoulanDNSLogicalDBServiceImpl() throws IOException, ZoneTransferException
     {
         LoulanDNSLogicalDBService logicalDBService = new LoulanDNSLogicalDBService();
         return logicalDBService;
@@ -102,7 +106,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean(name = "loulanDNSLogicalModelServiceImpl")
-    LoulanDNSLogicalModelService configLoulanDNSLogicalModelServiceImpl() throws IOException, ZoneTransferException
+    public LoulanDNSLogicalModelService configLoulanDNSLogicalModelServiceImpl() throws IOException, ZoneTransferException
     {
         // 本クラス内のファクトリメソッドを利用して、LoulanDNSLogicalDBServiceクラスの実体を取得する.
         LoulanDNSLogicalDBService logicalDBService = configLoulanDNSLogicalDBServiceImpl();
@@ -115,7 +119,7 @@ public class LoulanDNSBaseApplicationConfig
 
     
     @Bean(name = "loulanDNSAuthenticationProviderImpl")
-    LoulanDNSAuthenticationProvider connfigLoulanDNSUserBasicAuthenticationProviderImpl()
+    public LoulanDNSAuthenticationProvider connfigLoulanDNSUserBasicAuthenticationProviderImpl()
     {
         LoulanDNSAuthenticationProvider provider = new LoulanDNSUserBasicAuthenticationProvider();
         return provider;
@@ -147,7 +151,7 @@ public class LoulanDNSBaseApplicationConfig
     }
 
     @Bean(name = "dnsProtocolModelInstanceFactoryImpl" )
-    IDNSProtocolModelInstanceFactory configDNSProtocolModelInstanceFactory() throws DNSServiceCommonException
+    public IDNSProtocolModelInstanceFactory configDNSProtocolModelInstanceFactory() throws DNSServiceCommonException
     {
         initDNSProtocolModelInstanceFactory();
 
@@ -156,7 +160,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsHeaderSectionFactoryImpl")
-    IDNSHeaderSectionFactory configDNSHeaderSectionFactory()
+    public IDNSHeaderSectionFactory configDNSHeaderSectionFactory()
     {
         IDNSHeaderSectionFactory dnsQuestionSectionFactoryImpl = new DNSHeaderSectionFactoryImpl();
         return dnsQuestionSectionFactoryImpl;
@@ -164,7 +168,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsQuestionSectionFactoryImpl")
-    IDNSQuestionSectionFactory configDNSQuestionSectionFactory()
+    public IDNSQuestionSectionFactory configDNSQuestionSectionFactory()
     {
         try
         {
@@ -182,7 +186,7 @@ public class LoulanDNSBaseApplicationConfig
     }
 
     @Bean( name="dnsAnswerSectionFactoryImpl" )
-    IDNSAnswerSectionFactory configDNSAnswerSectionFactory()
+    public IDNSAnswerSectionFactory configDNSAnswerSectionFactory()
     {
         IDNSAnswerSectionFactory dnsAnswerSectionFactoryImpl = new DNSAnswerSectionFactoryImpl();
         return dnsAnswerSectionFactoryImpl;
@@ -190,14 +194,14 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsAuthoritySectionFactoryImpl" )
-    IDNSAuthoritySectionFactory configDNSAuthoritySectionFactory()
+    public IDNSAuthoritySectionFactory configDNSAuthoritySectionFactory()
     {
         IDNSAuthoritySectionFactory dnsAuthoritySectionFactoryImpl = new DNSAuthoritySectionFactoryImpl();
         return dnsAuthoritySectionFactoryImpl;
     }
 
     @Bean( name="dnsAdditionalSectionFactoryImpl" )
-    IDNSAdditionalSectionFactory configDNSAdditionalSectionFactory()
+    public IDNSAdditionalSectionFactory configDNSAdditionalSectionFactory()
     {
         IDNSAdditionalSectionFactory dnsAdditonalSectionFactoryImpl = new DNSAdditionalSectionFactoryImpl();
         return dnsAdditonalSectionFactoryImpl;
@@ -205,7 +209,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsMessageFactoryImpl" )
-    IDNSMessageFactory configDNSMessageFactory() throws DNSServiceCommonException
+    public IDNSMessageFactory configDNSMessageFactory() throws DNSServiceCommonException
     {
         IDNSMessageFactory dnsMessageFactoryImpl = new DNSMessageFactoryImpl();
         return dnsMessageFactoryImpl;
@@ -214,7 +218,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsServiceInstanceFactoryImpl" )
-    IDNSServiceInstanceFactory configDNSServiceInstanceFactory() throws DNSServiceCommonException
+    public IDNSServiceInstanceFactory configDNSServiceInstanceFactory() throws DNSServiceCommonException
     {
         IDNSServiceInstanceFactory dnsServiceInstanceFactoryImpl = new DNSServiceInstanceFactoryImpl();
 
@@ -227,7 +231,7 @@ public class LoulanDNSBaseApplicationConfig
 
 
     @Bean( name="dnsResolverInstanceFactoryImpl")
-    IDNSResolverInstanceFactory getDNSResolerInstanceFactory() throws DNSServiceCommonException
+    public IDNSResolverInstanceFactory getDNSResolerInstanceFactory() throws DNSServiceCommonException
     {
         IDNSResolverInstanceFactory dnsResolverInstanceFactoryImpl = new DNSResolverInstanceFactoryImpl();
         
@@ -242,7 +246,7 @@ public class LoulanDNSBaseApplicationConfig
      * @throws DNSServiceCommonException
      */
     @Bean( name="loulanDNSLoggerFactoryImpl")
-    ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory() throws DNSServiceCommonException
+    public ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory() throws DNSServiceCommonException
     {
 
         ILoulanDNSLoggerFactory loggerFactory = new LoulanDNSLoggerFactoryImpl();
@@ -271,6 +275,27 @@ public class LoulanDNSBaseApplicationConfig
 
         return loggerFactory;
     }
+
+
+    /**
+     * ドメインキャッシュサービスのファクトリクラスを返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    @Bean( name="loulanDNSDomainCacheServiceFactoryImpl")
+    public ILoulanDNSDomainCacheServiceFactory getLoulanDNSDomainCacheServiceFactory() throws DNSServiceCommonException
+    {
+        ILoulanDNSDomainCacheServiceFactory domainCacheServiceFactory = new LoulanDNSDomainCacheServiceFactoryImpl();
+
+        // ドメインキャッシュサービスファクトリクラスをここで初期化する.
+        // TODO : パラメータは何も指定していない.
+        Properties cacheFactoryProperties =new Properties();
+        domainCacheServiceFactory.init(cacheFactoryProperties);
+
+        return domainCacheServiceFactory;
+    }
+
 
 
     @Bean( name="SpringCloudAppDeployer" )

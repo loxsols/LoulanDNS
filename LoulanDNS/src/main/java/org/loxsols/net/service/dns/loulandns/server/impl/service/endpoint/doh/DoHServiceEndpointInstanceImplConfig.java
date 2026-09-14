@@ -167,8 +167,7 @@ public class DoHServiceEndpointInstanceImplConfig implements WebServerFactoryCus
                 ret = false;
             }
 
-            System.out.println("[DEBUG] DoHServiceEndpointInstanceImplConfig.ControllerMatchFilter.match() : className=" + className + ", ret=" + ret);
-
+    
             return ret;
 
         }
@@ -181,7 +180,6 @@ public class DoHServiceEndpointInstanceImplConfig implements WebServerFactoryCus
             boolean ret = false;
 
             String className = metadataReader.getClassMetadata().getClassName();
-            System.out.println("[DEBUG] DoHServiceEndpointInstanceImplConfig.ControllerMatchFilter.match() : className=" + className + ", ret=" + ret);
 
             return ret;
         }

@@ -6,8 +6,8 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
@@ -32,10 +32,31 @@ public class UserInfoFactory
         return userInfo;
     }
 
-    public UserInfo createUserInfoObject(Long userID, String userName, String userPassword, long recordStatus, String memo, String createDateString, String updateDateString)
+    public UserInfo createUserInfoObject(Long userID, String userName, String userPassword, long recordStatus, String memo, String createDateString, String updateDateString) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime createDate = LoulanDNSUtils.toDateTimeObject(createDateString);
-        ZonedDateTime updateDate = LoulanDNSUtils.toDateTimeObject(updateDateString);
+        ZonedDateTime createDate;
+        try
+        {
+            createDate = LoulanDNSUtils.toDateTimeObject(createDateString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to convert to ZonedDateTime object from String. value=%s", createDateString);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+        ZonedDateTime updateDate;
+        try
+        {
+            updateDate = LoulanDNSUtils.toDateTimeObject(updateDateString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to convert to ZonedDateTime object from String. value=%s", updateDateString);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
 
         UserInfo userInfo = createUserInfoObject(userID, userName, userPassword, recordStatus, memo, createDate, updateDate );
         return userInfo;

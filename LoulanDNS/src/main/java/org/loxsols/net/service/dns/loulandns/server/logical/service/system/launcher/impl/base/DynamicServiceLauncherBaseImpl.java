@@ -143,7 +143,6 @@ public class DynamicServiceLauncherBaseImpl implements IDynamicServiceLauncher
             LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg);
             throw exception;
         }
-        System.out.println("[DEBUG] buildJVMOptions() jdbcURL=" + jdbcURL );
 
         options.add("-Dspring.datasource.url=" + jdbcURL);
 

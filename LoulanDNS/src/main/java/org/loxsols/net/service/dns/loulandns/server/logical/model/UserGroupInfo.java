@@ -7,8 +7,9 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanCommonUtilityException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
 
@@ -28,15 +29,37 @@ public class UserGroupInfo
     List<UserGroupPrivilegeInfo> userGroupPrivilegeInfoList;
 
 
-    public void setCreateDate(String createDate)
+    public void setCreateDate(String createDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        ZonedDateTime dateTime;
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set createDate to %s. value=%s", this.getClass().getName(), createDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         this.createDate = dateTime;
     }
 
-    public void setUpdateDate(String updateDate)
+    public void setUpdateDate(String updateDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        ZonedDateTime dateTime;
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set updateDate to %s. value=%s", this.getClass().getName(), updateDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+        
         this.updateDate = dateTime;
     }
 

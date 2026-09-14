@@ -52,4 +52,7 @@ public interface IDNSMessage
     // このDNSメッセージがEDNS(0)[RFC6891]で拡張されている場合、EDNS0拡張情報のOPTリソースレコードを返す.
     public DNSResourceRecordTypeOPTForEDNS0Impl getEDNS0OPTResourceRecord() throws DNSServiceCommonException;
 
+    // このDNSメッセージのクローンを生成する.
+    public IDNSMessage cloneDNSMessage() throws DNSServiceCommonException;
+
 }

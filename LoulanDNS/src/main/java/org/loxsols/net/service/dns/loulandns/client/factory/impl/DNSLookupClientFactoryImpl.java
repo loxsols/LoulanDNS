@@ -4,6 +4,7 @@ import org.loxsols.net.service.dns.loulandns.client.common.DNSClientCommonExcept
 import org.loxsols.net.service.dns.loulandns.client.common.LoulanDNSClientConstants;
 import org.loxsols.net.service.dns.loulandns.client.factory.IDNSLookupClientFactory;
 import org.loxsols.net.service.dns.loulandns.client.impl.UDPResolverImpl;
+import org.loxsols.net.service.dns.loulandns.client.impl.*;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
@@ -47,15 +48,13 @@ public class DNSLookupClientFactoryImpl implements IDNSLookupClientFactory
         if ( dnsProtocolType.equals( LoulanDNSClientConstants.DNS_PROTOCOL_TYPE_UDP ) )
         {
           client = new UDPResolverImpl();
-
           client.init(properties);
-
         }
         else if ( dnsProtocolType.equals( LoulanDNSClientConstants.DNS_PROTOCOL_TYPE_TCP ) )
         {
-          String msg = String.format("Failed to create DNSLookupClient. Specified DNS protocol type is not implemented. key=%s ,value=%s", LoulanDNSClientConstants.PROP_KEY_DNS_PROTOCOL_TYPE, dnsProtocolType );
-          DNSClientCommonException exception = new DNSClientCommonException(msg);
-          throw exception;
+          // TCPプロトコルのDNSリゾルバ
+          client = new TCPResolverImpl();
+          client.init(properties);
         }
         else if ( dnsProtocolType.equals( LoulanDNSClientConstants.DNS_PROTOCOL_TYPE_DOH ) )
         {

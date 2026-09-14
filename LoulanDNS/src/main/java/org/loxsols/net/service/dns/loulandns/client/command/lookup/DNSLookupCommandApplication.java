@@ -82,7 +82,6 @@ public class DNSLookupCommandApplication extends SimpleDNSLookupCommandApplicati
 
     public static void main(String[] args)
     {
-        System.out.println("[DEBUG] start to DNSLookupCommandApplication : args.length=" + args.length );
 
 
         SpringApplicationBuilder applicationBuilder 

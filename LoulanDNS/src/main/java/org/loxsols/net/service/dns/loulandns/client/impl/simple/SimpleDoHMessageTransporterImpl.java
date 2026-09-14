@@ -445,8 +445,6 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
 
         URI buildedURI = buildQueryParameterURI(siteURI, queryParamProerties);
 
-        System.out.println( String.format("[DEBUG] SimpleDoHMessageTransporterImpl.lookupByGet() : buildedURI=%s, siteURI=%s", buildedURI.toString(), siteURI.toString() ) );
-
         HttpRequest.Builder builder = HttpRequest.newBuilder( buildedURI ).GET();
         for( var key : requestHeaders.keySet() )
         {
@@ -625,8 +623,6 @@ public class SimpleDoHMessageTransporterImpl extends SimpleUDPMessageTransporter
             DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
             throw exception;
         }
-
-        System.out.println( String.format("[DEBUG] SimpleDoHMessageTransporter.buildQueryParameterURI() : uri=%s, originalURI=%s", uri, originalURI) );
 
         return uri;
     }

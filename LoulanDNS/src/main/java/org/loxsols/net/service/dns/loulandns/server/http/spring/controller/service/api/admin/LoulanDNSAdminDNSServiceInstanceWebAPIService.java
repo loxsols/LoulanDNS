@@ -409,9 +409,6 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
         }
 
 
-        System.out.println("[DEBUG]getDNSServiceInstanceProperties() : dnsServiceInstanceInfo.getDNSServiceInstanceName()=" + dnsServiceInstanceInfo.getDNSServiceInstanceName() + ", dnsServiceInstanceInfo.getDNSServiceInstanceProperties().size()=" +  dnsServiceInstanceInfo.getDNSServiceInstanceProperties().size() );
-
-
         List<DNSServiceInstancePropertyInfo> dnsServiceInstanceProperties = dnsServiceInstanceInfo.getDNSServiceInstanceProperties();
         return dnsServiceInstanceProperties;
     }
@@ -648,8 +645,6 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
 
         DNSServiceInstancePropertyInfo savedInfo;
 
-
-        System.out.println( String.format("[DEBUG] putDNSServiceInstanceProperty() : UserName=%s, DNSServiceInstanceName=%s, key=%s, value=%s", userName, dnsServiceInstanceName, key, value) );
 
         DNSServiceInstancePropertyInfo  existInfo = getDNSServiceInstanceProperty(userName, dnsServiceInstanceName, key);
         if ( existInfo == null )
@@ -936,8 +931,6 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
                                                             @RequestParam(name = "Memo", required = false) String memo) throws DNSServiceCommonException
     {
 
-        System.out.println( String.format("[DEBUG] createDNSResolverInstanceProperty() : UserName=%s, DNSResolverInstanceName=%s, DNSResolverInstancePropertyKey=%s, DNSResolverInstancePropertyValue=%s", userName, dnsResolverInstanceName, dnsResolverInstancePropertyKey, dnsResolverInstancePropertyValue ) );
-
 
         // DB上に既存のプロパティ情報のエントリがあるかをチェックする.
         DNSResolverInstancePropertyInfo checkDNSResolverInstancePropertyInfo = getDNSResolverInstanceProperty(userName, dnsResolverInstanceName, dnsResolverInstancePropertyKey );
@@ -970,15 +963,11 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
         properties.add(dnsResolverInstancePropertyInfo);
         dnsResolverInstanceInfo.setDNSResolverPropertiesInfoList(properties);
 
-        System.out.println( String.format("[DEBUG] createDNSResolverInstanceProperty() : dnsResolverInstanceInfo.getDNSResolverPropertiesInfoList().size()=%d, properties.size()=%d", dnsResolverInstanceInfo.getDNSResolverPropertiesInfoList().size(), properties.size() )  );
 
 
         // 親エントリであるDNSサービスインスタンスごと論理的に更新する.
         DNSResolverInstanceInfo savedDNSResolverInstanceInfo = loulanDNSLogicalModelService.saveDNSResolverInstanceInfo(dnsResolverInstanceInfo);
         DNSResolverInstancePropertyInfo savedDNSResolverInstancePropertyInfo = savedDNSResolverInstanceInfo.getDNSPropertiesInfo(dnsResolverInstancePropertyKey);
-
-        System.out.println( String.format("[DEBUG] createDNSResolverInstanceProperty() : savedDNSResolverInstancePropertyInfo.size()=%d", savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size() )  );
-
 
         return savedDNSResolverInstancePropertyInfo;
     }
@@ -1117,7 +1106,6 @@ public class LoulanDNSAdminDNSServiceInstanceWebAPIService
                                                             @RequestParam(name = "value", required=true) String value ) throws DNSServiceCommonException
     {
 
-        System.out.println( String.format("[DEBUG] putDNSResolverInstanceProperty() : UserName=%s, DNSResolverInstanceName=%s, key=%s, value=%s", userName, dnsResolverInstanceName, key, value) );
 
 
         DNSResolverInstancePropertyInfo savedInfo;

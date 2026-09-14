@@ -155,8 +155,6 @@ public class LoulanDNSLogicalDBService
         List<DNSServiceInstancePropertyInfo> propInfoList = getDNSServiceInstancePropertyInfoListByDNSServiceInstanceID( dnsServiceInstanceID );
         dnsServiceInstanceInfo.setDnsServiceInstanceProperties(propInfoList);
 
-        System.out.println( String.format("[DEBUG] getDNSServiceInstanceInfo() : propInfoList.size()=%d, dnsServiceInstanceInfo.getDNSServiceInstanceProperties()=%d", propInfoList.size(), dnsServiceInstanceInfo.getDNSServiceInstanceProperties().size() ) );
-        
 
 
         // DNSリゾルバを設定する.
@@ -291,8 +289,6 @@ public class LoulanDNSLogicalDBService
         List<DNSResolverInstancePropertyInfo> dnsResolverPropertiesInfoList = new ArrayList<DNSResolverInstancePropertyInfo>();
         List<DNSResolverInstanceProperties> dndDnsResolverInstancePropertiesList = loulanDNSDBService.getDNSResolverInstancePropertiesListByDNSResolverInstanceID( dnsResolverInstanceInfo.getDNSResolverInstanceID() );
 
-
-        System.out.println("[DEBUG] LoulanDNSLogicalDBService.getDNSResolverInstanceInfo() : dndDnsResolverInstancePropertiesList.size()=" + dndDnsResolverInstancePropertiesList.size() );
 
         for( DNSResolverInstanceProperties dnsResolverInstanceProperties : dndDnsResolverInstancePropertiesList )
         {
@@ -779,13 +775,11 @@ public class LoulanDNSLogicalDBService
             saveDNSResolverPropertiesInfo( dnsResolverPropertiesInfo );
         }
 
-        System.out.println( String.format("[DEBUG] saveDNSResolverInstanceInfo() : savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size()=%d", savedDNSResolverInstanceInfo.getDNSResolverPropertiesInfoList().size() ) );
-        
+
         // DB上にのみ存在するDNSリゾルバのプロパティ情報を削除する.
         List<DNSResolverInstanceProperties> dnsResolverPropertiesListOnDB = loulanDNSDBService.getDNSResolverInstancePropertiesListByDNSResolverInstanceID( dnsResolverInstanceID );
 
-        System.out.println( String.format("[DEBUG] saveDNSResolverInstanceInfo() : dnsResolverPropertiesListOnDB.size()=%d", dnsResolverPropertiesListOnDB.size() ) );
-        
+
 
         for( DNSResolverInstanceProperties dnsResolverPropertiesOnDB : dnsResolverPropertiesListOnDB )
         {
@@ -1090,8 +1084,6 @@ public class LoulanDNSLogicalDBService
         }
 
 
-        System.out.println( String.format("[DEBUG] LoulanDNSLogicalDBService.getDNSServiceEndpointInstancePropertyInfoListByDNSServiceEndpointInstanceID() : dnsServiceEndpointInstanceID=%d, itemInfoList.size()=%d", dnsServiceEndpointInstanceID, itemInfoList.size() ) );
-
         return itemInfoList;
     }
 
@@ -1185,7 +1177,7 @@ public class LoulanDNSLogicalDBService
 
 
 
-    private UserInfo toUserInfo(User user)
+    private UserInfo toUserInfo(User user) throws LoulanDNSSystemServiceException
     {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserID( user.getUserID() );
@@ -1200,7 +1192,7 @@ public class LoulanDNSLogicalDBService
         return userInfo;
     }
 
-    private UserGroupInfo toUserGroupInfo(UserGroup userGroup)
+    private UserGroupInfo toUserGroupInfo(UserGroup userGroup) throws LoulanDNSSystemServiceException
     {
 
         UserGroupInfo  userGroupInfo = new UserGroupInfo();
@@ -1215,7 +1207,7 @@ public class LoulanDNSLogicalDBService
         return userGroupInfo;
     }
 
-    private UserGroupPrivilegeInfo toUserGroupPrivilegeInfo(UserGroupPrivilege userGroupPrivilege)
+    private UserGroupPrivilegeInfo toUserGroupPrivilegeInfo(UserGroupPrivilege userGroupPrivilege) throws LoulanDNSSystemServiceException
     {
         UserGroupPrivilegeInfo  userGroupPrivilegeInfo = new UserGroupPrivilegeInfo();
 
@@ -1234,7 +1226,7 @@ public class LoulanDNSLogicalDBService
 
     }
 
-    private List<UserGroupPrivilegeInfo> toUserGroupPrivilegeInfoList( List<UserGroupPrivilege> userGroupPrivilegeList )
+    private List<UserGroupPrivilegeInfo> toUserGroupPrivilegeInfoList( List<UserGroupPrivilege> userGroupPrivilegeList )  throws LoulanDNSSystemServiceException
     {
         List<UserGroupPrivilegeInfo> list = new ArrayList<UserGroupPrivilegeInfo>();
         for( UserGroupPrivilege privilege : userGroupPrivilegeList )
@@ -1247,7 +1239,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSServiceInstanceInfo toDNSServiceInstanceInfo(DNSServiceInstance dnsServiceInstance)
+    private DNSServiceInstanceInfo toDNSServiceInstanceInfo(DNSServiceInstance dnsServiceInstance) throws LoulanDNSSystemServiceException
     {
         DNSServiceInstanceInfo dnsServiceInstanceInfo = new DNSServiceInstanceInfo();
 
@@ -1268,7 +1260,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSResolverInstanceInfo toDNSResolverInstanceInfo(DNSResolverInstance dnsResolverInstance)
+    private DNSResolverInstanceInfo toDNSResolverInstanceInfo(DNSResolverInstance dnsResolverInstance) throws LoulanDNSSystemServiceException
     {
 
         DNSResolverInstanceInfo dnsResolverInfo = new DNSResolverInstanceInfo();
@@ -1287,7 +1279,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSResolverInstancePropertyInfo toDNSResolverPropertiesInfo(DNSResolverInstanceProperties dnsResolverInstanceProperties)
+    private DNSResolverInstancePropertyInfo toDNSResolverPropertiesInfo(DNSResolverInstanceProperties dnsResolverInstanceProperties) throws LoulanDNSSystemServiceException
     {
 
         DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo = new DNSResolverInstancePropertyInfo();
@@ -1306,7 +1298,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private SystemPropertiesInfo toSystemPropertiesInfo(SystemProperties systemProperties)
+    private SystemPropertiesInfo toSystemPropertiesInfo(SystemProperties systemProperties) throws LoulanDNSSystemServiceException
     {
         SystemPropertiesInfo systemPropertiesInfo = new SystemPropertiesInfo();
 
@@ -1323,7 +1315,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private List<SystemPropertiesInfo> toSystemPropertiesInfoList(List<SystemProperties> systemPropertiesList)
+    private List<SystemPropertiesInfo> toSystemPropertiesInfoList(List<SystemProperties> systemPropertiesList) throws LoulanDNSSystemServiceException
     {
         List<SystemPropertiesInfo> systemPropertiesInfoList = new ArrayList<SystemPropertiesInfo>();
 
@@ -1337,7 +1329,7 @@ public class LoulanDNSLogicalDBService
     } 
 
 
-    private CommonSystemLogInfo toCommonSystemLogInfo(CommonSystemLog commonSystemLog)
+    private CommonSystemLogInfo toCommonSystemLogInfo(CommonSystemLog commonSystemLog) throws LoulanDNSSystemServiceException
     {
         CommonSystemLogInfo commonSystemLogInfo = new CommonSystemLogInfo();
 
@@ -1359,7 +1351,7 @@ public class LoulanDNSLogicalDBService
         return commonSystemLogInfo;
     }
 
-    private List<CommonSystemLogInfo> toCommonSystemLogInfoList(List<CommonSystemLog> commonSystemLogList)
+    private List<CommonSystemLogInfo> toCommonSystemLogInfoList(List<CommonSystemLog> commonSystemLogList) throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLogInfo> commonSystemLogInfoList = new ArrayList<CommonSystemLogInfo>();
 
@@ -1373,7 +1365,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private CommonSystemLogPropertiesInfo toCommonSystemLogPropertiesInfo(CommonSystemLogProperties commonSystemLogProperties )
+    private CommonSystemLogPropertiesInfo toCommonSystemLogPropertiesInfo(CommonSystemLogProperties commonSystemLogProperties ) throws LoulanDNSSystemServiceException
     {
         CommonSystemLogPropertiesInfo commonSystemLogPropertiesInfo = new CommonSystemLogPropertiesInfo();
 
@@ -1396,7 +1388,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private List<CommonSystemLogPropertiesInfo> toCommonSystemLogPropertiesInfoList(List<CommonSystemLogProperties> commonSystemLogPropertiesList )
+    private List<CommonSystemLogPropertiesInfo> toCommonSystemLogPropertiesInfoList(List<CommonSystemLogProperties> commonSystemLogPropertiesList )  throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLogPropertiesInfo> commonSystemLogPropertiesInfoList = new ArrayList<CommonSystemLogPropertiesInfo>();
 
@@ -1504,7 +1496,7 @@ public class LoulanDNSLogicalDBService
 
 
 
-    public DNSServiceInstancePropertyInfo toDNSServiceInstancePropertyInfo(DNSServiceInstanceProperties dnsServiceInstanceProperties)
+    public DNSServiceInstancePropertyInfo toDNSServiceInstancePropertyInfo(DNSServiceInstanceProperties dnsServiceInstanceProperties) throws LoulanDNSSystemServiceException
     {
         DNSServiceInstancePropertyInfo info = new DNSServiceInstancePropertyInfo();
 
@@ -1559,7 +1551,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSServiceEndpointInstanceInfo toDNSServiceEndpointInstanceInfo(DNSServiceEndpointInstance dnsServiceEndpointInstance)
+    private DNSServiceEndpointInstanceInfo toDNSServiceEndpointInstanceInfo(DNSServiceEndpointInstance dnsServiceEndpointInstance) throws LoulanDNSSystemServiceException
     {
         DNSServiceEndpointInstanceInfo dnsServiceEndpointInstanceInfo = new DNSServiceEndpointInstanceInfo();
 
@@ -1593,7 +1585,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSServiceEndpointInstancePropertyInfo toDNSServiceEndpointInstancePropertyInfo(DNSServiceEndpointInstanceProperties dnsServiceEndpointInstanceProperties)
+    private DNSServiceEndpointInstancePropertyInfo toDNSServiceEndpointInstancePropertyInfo(DNSServiceEndpointInstanceProperties dnsServiceEndpointInstanceProperties) throws LoulanDNSSystemServiceException
     {
         DNSServiceEndpointInstancePropertyInfo info = new DNSServiceEndpointInstancePropertyInfo();
 

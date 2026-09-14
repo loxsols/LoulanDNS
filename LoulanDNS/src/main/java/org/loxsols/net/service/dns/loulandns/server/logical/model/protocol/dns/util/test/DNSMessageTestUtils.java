@@ -143,14 +143,6 @@ public class DNSMessageTestUtils
         }
 
 
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header ID=%d", dnsResponseMessage.getHeader().getID() ) );
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header flag(0)=%B", dnsResponseMessage.getHeader().getFlag(0) ) ) ;    
-       // System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header flag(1)=%B", dnsResponseMessage.getHeader().getFlag(1) ) ) ;
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header rcode=%d", dnsResponseMessage.getHeader().getRcode() ) ) ;
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header opcode=%d", dnsResponseMessage.getHeader().getOpcode() ) );
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header count(0)=%d", dnsResponseMessage.getHeader().getCount(0) ) );
-        System.out.println( String.format( "[DEBUG] DNSMessageTestUtils.createDNSResponseMessage() : DNS header count(1)=%d", dnsResponseMessage.getHeader().getCount(1) ) );
-
 
         byte[] bytes = dnsResponseMessage.toWire();
 

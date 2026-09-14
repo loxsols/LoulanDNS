@@ -256,5 +256,17 @@ public class XbillDNSMessageImpl extends DNSMessageImpl implements IDNSMessage
 
 
 
+    // このDNSメッセージのクローンを生成する.
+    public IDNSMessage cloneDNSMessage() throws DNSServiceCommonException
+    {
+        IDNSProtocolModelInstanceFactory factory = getDNSProtocolModelInstanceFactory();
+        IDNSMessage cloneDNSMessage = new XbillDNSMessageImpl( factory );
+        cloneDNSMessage.setDNSMessageBytes( this.getDNSMessageBytes() );
+
+        return cloneDNSMessage;
+    }
+
+
+
 
 }

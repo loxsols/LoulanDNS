@@ -6,8 +6,7 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
@@ -17,7 +16,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.*;
 // LoulanDNSの論理モデルクラスのうちのDNSサービスインスタンスのプロパティオブジェクトのファクトリクラス.
 public class DNSServiceInstancePropertyInfoFactory
 {
-    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo, String createDate, String updateDate)
+    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo, String createDate, String updateDate) throws LoulanDNSSystemServiceException
     {
         DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo = new DNSServiceInstancePropertyInfo();
 
@@ -40,7 +39,7 @@ public class DNSServiceInstancePropertyInfoFactory
     }
 
 
-    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo, ZonedDateTime createZonedDateTime, ZonedDateTime updateZonedDateTime)
+    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo, ZonedDateTime createZonedDateTime, ZonedDateTime updateZonedDateTime) throws LoulanDNSSystemServiceException
     {
         String createDate = LoulanDNSUtils.toDateTimeString(createZonedDateTime);
         String updateDate = LoulanDNSUtils.toDateTimeString(updateZonedDateTime);
@@ -51,7 +50,7 @@ public class DNSServiceInstancePropertyInfoFactory
         return dnsServiceInstancePropertyInfo;
     }
 
-    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo )
+    public DNSServiceInstancePropertyInfo createDNSServiceInstancePropertiesInfoObject(Long dnsServiceInstanceID,  String dnsServiceInstancePropertyKey, String dnsServiceInstancePropertyValue, String dnsServiceInstancePropertyExplain, long recordStatus, String memo ) throws LoulanDNSSystemServiceException
     {
         ZonedDateTime createZonedDateTime, updateZonedDateTime;
         createZonedDateTime = updateZonedDateTime = LoulanDNSUtils.getCurrentZonedDateTime();

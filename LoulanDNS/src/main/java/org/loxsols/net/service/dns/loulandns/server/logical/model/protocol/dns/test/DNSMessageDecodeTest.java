@@ -183,10 +183,6 @@ public class DNSMessageDecodeTest
 
 
 
-		// TODO : dnsQuestionSectionSizeが259というおかしな値になるので修正する.
-		// For DEBUG.
-		System.out.println("[DEBUG] testDecodeDNSResponseMessage001() dnsQuestionSectionSize=" + dnsQuestionSectionSize );
-		System.out.flush();
 		
 
 

@@ -37,9 +37,6 @@ public abstract class LoulanDNSAuthenticationProvider implements AuthenticationP
     String inputUserName = authentication.getName();
     String inputPassword = authentication.getCredentials().toString();
 
-    System.out.println("[DEBUG] LoulanDNSAuthenticationProvider.authenticate(Authentication authentication)  : inputUserName=" + inputUserName );
-    System.out.println("[DEBUG] LoulanDNSAuthenticationProvider.authenticate(Authentication authentication)  : inputPassword=" + inputPassword );
-
 
     // ユーザー名とパスワードが正しいかチェック
     boolean isAuthenticated;

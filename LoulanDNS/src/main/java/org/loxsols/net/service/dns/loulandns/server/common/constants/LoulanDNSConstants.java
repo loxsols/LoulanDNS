@@ -302,12 +302,15 @@ public class LoulanDNSConstants
     // "loulan.dns.service.instance.name"
     public static String PROP_KEY_SERVICE_INSTANCE_NAME = "loulan.dns.service.instance.name";
 
-
     // デフォルトDNSサービスインスタンスのインスタンス名.
     public static String PROP_KEY_DEFAULT_SERVICE_INSTANCE_NAME = "loulan.dns.service.instance.default.instance.name";
     
     // デフォルトDNSサービスインスタンスが所属するユーザーの名前
     public static String PROP_KEY_DEFAULT_SERVICE_INSTANCE_USER_NAME = "loulan.dns.service.instance.default.instance.user.name";
+
+    // DNSサービスインスタンス内部のドメインキャッシュサービスの有効/無効設定キー(true/falseで指定)
+    public static String PROP_KEY_SERVICE_INSTANCE_DOMAIN_CACHE_ACTIVE = "loulan.dns.service.instance.domain.cache.active";
+
 
     // **************************************************
     // 以下、DNSサービスインスタンスのタイプコード
@@ -461,6 +464,27 @@ public class LoulanDNSConstants
 
 
 
+    // ******************************************
+    // 以下、キャッシュサービス(ILoulanDNSCommonCacheService)設定用のプロパティキー
+    // ******************************************
+
+    // キャッシュサービスタイプ.
+    // "loulan.dns.cache.service.type"
+    public static final String PROP_KEY_CACHE_SERVICE_TYPE = "loulan.dns.cache.service.type";
+
+    // 最大キャッシュサイズ
+    // "loulan.dns.cache.size.max"
+    public static final String PROP_KEY_MAX_CACHE_SIZE = "loulan.dns.cache.size.max";
+
+    // 最大TTL
+    // "loulan.dns.cache.ttl.max"
+    public static final String PROP_KEY_MAX_CACHE_TTL = "loulan.dns.cache.ttl.max";
+
+    // キャッシュサービスタイプの値 : 汎用(Common)
+    public static final String CONST_CACHE_SERVICE_TYPE_COMMON_CACHE = "CommonCache"; 
+
+    // キャッシュサービスタイプの値 : ドメインキャッシュ.
+    public static final String CONST_CACHE_SERVICE_TYPE_DOMAIN_CACHE = "DomainCache";
 
 
 

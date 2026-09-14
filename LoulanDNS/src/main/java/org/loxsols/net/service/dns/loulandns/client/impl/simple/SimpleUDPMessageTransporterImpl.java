@@ -284,13 +284,9 @@ public class SimpleUDPMessageTransporterImpl implements IDNSMessageTransporter
             channel.write(sendBuffer);
 
 
-            System.out.println("[DEBUG] UDPMessageTransporterImpl.lookup() receive start.");
-
             ByteBuffer receiveBuffer = ByteBuffer.allocate(LoulanDNSClientConstants.UDP_CLIENT_MAX_RECEIVE_BUFFER_SIZE);
             // channel.receive(receiveBuffer);
             channel.read(receiveBuffer);
-
-            System.out.println("[DEBUG] UDPMessageTransporterImpl.lookup() receive end.");
 
             receiveBuffer.flip();
             

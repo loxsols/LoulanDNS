@@ -332,12 +332,10 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         String javaHome = System.getProperty("java.home");
         String javaBin = javaHome + File.separator + "bin" + File.separator + "java";
 
-        System.out.println("[DEBUG] doDoHEndpointServiceTask() : javaBin=" + javaBin);
 
         // 2. 現在実行中のJARファイル、またはクラスパスを自動取得
         String classPath = System.getProperty("java.class.path");
 
-        System.out.println("[DEBUG] doDoHEndpointServiceTask() : classPath=" + classPath);
 
 
         // 3. コマンドラインの組み立て
@@ -383,7 +381,6 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
     protected void doDoHEndpointServiceTaskOnCurrentSpringContext() throws DNSServiceCommonException
     {
 
-      System.out.println("[DEBUG] doDoHEndpointServiceTaskOnCurrentSpringContext()");
 
       SocketAddress socketAddress = getDoHServiceSocketAddress();
 
@@ -465,9 +462,6 @@ public class DoHServiceEndpointInstanceImpl extends DNSServiceEndpointInstanceIm
         // 2. 現在実行中のJARファイル、またはクラスパスを自動取得
         String classPath = System.getProperty("java.class.path");
 
-        System.out.println("[DEBUG] doDoHEndpointServiceTask() : javaBin=" + javaBin);
-        System.out.println("[DEBUG] doDoHEndpointServiceTask() : jarPath=" + jarPath);
-        System.out.println("[DEBUG] doDoHEndpointServiceTask() : classPath=" + classPath);
 
         // 3. コマンドラインの組み立て
         List<String> command = new ArrayList<>();

@@ -32,6 +32,4 @@ public interface IDNSResponseMessage extends IDNSMessage
 
     public boolean isSucceedDNSResponse() throws DNSServiceCommonException;
 
-
-
 }

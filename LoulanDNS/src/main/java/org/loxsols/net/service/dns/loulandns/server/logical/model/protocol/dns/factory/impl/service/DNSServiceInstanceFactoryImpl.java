@@ -10,13 +10,18 @@ import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSServiceInstanceInfo;
+import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSServiceInstancePropertyInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserInfo;
+
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.*;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.factory.IDNSResolverInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.DNSServiceInstanceImpl;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.TemporaryDNSServiceInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,6 +47,12 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
     @Autowired
     @Qualifier("loulanDNSLoggerFactoryImpl")
     ILoulanDNSLoggerFactory loulanDNSLoggerFactory;
+
+
+    @Autowired
+    @Qualifier("loulanDNSDomainCacheServiceFactoryImpl")
+    ILoulanDNSDomainCacheServiceFactory loulanDNSDomainCacheServiceFactory;
+
 
 
 
@@ -336,6 +347,16 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
         // ロガークラスを設定.
         ( (DNSServiceInstanceImpl)dnsServiceInstance ).setLoulanDNSLoggerFactory( this.loulanDNSLoggerFactory );
 
+
+        // LogicalModelServiceクラスを設定.
+        ( (DNSServiceInstanceImpl)dnsServiceInstance ).setLoulanDNSLogicalModelService( this.loulanDNSLogicalModelService);
+
+        // ドメインキャッシュサービスのファクトリクラスを設定.
+        ( (DNSServiceInstanceImpl)dnsServiceInstance ).setDomainCacheServiceFactoryInstance( this.loulanDNSDomainCacheServiceFactory );
+
+
+
+
         return dnsServiceInstance;
     }
 
@@ -406,6 +427,22 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
         info.setDNSServiceInstanceExplain(null);
         info.setDnsServiceTypeCode(dnsServiceInstanceTypeCode);
 
+        // 2026/09/11 : DNSサービスプロパティの設定処理を追加.
+        List<DNSServiceInstancePropertyInfo> propertyInfoList = new ArrayList<DNSServiceInstancePropertyInfo>();
+        for( Object keyObj: dnsServiceInstanceProperties.keySet() )
+        {
+            String key = (String)keyObj;
+            String value = dnsServiceInstanceProperties.getProperty( key );
+
+            DNSServiceInstancePropertyInfo propInfo = new DNSServiceInstancePropertyInfo();
+            propInfo.setDnsServiceInstancePropertyKey( key );
+            propInfo.setDnsServiceInstancePropertyValue( value );
+
+            propertyInfoList.add( propInfo );
+        }
+        info.setDnsServiceInstanceProperties( propertyInfoList );
+    
+
         // info.setDNSResolverInstanceID(null);
         info.setRecordStatus(LoulanDNSConstants.DB_CONST_VALUE_RECORD_STATUS_ACTIVE);
 
@@ -414,10 +451,10 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
         info.setUpdateDate( loulanDNSUtils.toDateTimeString(currentDateTime) );
 
 
-        IDNSServiceInstance dnsServiceInstance = new DNSServiceInstanceImpl(info, resolverInstance);
+        IDNSServiceInstance dnsServiceInstance = new TemporaryDNSServiceInstanceImpl(info, resolverInstance);
 
         // ロガークラスを設定.
-        ( (DNSServiceInstanceImpl)dnsServiceInstance ).setLoulanDNSLoggerFactory( this.loulanDNSLoggerFactory );
+        dnsServiceInstance.setLoulanDNSLoggerFactory( this.loulanDNSLoggerFactory );
 
         return dnsServiceInstance;
     }

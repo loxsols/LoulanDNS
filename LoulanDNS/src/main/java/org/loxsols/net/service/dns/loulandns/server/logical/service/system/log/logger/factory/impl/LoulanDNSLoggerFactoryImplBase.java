@@ -27,8 +27,8 @@ public abstract class LoulanDNSLoggerFactoryImplBase implements ILoulanDNSLogger
 
 
     // デフォルトのロガータイプ.
-    // protected String DEFAULT_LOGGER_TYPE = LoulanDNSConstants.CONST_LOG_TYPE_SIMPLE_LOGGER;  // シンプルロガー
-    protected String DEFAULT_LOGGER_TYPE = LoulanDNSConstants.CONST_LOG_TYPE_DB_LOGGER;     // DBロガー
+    protected String DEFAULT_LOGGER_TYPE = LoulanDNSConstants.CONST_LOG_TYPE_SIMPLE_LOGGER;  // シンプルロガー
+    // protected String DEFAULT_LOGGER_TYPE = LoulanDNSConstants.CONST_LOG_TYPE_DB_LOGGER;     // DBロガー
 
 
     protected LoulanDNSLogicalDBService logicalDBService;

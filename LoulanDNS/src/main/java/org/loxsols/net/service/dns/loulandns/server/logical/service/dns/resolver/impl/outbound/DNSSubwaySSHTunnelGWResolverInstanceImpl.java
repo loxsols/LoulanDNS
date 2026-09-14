@@ -133,10 +133,7 @@ public class DNSSubwaySSHTunnelGWResolverInstanceImpl extends UDPResolverInstanc
 
         client.init(properties);
 
-        for( var domain : ( (DNSSubwayResolverImpl)client ).getDNSSubwayDomainList() )
-        {
-            System.out.println( String.format("[DEBUG] DNSSubwaySSHTunnelGWResolverInstanceImpl.initDNSSubwayResolver() : targetDomain=%s", domain ) );
-        }
+
 
         setDNSLookupClient(client);
     }

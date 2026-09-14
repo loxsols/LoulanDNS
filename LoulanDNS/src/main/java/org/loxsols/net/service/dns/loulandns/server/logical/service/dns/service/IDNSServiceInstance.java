@@ -8,6 +8,7 @@ import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonExcep
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.part.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 
 /**
  * DNSサービスインスタンスのインターフェース
@@ -59,6 +60,20 @@ public interface IDNSServiceInstance
      */
     public String getDNSServiceUserName() throws DNSServiceCommonException;
 
+
+    /**
+     * ロガーインスタンスを設定する.
+     * 
+     * @param instance
+     */
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance);
+
+    /**
+     * ロガーインスタンスを取得する.
+     * 
+     * @return
+     */
+    public ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory();
 
 
 }

@@ -224,9 +224,6 @@ public class DNSResourceRecordImpl implements IDNSResourceRecord
         this.originaryRRBytes = Arrays.copyOfRange(rrBytes, 0, sizeOfRRBytes );
 
 
-        // For DEBUG.
-        String csvRecord = getCSVRecord();
-        System.out.println("[DEBUG] DNSResourceRescord.setDNSResourceRecordBytes() : DNS RR = " + csvRecord );
 
         return sizeOfRRBytes;
     }

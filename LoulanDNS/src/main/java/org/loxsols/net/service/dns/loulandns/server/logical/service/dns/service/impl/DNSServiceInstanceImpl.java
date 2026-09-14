@@ -26,11 +26,20 @@ import org.loxsols.net.service.dns.loulandns.server.common.constants.*;
 import org.loxsols.net.service.dns.loulandns.server.common.util.*;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.ILoulanDNSCommonCacheServiceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.ILoulanDNSDomainCacheService;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.ILoulanDNSDomainCacheServiceFactory;
+
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 
+
+
 /**
  * SpringのDBアクセス機能を用いたDNSサービスインスタンスの実装クラス
+ * NOTE : 本クラスは通常はDNSServiceInstanceFactoryImplクラスでnew生成しているから、SpringのDIは機能しない.
+ *          SpringのDIを期待した処理は動かないので注意.
+ * 
  */
 @Setter
 @Getter
@@ -102,10 +111,6 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
         this.dnsResolerInstanceFactory = dnsResolerInstanceFactory;
     }
 
-    public IDNSResolverInstanceFactory getDNSResolverInstanceFactory()
-    {
-        return this.dnsResolerInstanceFactory;
-    }
 
 
 
@@ -134,6 +139,16 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
 
         return logger;
     }
+
+
+
+    @Autowired
+    @Qualifier("loulanDNSDomainCacheServiceFactoryImpl")
+    public void setDomainCacheServiceFactoryInstance(ILoulanDNSDomainCacheServiceFactory instance) throws DNSServiceCommonException
+    {
+        super.setDomainCacheServiceFactoryInstance(instance);
+    }
+
 
 
 

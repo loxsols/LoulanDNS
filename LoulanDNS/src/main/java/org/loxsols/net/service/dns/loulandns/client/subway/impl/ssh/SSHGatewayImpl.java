@@ -18,6 +18,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
+import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtocolUtils;
 import org.loxsols.net.service.dns.loulandns.client.subway.*;
 import org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException;
 import org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayConstants;
@@ -292,9 +293,9 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
                 
             int localBindPort = forwardPort;
 
-            String remoteAddress = getTargetHost();
+            String remoteHost = getTargetHost();
             int remotePort = forwardPort;
-            SSHTunnelInstance sshTunnelInstance = new SSHTunnelInstance( sshSessionInstance, localBindAddress, localBindPort, remoteAddress, remotePort  );
+            SSHTunnelInstance sshTunnelInstance = new SSHTunnelInstance( sshSessionInstance, localBindAddress, localBindPort, remoteHost, remotePort  );
             
             // SSHトンネルを構築する.
             // ローカルポートフォワーディングの開始（入り口の構築）
@@ -381,28 +382,61 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
     protected String getEnableLocalSocketAddress() throws DNSSubwayCommonException
     {
         String localAddress = getLocalAddress();
+        int[] portList = getForwardTCPPortList();
 
-        String ipAddressString = null;
+        String enableIPAddressString = null;
+
         if ( dnsSubwayUtils.isIPSubnetFormatString(localAddress) )
         {
             // サブネットワーク形式("xxx.xxx.xxx.xxx/yy")なので、候補アドレスの一覧からbind可能なアドレスを探す.
-            List<String> addressList = dnsSubwayUtils.getIPAddressListFromIPSubnetFormat(localAddress);
-            for( String addr : addressList )
+            // List<String> addressList = dnsSubwayUtils.getIPAddressListFromIPSubnetFormat(localAddress);
+            // for( String addr : addressList )
+            // {
+            //     int[] portList = getForwardTCPPortList();
+            //     if ( dnsSubwayUtils.isEnableToBindTCPAddress(addr, portList) )
+            //     {
+            //         ipAddressString = addr;
+            //         break;
+            //     }
+            // }
+
+            String lowAddressString = dnsSubwayUtils.getIPAddressSpaceLowAddressFromIPSubnetFormat(localAddress);
+            long lowAddressValue = dnsSubwayUtils.getIPv4AddressLongValue(lowAddressString);
+
+            long size = dnsSubwayUtils.getIPAddressSpaceSizeFromIPSubnetFormat(localAddress);
+
+            for(long i=0; i < size; i++)
             {
-                int[] portList = getForwardTCPPortList();
-                if ( dnsSubwayUtils.isEnableToBindTCPAddress(addr, portList) )
+                long addressValue = lowAddressValue + i;
+                InetAddress address = dnsSubwayUtils.getIPv4AddressFromLongValue(addressValue);
+
+                if ( dnsSubwayUtils.isEnableToBindTCPAddress(address, portList) )
                 {
-                    ipAddressString = addr;
+                    LoulanDNSProtocolUtils protocolUtils = new LoulanDNSProtocolUtils();
+                    try
+                    {
+                        enableIPAddressString = protocolUtils.inetAddressToIPAddressString(address);
+                    }
+                    catch(DNSServiceCommonException cause)
+                    {
+                        String msg = String.format("Failed to check Enable local socket address. localAddress=%s", localAddress);
+                        DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                        throw exception;
+                    }
+
                     break;
                 }
             }
         }
         else
         {
-            ipAddressString = localAddress;
+            if ( dnsSubwayUtils.isEnableToBindTCPAddress(localAddress, portList)  )
+            {
+                enableIPAddressString = localAddress;
+            }
         }
 
-        if ( ipAddressString == null )
+        if ( enableIPAddressString == null )
         {
             // bindできそうなアドレスが存在しなかった.
             String msg = String.format("Failed to bind SocketAddress. localAddress=%s, forwardPortList=%s", localAddress, getForwardTCPPortListString());
@@ -410,7 +444,7 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
             throw exception;
         }
 
-        return ipAddressString;
+        return enableIPAddressString;
     }
 
 

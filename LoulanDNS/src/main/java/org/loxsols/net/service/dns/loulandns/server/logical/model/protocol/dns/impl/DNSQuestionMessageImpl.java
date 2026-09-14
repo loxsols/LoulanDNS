@@ -83,6 +83,17 @@ public class DNSQuestionMessageImpl extends DNSMessageImpl implements IDNSMessag
     }
 
 
+    // このDNSメッセージのクローンを生成する.
+    public IDNSMessage cloneDNSMessage() throws DNSServiceCommonException
+    {
+        IDNSProtocolModelInstanceFactory factory = getDNSProtocolModelInstanceFactory();
+        IDNSMessage cloneDNSMessage = new DNSQuestionMessageImpl( factory );
+        cloneDNSMessage.setDNSMessageBytes( this.getDNSMessageBytes() );
+
+        return cloneDNSMessage;
+    }
+
+
 
     
 

@@ -1,6 +1,9 @@
 package org.loxsols.net.service.dns.loulandns.server.common.util;
 
 import java.util.TimeZone;
+
+import static org.mockito.ArgumentMatchers.endsWith;
+
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
@@ -10,8 +13,6 @@ import java.time.format.DateTimeFormatter;
 import org.loxsols.net.service.dns.loulandns.client.common.DNSClientCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
-import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
-
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserGroupInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserGroupMappingInfo;
@@ -31,20 +32,33 @@ public class LoulanDNSUtils
 
     // DBレコード上で使用する時刻表記の文字列を取得する.
     // 例) "2024/06/11 12:34:56.123 JST" -> TimeZone型クラス
-    public static ZonedDateTime toDateTimeObject(String dateTimeString)
+    public static ZonedDateTime toDateTimeObject(String dateTimeString) throws DNSServiceCommonException
     {
+        // 以下のタイムゾーン付きの文字列を正規表現で空白文字で区切る.
+        // 例)"2024/06/11 12:34:56.123 Asia/Tokyo"  -> ["2024/06/11", "12:34:56.123", "Asia/Tokyo"]
+        String[] dateTimeStringArray = dateTimeString.split("\\s+");
+
+        if ( dateTimeStringArray.length < 3)
+        {
+            String msg = String.format("Failed to convert to ZonedDateTime object from String. Invalid array size. array-size=%d, dateTimeString=%s", dateTimeStringArray.length, dateTimeString);
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+
         // タイムゾーンを表すコードが文字列末尾に存在するはずなので取得する.
-        // 例) "2024/06/11 12:34:56.123 JST"  -> "JST"
-        String timeZoneCode = dateTimeString.substring( dateTimeString.length() - 3 );
+        // 例1) "2024/06/11 12:34:56.123 JST"  -> "JST"
+        // 例2) "2024/06/11 12:34:56.123 Asia/Tokyo"  -> "Asia/Tokyo"
+        // String timeZoneCode = dateTimeString.substring( dateTimeString.length() - 3 );
+        String timeZoneCode = dateTimeStringArray[2];
 
         // "JST"のようなタイムゾーンの名称からTimeZoneクラスを生成する.
-        TimeZone timeZone = TimeZone.getTimeZone(timeZoneCode);
-        // TimeZone.toZoneId().getId()を実行すると"Asia/Tokyo"のようなコードが得られる.
+        TimeZone timeZone = getTimeZone(timeZoneCode);
         ZoneId zoneID = ZoneId.of( timeZone.toZoneId().getId() );
 
         // 指定された時刻文字列からタイムゾーンコードを取り除く.
         // 例) "2024/06/11 12:34:56.123 JST"  -> "2024/06/11 12:34:56.123" 
-        String dateTimeStr2 = dateTimeString.substring(0, dateTimeString.length() - 3 );
+        String dateTimeStr2 = String.format("%s %s", dateTimeStringArray[0], dateTimeStringArray[1]);
         dateTimeStr2 = dateTimeStr2.trim();
 
         // 変換する
@@ -53,6 +67,35 @@ public class LoulanDNSUtils
         LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr2, formatter );
         ZonedDateTime dateTime = ZonedDateTime.of( localDateTime, zoneID );
         return dateTime;
+    }
+
+
+    /**
+     * 指定したタイムゾーンコードからTimeZoneオブジェクトを生成する.
+     * Java8以降のJVMでは非推奨となっている"JST"は本メソッド内で"Asia/Tokyo"に読み替えて対応する.
+     * 
+     * @param timeZoneCode
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public static TimeZone getTimeZone(String timeZoneCode) throws DNSServiceCommonException
+    {
+        if ( timeZoneCode == null || timeZoneCode.isEmpty() )
+        {
+            String msg = String.format("Failed to get TimeZone object from String. value=%s", timeZoneCode);
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+        // 非推奨の古いタイムゾーン表記("JST"など)を変換する.
+        if ( timeZoneCode.equals("JST") )
+        {
+            timeZoneCode = "Asia/Tokyo";
+        }
+
+        // "Aisa/Tokyo"のようなタイムゾーンの名称からTimeZoneクラスを生成する.
+        TimeZone timeZone = TimeZone.getTimeZone(timeZoneCode);
+        return timeZone;
     }
 
     // 現在時刻を表すZonedDateTimeオブジェクトを取得する.
@@ -203,8 +246,35 @@ public class LoulanDNSUtils
             throw execption;
         }
 
-        ZonedDateTime createDateObject = toDateTimeObject(createDate);
-        ZonedDateTime updateDateObject = toDateTimeObject(updateDate);
+        ZonedDateTime createDateObject;
+        try
+        {
+            createDateObject = toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set convert ZonedDateTime from String. value=%s", createDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+        ZonedDateTime updateDateObject;
+        
+        try
+        {
+            updateDateObject = toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set convert ZonedDateTime from String. value=%s", updateDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+
+
+
+
         if ( createDateObject.isAfter(updateDateObject) == true )
         {
             // レコード作成時刻がレコード更新時刻よりも後の時刻で設定されている.
@@ -304,8 +374,32 @@ public class LoulanDNSUtils
             throw execption;
         }
 
-        ZonedDateTime createDateObject = toDateTimeObject(createDate);
-        ZonedDateTime updateDateObject = toDateTimeObject(updateDate);
+        ZonedDateTime createDateObject;
+        try
+        {
+            createDateObject = toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set convert ZonedDateTime from String. value=%s", createDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+        ZonedDateTime updateDateObject;
+        
+        try
+        {
+            updateDateObject = toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set convert ZonedDateTime from String. value=%s", updateDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+
         if ( createDateObject.isAfter(updateDateObject) == true )
         {
             // レコード作成時刻がレコード更新時刻よりも後の時刻で設定されている.

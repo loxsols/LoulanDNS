@@ -280,8 +280,6 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
 
         List<String> list = getDNSSubwayDomainList();
 
-        System.out.println( String.format("[DEBUG] SimpleDNSSubwayResolverImpl.addDNSSubwayDomain() : dname=%s, list.size()=%d", dname, list.size() ) );
-
         if ( dname.endsWith(".") )
         {
             // 指定されたドメイン名がFQDN形式で末尾がドット記号(.)で終端する場合はそれを取り除く.
@@ -390,7 +388,7 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
     public IDNSResponseMessage resolveDNSSubwayGateway(IDNSQuestionMessage questionMessage) throws DNSClientCommonException
     {
 
-        System.out.println( String.format("[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() called.") );
+        IDNSMessageFactory dnsMessageFactory = getDNSMessageFactory();
 
         String dname;
         try
@@ -402,6 +400,15 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
             String msg = String.format("Failed to resolve DNSSubway GW domain. Unable to get dname.");
             DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
             throw exception;
+        }
+
+
+        if ( dnsSubwayUtils.isDNSQueryTypeARecord(questionMessage) == false )
+        {
+            // DNS問い合わせタイプがTYPE_AでもTYPE_ANYでもない.
+            // DNSSubwayのGWは現状HTTPS(TYPE_65)やTYPE_AAAAに対応していないのでエラーを返す.
+            IDNSResponseMessage nodataResponse = dnsSubwayUtils.buildDNSResponseForNODATA(dnsMessageFactory, questionMessage);
+            return nodataResponse;
         }
 
         IDNSSubwayGatewayInstancePool gwPool = getDNSSubwayGatewayPool();
@@ -440,6 +447,8 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
 
 
         int[] portList = dnsSubwayUtils.getPortArrayFromPortList(targetPortList);
+
+        // ここでDNSSubwayのゲートウェイを実際に構築する.
         IDNSSubwayGatewayDescriptor  gwDescriptor = gwPool.getOrCreateDNSSubwayDescriptor(subwayLineType, dname, protocolType, portList, gwOptions );
         if ( gwDescriptor == null )
         {
@@ -449,98 +458,16 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
         }
 
 
+        // 実際のDNSSubwayのゲートウェイの入り口のアドレス/ポート番号(複数)を取得する.
         String gwAddress = gwDescriptor.getGatewayAddress();
         int[] gwPortList = gwDescriptor.gatGatewayPortList();
 
-        
-        // とりあえず、GWのIPアドレスを含むAレコードのみからなるレスポンスを生成して返す.
-        IDNSQueryPart query;
-        String qname;
-        int qtype;
-        int qclass;
-        try
-        {
-            query = questionMessage.getDNSQuestionSection().getDNSQueries()[0];
-            qname = query.getDNSQueryName();
-            qtype = query.getDNSQueryType();
-            qclass = query.getDNSQueryClass();
-        }
-        catch(DNSServiceCommonException cause)
-        {
-            String msg = String.format("Failed to create DNS Gateway response, caused by Unable to get query information.");
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception;
-        }
 
+        // ------ 
+        // とりあえず、ゲートウェイのIPアドレスを含むAレコードのみからなるレスポンスを生成して返す.
+        // ------ 
         int rTTL = 3600;    // TTLはとりえあず3600秒に設定する.
-        byte[] rdata;
-        try
-        {
-            rdata = InetAddress.getByName(gwAddress).getAddress();
-        }
-        catch(UnknownHostException cause)
-        {
-            String msg = String.format("Failed to create DNS Gateway rdata.");
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception;
-        }
-
-
-        System.out.println(String.format("[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() rdata.length=%d", rdata.length ) );
-
-        IDNSMessageFactory dnsMessageFactory = getDNSMessageFactory();
-        IDNSResponseMessage response;
-        try
-        {
-            response = dnsMessageFactory.createSimpleResponseDNSMesssage(qname, qtype, qclass, rTTL, rdata);
-        }
-        catch(DNSServiceCommonException cause)
-        {
-            String msg = String.format("Failed to craete DNS Subway Gateway response. qname=%s, qtype=%d, qclass=%d, rTTL=%d, gwAddress=%s, gwPort=%s", qname, qtype, qclass, rTTL, gwAddress, dnsSubwayUtils.getPortListString(gwPortList)  );
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception;
-        }
-
-
-        // DNSクエリIDをレスポンスメッセージに設定する.
-        try
-        {
-            int dnsQueryID = questionMessage.getDNSHeaderSection().getID();
-            response.getDNSHeaderSection().setID( dnsQueryID );
-        }
-        catch(DNSServiceCommonException cause)
-        {
-            String msg = String.format("Failed to craete DNS Subway Gateway response, caued by setting to DNS Query ID.");
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception;
-        }  
-
-
-        // ------
-        // 2026/08/21 : ヘッダーセクションの各値がレスポンスに適していない不具合対応.
-        try
-        {
-            IDNSHeaderSection headerSection = response.getDNSHeaderSection();
-
-            // QRビットをオンにして「レスポンス」にする
-            headerSection.setQR(1);
-
-            // RAビットをオンにして「再帰応答可能」にする
-            headerSection.setRA(1);
-
-            // RCODEを 0 (NOERROR) に設定
-            headerSection.setRCode(0);
-
-            // 再度DNSレスポンスメッセージのヘッダセクションをsetする.
-            response.setDNSHeaderSection(headerSection);
-
-        }
-        catch(DNSServiceCommonException cause)
-        {
-            String msg = String.format("Failed to craete DNS Subway Gateway response, caued by setting to DNS Response header values.");
-            DNSClientCommonException exception = new DNSClientCommonException(msg, cause);
-            throw exception;
-        }  
+        IDNSResponseMessage response = dnsSubwayUtils.buildDNSResponseForDNSSubwayGatewayARecord(dnsMessageFactory, questionMessage, gwAddress, rTTL);
         // ------
 
 
@@ -554,9 +481,6 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
 
             LoulanDNSDebugUtils.printHexString(getClass(), "DNS-Subway DNS Response message. hex=", response.getDNSMessageBytes() );
             LoulanDNSDebugUtils.printDebug(getClass(),"DNS-Subway DNS Response message. header=", headerDebugString );
-
-            System.out.println( String.format("[DEBUG] SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway() gwAddress=%s, rdata.length=%d, response=%s, headerDebugString=%s", gwAddress, rdata.length, response, headerDebugString) );
-
         }
         catch(DNSServiceCommonException cause)
         {
@@ -616,8 +540,6 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
             throw exception;
         }
 
-
-        System.out.println( String.format("[DEBUG] SimpleDNSSubwayResolverImpl.resolve() dname=%s, isDNSSubwayDomain(dname)=%s", dname, isDNSSubwayDomain(dname) ) );
 
 
         if ( isDNSSubwayDomain(dname) )

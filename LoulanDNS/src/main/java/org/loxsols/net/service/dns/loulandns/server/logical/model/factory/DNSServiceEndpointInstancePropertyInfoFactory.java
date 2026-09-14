@@ -6,8 +6,7 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
@@ -17,7 +16,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.*;
 // LoulanDNSの論理モデルクラスのうちのDNSサービスエンドポイントインスタンスのプロパティオブジェクトのファクトリクラス.
 public class DNSServiceEndpointInstancePropertyInfoFactory
 {
-    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo, String createDate, String updateDate)
+    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo, String createDate, String updateDate) throws LoulanDNSSystemServiceException
     {
         DNSServiceEndpointInstancePropertyInfo dnsServiceEndpointInstancePropertyInfo = new DNSServiceEndpointInstancePropertyInfo();
 
@@ -40,7 +39,7 @@ public class DNSServiceEndpointInstancePropertyInfoFactory
     }
 
 
-    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo, ZonedDateTime createZonedDateTime, ZonedDateTime updateZonedDateTime)
+    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo, ZonedDateTime createZonedDateTime, ZonedDateTime updateZonedDateTime)  throws LoulanDNSSystemServiceException
     {
         String createDate = LoulanDNSUtils.toDateTimeString(createZonedDateTime);
         String updateDate = LoulanDNSUtils.toDateTimeString(updateZonedDateTime);
@@ -51,7 +50,7 @@ public class DNSServiceEndpointInstancePropertyInfoFactory
         return dnsServiceEndpointInstancePropertyInfo;
     }
 
-    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo )
+    public DNSServiceEndpointInstancePropertyInfo createDNSServiceEndpointInstancePropertyInfoObject(Long dnsServiceEndpointInstanceID,  String dnsServiceEndpointInstancePropertyKey, String dnsServiceEndpointInstancePropertyValue, String dnsServiceEndpointInstancePropertyExplain, long recordStatus, String memo )  throws LoulanDNSSystemServiceException
     {
         ZonedDateTime createZonedDateTime, updateZonedDateTime;
         createZonedDateTime = updateZonedDateTime = LoulanDNSUtils.getCurrentZonedDateTime();

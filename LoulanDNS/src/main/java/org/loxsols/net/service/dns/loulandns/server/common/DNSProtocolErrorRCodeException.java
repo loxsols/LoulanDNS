@@ -70,6 +70,21 @@ public class DNSProtocolErrorRCodeException extends DNSProtocolException
         IDNSResponseMessage responseMessage = protocolUtils.createDNSResponseMessageFromQuestionMessage( questionMessage );
         responseMessage.getDNSHeaderSection().setRCode( getResponseCode() );
 
+        // QRビット(レスポンスメッセージか否か)を1に設定してDNSレスポンスであることを明示する
+        responseMessage.getDNSHeaderSection().setQR(1);
+
+        // DNS問い合わせ電文のRD(Recursion Desire)フラグの値に応じて、レスポンスメッセージのRD/RAを設定する.
+        if ( questionMessage.getDNSHeaderSection().getRD() == 1 )
+        {
+            responseMessage.getDNSHeaderSection().setRD(1);
+            responseMessage.getDNSHeaderSection().setRA(1);
+        }
+        else
+        {   
+            responseMessage.getDNSHeaderSection().setRD(0);
+            responseMessage.getDNSHeaderSection().setRA(0);
+        }
+
         return responseMessage;
     }
 

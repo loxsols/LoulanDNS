@@ -7,7 +7,8 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
 
@@ -37,9 +38,21 @@ public class CommonSystemLogInfo
      * ログ発生日時を設定する.
      * 
      */
-    public void setCommonSystemLogOccurDate(String logOccurDate)
+    public void setCommonSystemLogOccurDate(String logOccurDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(logOccurDate);
+        ZonedDateTime dateTime;
+        
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(logOccurDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set CommonSystemLog LogOccurDate. value=%s", logOccurDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         setCommonSystemLogOccurDate(dateTime);
     }
 
@@ -48,21 +61,45 @@ public class CommonSystemLogInfo
      * 
      * @param logOccurDate
      */
-    public void setCommonSystemLogOccurDate(ZonedDateTime logOccurDate)
+    public void setCommonSystemLogOccurDate(ZonedDateTime logOccurDate) throws LoulanDNSSystemServiceException
     {
         this.commonSystemLogOccurDate = logOccurDate;
     }
 
 
-    public void setCreateDate(String createDate)
+    public void setCreateDate(String createDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        ZonedDateTime dateTime;
+        
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set CommonSystemLog createDate. value=%s", createDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         this.createDate = dateTime;
     }
 
-    public void setUpdateDate(String updateDate)
+    public void setUpdateDate(String updateDate) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        ZonedDateTime dateTime;
+        
+        try
+        {
+            dateTime = LoulanDNSUtils.toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to set CommonSystemLog updateDate. value=%s", updateDate);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
         this.updateDate = dateTime;
     }
 

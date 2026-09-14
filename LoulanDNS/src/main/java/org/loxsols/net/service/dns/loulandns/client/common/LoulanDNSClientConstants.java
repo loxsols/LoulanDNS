@@ -117,6 +117,9 @@ public class LoulanDNSClientConstants
     public static final int UDP_CLIENT_MAX_SEND_BUFFER_SIZE = 4096;
     public static final int UDP_CLIENT_MAX_RECEIVE_BUFFER_SIZE = 4096;
 
+    public static final int TCP_CLIENT_MAX_SEND_BUFFER_SIZE = 65536;
+    public static final int TCP_CLIENT_MAX_RECEIVE_BUFFER_SIZE = 65536;
+
 
     // ******************************************
     // 以下、DNSクライアントのデフォルト値

@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
-
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.model.User;
@@ -110,8 +110,33 @@ public class LoulanDNSSpringUtils
             throw execption;
         }
 
-        ZonedDateTime createDateObject = LoulanDNSUtils.toDateTimeObject(createDate);
-        ZonedDateTime updateDateObject = LoulanDNSUtils.toDateTimeObject(updateDate);
+        ZonedDateTime createDateObject;
+        ZonedDateTime updateDateObject;
+        try
+        {
+            createDateObject = LoulanDNSUtils.toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            // 作成時刻のタイムゾーン付き時刻型への変換に失敗した.
+            String msg = String.format("Invalid DateTime format. Failed to convert to ZonedDateTime object. createDate=%s", createDate );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+
+        try
+        {
+            updateDateObject = LoulanDNSUtils.toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            // 更新時刻のタイムゾーン付き時刻型への変換に失敗した.
+            String msg = String.format("Invalid DateTime format. Failed to convert to ZonedDateTime object. updateDate=%s", updateDate );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+    
+
         if ( createDateObject.isAfter(updateDateObject) == true )
         {
             // レコード作成時刻がレコード更新時刻よりも後の時刻で設定されている.
@@ -211,8 +236,34 @@ public class LoulanDNSSpringUtils
             throw execption;
         }
 
-        ZonedDateTime createDateObject = LoulanDNSUtils.toDateTimeObject(createDate);
-        ZonedDateTime updateDateObject = LoulanDNSUtils.toDateTimeObject(updateDate);
+        ZonedDateTime createDateObject;
+        ZonedDateTime updateDateObject;
+        try
+        {
+            createDateObject = LoulanDNSUtils.toDateTimeObject(createDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            // 作成時刻のタイムゾーン付き時刻型への変換に失敗した.
+            String msg = String.format("Invalid DateTime format. Failed to convert to ZonedDateTime object. createDate=%s", createDate );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+
+        try
+        {
+            updateDateObject = LoulanDNSUtils.toDateTimeObject(updateDate);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            // 更新時刻のタイムゾーン付き時刻型への変換に失敗した.
+            String msg = String.format("Invalid DateTime format. Failed to convert to ZonedDateTime object. updateDate=%s", updateDate );
+            LoulanDNSSystemServiceException execption = new LoulanDNSSystemServiceException( msg );
+            throw execption;
+        }
+
+
+
         if ( createDateObject.isAfter(updateDateObject) == true )
         {
             // レコード作成時刻がレコード更新時刻よりも後の時刻で設定されている.

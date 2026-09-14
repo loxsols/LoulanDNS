@@ -65,7 +65,6 @@ public class DNSMessageFormatterCommandApplication implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
-        System.out.println("[DEBUG] start to DNSMessageFormatterCommandApplication.run() called");
 
         String qname = "google.co.jp.";
         int qtype = 1;
@@ -79,7 +78,6 @@ public class DNSMessageFormatterCommandApplication implements CommandLineRunner
 
     public static void main(String[] args)
     {
-        System.out.println("[DEBUG] start to DNSMessageFormatterCommandApplication");
 
 
         SpringApplicationBuilder applicationBuilder 

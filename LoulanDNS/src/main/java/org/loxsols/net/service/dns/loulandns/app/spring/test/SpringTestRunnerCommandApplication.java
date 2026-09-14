@@ -106,12 +106,6 @@ public class SpringTestRunnerCommandApplication implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
-        System.out.println("run!");
-
-        System.out.println("args.length=" + args.length );
-        System.out.println("args[0]=" + args[0] );
-
-
         if ( args.length == 0 )
         {
             System.out.println("Usage : <package> | <package>.<class> | <package>.<class>#<method>");
@@ -181,7 +175,14 @@ public class SpringTestRunnerCommandApplication implements CommandLineRunner
         ApplicationContext context = getApplicationContext();
 
         Class beanClassType = Class.forName( beanFullClassName );
-        LoulanDNSSSpringTestTarget testTarget = (LoulanDNSSSpringTestTarget)context.getBean(beanClassType);
+
+        // 2026/08/27 : SpringのDIがうまく動作しないため、以下のように改修
+        // [改修前]
+        // LoulanDNSSSpringTestTarget testTarget = (LoulanDNSSSpringTestTarget)context.getBean(beanClassType);
+        // [改修後]
+        // SpringのBeanFactoryを使用して、DIを適用したインスタンスを動的生成
+        LoulanDNSSSpringTestTarget testTarget = (LoulanDNSSSpringTestTarget)context.getAutowireCapableBeanFactory().createBean(beanClassType);
+
 
         for( String methodName : testTarget.getTestMethodNames() )
         {

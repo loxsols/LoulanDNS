@@ -11,7 +11,9 @@ import org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolErrorRCode
 import org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolRcodeErrorSERVFAILException;
 import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.ILoulanDNSCommonCacheServiceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.part.*;
@@ -29,6 +31,10 @@ import org.loxsols.net.service.dns.loulandns.server.common.constants.*;
 import org.loxsols.net.service.dns.loulandns.server.common.util.*;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.*;
+
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.DNSCacheServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.*;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.impl.*;
 
 /**
  * DNSサービスインスタンスのベースクラス
@@ -48,12 +54,20 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     IDNSResolverInstance dnsResolverInstance;
 
 
+    // ドメインキャッシュサービスのファクトリインスタンス
+    ILoulanDNSDomainCacheServiceFactory domainCacheServiceFactoryInstance;
+
+    // ドメインキャッシュサービスの有効/無効フラグ.
+    boolean domainCacheServiceActiveFlag;
+
     // 本サービスのタスクステータス.
     int serviceTaskStatus = LoulanDNSConstants.CONST_TASK_STATUS_INACTIVE_DNS_SERVICE_INSTANCE;
 
     LoulanDNSCommonUtils commonUtils = new LoulanDNSCommonUtils();
 
     String LOGGER_NAME = "DNSServiceInstanceLogger";
+
+    ILoulanDNSLoggerFactory loulanDNSLoggerFactory;
 
 
     // ロガークラス.
@@ -95,6 +109,82 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     {
         return dnsResolverInstance;
     }
+
+
+
+    public void setDomainCacheServiceFactoryInstance(ILoulanDNSDomainCacheServiceFactory instance) throws DNSServiceCommonException
+    {
+        this.domainCacheServiceFactoryInstance = instance;
+    }
+
+    public  ILoulanDNSDomainCacheServiceFactory getDomainCacheServiceFactoryInstance() throws DNSServiceCommonException
+    {
+        return this.domainCacheServiceFactoryInstance;
+    }
+
+
+    // ドメインキャッシュサービスの識別名を取得する.
+    public String getDomainCacheServiceName() throws DNSServiceCommonException
+    {
+        String domainCacheServiceName;
+
+        // ドメインサービスキャッシュ名は"<ユーザー名>/<サービスインスタンス名>"とする.
+        domainCacheServiceName = String.format("%s/%s", getDNSServiceUserName(), getDNSServiceInstanceName() );
+        return domainCacheServiceName;
+    }
+
+    // ドメインキャッシュサービスのインスタンスを取得or新規生成する.
+    public ILoulanDNSDomainCacheService getOrCreateDomainCacheServiceInstance() throws DNSServiceCommonException
+    {
+        ILoulanDNSDomainCacheService cacheService;
+
+        // キャッシュサービスのファクトリインスタンスを取得.
+        ILoulanDNSDomainCacheServiceFactory factory = getDomainCacheServiceFactoryInstance();
+
+        if ( factory == null )
+        {
+            // キャッシュサービスのファクトリクラスが未指定なので例外をスロー.
+            String msg = String.format("Failed to get/create DomainCacheSerivice. DomainCacheServiceFactory is null.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+
+            // FOR DEBUG.
+            exception.printStackTrace();
+
+            throw exception;
+        }
+
+        try
+        {
+        String domainCacheServiceName = getDomainCacheServiceName();
+
+        // サービスインスタンスのプロパティ値をコピーして再利用する.
+        Properties options = (Properties)this.getDNSServiceInstanceProperties().clone();
+
+        // キャッシュサービスタイプをドメインキャッシュに固定する.
+        options.setProperty(LoulanDNSConstants.PROP_KEY_CACHE_SERVICE_TYPE, LoulanDNSConstants.CONST_CACHE_SERVICE_TYPE_DOMAIN_CACHE);
+
+        cacheService = (ILoulanDNSDomainCacheService)factory.getOrCreateDomainCacheService(domainCacheServiceName, options);
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+            throw exception;
+        }
+
+        return cacheService;
+    }
+
+
+    public void setDomainCacheServiceActiveFlag(boolean value) throws DNSServiceCommonException
+    {
+        this.domainCacheServiceActiveFlag = value;
+    }
+
+    public boolean isDomainCacheServiceActive() throws DNSServiceCommonException
+    {
+        return this.domainCacheServiceActiveFlag;
+    }
+
 
 
     public void setDNSServiceInstanceProperties(Properties properties) throws DNSServiceCommonException
@@ -140,6 +230,13 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
         setDNSResolverInstance(resolverInstance);
 
         initDNSService( info.getProperties() );
+
+        // ドメインキャッシュサービスのファクトリクラスを初期化設定しておく.
+        Properties domainCacheServiceFactoryProperties = new Properties();
+        ILoulanDNSDomainCacheServiceFactory domainCacheServiceFactory = new LoulanDNSDomainCacheServiceFactoryImpl();
+        domainCacheServiceFactory.init(domainCacheServiceFactoryProperties);
+        setDomainCacheServiceFactoryInstance( domainCacheServiceFactory );
+
     }
 
 
@@ -194,9 +291,17 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
      */
     public void initDNSService(Properties properties) throws DNSServiceCommonException
     {
-        // ベースクラスとしては、特にすることはない. 
-
         setDNSServiceInstanceProperties(properties);
+ 
+        // ドメインキャッシュの有効/無効を取得する.
+        // キー : "loulan.dns.service.instance.domain.cache.active"
+        String domainCacheActiveValue = properties.getProperty( LoulanDNSConstants.PROP_KEY_SERVICE_INSTANCE_DOMAIN_CACHE_ACTIVE );
+        if ( domainCacheActiveValue != null || domainCacheActiveValue.isEmpty() == false )
+        {
+            boolean domainCacheActiveFlag = Boolean.parseBoolean(domainCacheActiveValue);
+            setDomainCacheServiceActiveFlag(domainCacheActiveFlag);
+        }
+
     }
 
     /**
@@ -207,12 +312,42 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
      */
     public IDNSResponseMessage serveDNSQuery(IDNSQuestionMessage dnsQuestionMessage) throws DNSServiceCommonException
     {
+        IDNSResponseMessage responseMessage = null;
 
         getLoulanDNSLogger().debug(String.format("DNSQuery is arrived. DNSQuery=%s", dnsQuestionMessage.toString()) );
 
+
+        // ドメインキャッシュが有効な場合は、キャッシュを参照する.
+        if( isDomainCacheServiceActive() )
+        {
+            try
+            {
+                ILoulanDNSDomainCacheService domainCacheService = getOrCreateDomainCacheServiceInstance();
+                responseMessage = domainCacheService.get(dnsQuestionMessage);
+            }
+            catch(DNSCacheServiceCommonException cause)
+            {
+                // FOR DEBUG.
+                cause.printStackTrace();
+
+                // キャッシュサービス層で例外が生じている.
+                // DNSサービス層としてはSERVFAILのDNSエラーを表す例外クラスに変換してスローする.
+                String msg = String.format("Failed to call DomainCacheService instance. DNSQuery=%s", dnsQuestionMessage.toString() );
+                DNSProtocolRcodeErrorSERVFAILException exception = new DNSProtocolRcodeErrorSERVFAILException(msg, cause, dnsQuestionMessage );
+
+                throw exception;
+            }
+
+            if ( responseMessage != null )
+            {
+                // ドメインキャッシュに当該問い合わせの結果が存在するので、それを返す.
+                return responseMessage;
+            }
+        }
+
+
         IDNSResolverInstance dnsResolverInstance = getDNSResolverInstance();
 
-        IDNSResponseMessage responseMessage;
         try
         {
             responseMessage = dnsResolverInstance.resolve(dnsQuestionMessage);
@@ -226,6 +361,49 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
             throw exception;
         }
 
+
+        // ドメインキャッシュが有効な場合は、DNSレスポンスメッセージをキャッシュに登録する.
+        if( isDomainCacheServiceActive() )
+        {
+            if ( responseMessage != null )
+            {
+                try
+                {
+                    ILoulanDNSDomainCacheService domainCacheService = getOrCreateDomainCacheServiceInstance();
+
+                    int cacheEntryTTL = domainCacheService.getMaxCacheTTL();
+
+                     // 2026/09/11 : NODATAレスポンス(RRが0個)の場合、TTLはキャッシュサービスの値を採用する. 
+                    if ( responseMessage.getDNSHeaderSection().getANCOUNT() > 0 )
+                    {
+                        // NOTE : NODATAレスポンス((RRが0個)の場合、以下のrrMinTTLはnullになるので注意.
+                        Integer rrMinTTL = LoulanDNSDomainCacheUtils.getDNSResponseMessageMinimumTTL(responseMessage);
+                        if ( rrMinTTL != null && rrMinTTL <  cacheEntryTTL )
+                        {
+                            // RRの最小TTLが、本キャッシュサービスの最大TTL値未満のため、キャッシュエントリのTTLをRRの最小TTLにする.
+                            cacheEntryTTL = rrMinTTL;
+                        }                        
+                    }
+
+                    // TODO : キャッシュオプションはとりあえず何も指定していない.
+                    Properties cacheOptions = new Properties(); 
+                    domainCacheService.put(responseMessage, cacheEntryTTL, cacheOptions);
+                }
+                catch(DNSCacheServiceCommonException cause)
+                {
+                    // FOR DEBUG.
+                    cause.printStackTrace();
+
+                    // キャッシュサービス層で例外が生じている.
+                    // DNSサービス層としてはSERVFAILのDNSエラーを表す例外クラスに変換してスローする.
+                    String msg = String.format("Failed to call DomainCacheService instance. DNSQuery=%s", dnsQuestionMessage.toString() );
+                    DNSProtocolRcodeErrorSERVFAILException exception = new DNSProtocolRcodeErrorSERVFAILException(msg, cause, dnsQuestionMessage );
+
+                    throw exception;
+                }
+            }
+        }
+
         return responseMessage;
 
     }
@@ -236,6 +414,18 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
         String serviceInstanceName = info.dnsServiceInstanceName;
         
         return serviceInstanceName;
+    }
+
+
+
+    public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
+    {
+        this.loulanDNSLoggerFactory = instance;
+    }
+
+    public ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory()
+    {
+        return this.loulanDNSLoggerFactory;
     }
 
 

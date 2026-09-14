@@ -59,10 +59,6 @@ public class LoulanDNSUserBasicAuthenticationProvider extends LoulanDNSAuthentic
 
     org.loxsols.net.service.dns.loulandns.server.http.spring.model.User user = getTargetUser(inputUserName);
 
-    System.out.println("[DEBUG] LoulanDNSUserBasicAuthenticationProvider.authenticate(String, String) : inputUserName=" + inputUserName );
-    System.out.println("[DEBUG] LoulanDNSUserBasicAuthenticationProvider.authenticate(String, String) : inputPassword=" + inputPassword );
-    System.out.println("[DEBUG] LoulanDNSUserBasicAuthenticationProvider.authenticate(String, String) : user=" + user );
-
 
     // ユーザー名とパスワードが正しいかチェック
     if (inputUserName.equals( user.getUserName() ) && inputPassword.equals( user.getUserPassword() ))

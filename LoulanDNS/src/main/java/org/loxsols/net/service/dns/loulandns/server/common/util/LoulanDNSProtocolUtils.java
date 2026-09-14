@@ -175,9 +175,6 @@ public class LoulanDNSProtocolUtils
 
             buf.append(hexPart);
 
-            
-            // System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDNSDebugMessage() : hexPart=%s", hexPart) );
-
         }
         
         String hexString = buf.toString();
@@ -189,12 +186,7 @@ public class LoulanDNSProtocolUtils
     public String toDebugHexString(byte[] bytes) 
     {
 
-        System.out.println("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : called.");
-        System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : bytes.length=%d", bytes.length) );
-
         String hexString = toHexString(bytes);
-
-        System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : hexString.length()=%d", hexString.length() ) );
 
         StringBuffer buf = new StringBuffer();
         if ( hexString.length() >= 32 )
@@ -213,8 +205,7 @@ public class LoulanDNSProtocolUtils
 
                 buf.append(line);
 
-                // System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : line=%s", line) );
-            }
+           }
         }
         else
         {
@@ -226,16 +217,10 @@ public class LoulanDNSProtocolUtils
             line += "\n";
 
             buf.append(line);
-
-            // System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : line=%s", line) );
         }
 
         String debugHexString = buf.toString();
 
-        System.out.println( String.format("[DEBUG] LoulanDNSProtocolUtils.toDebugHexString() : debugHexString is bellow.") );
-        System.out.println( "******************************");
-        System.out.print( debugHexString );
-        System.out.println( "******************************");
 
         return debugHexString;
     }
@@ -355,13 +340,6 @@ public class LoulanDNSProtocolUtils
         StringBuffer buffer = new StringBuffer();
 
 
-        // ++++++++++++++++++++++++++++
-        // For DEBUG.
-        // ++++++++++++++++++++++++++++
-        String debugHexString = toDebugHexString( dname );
-        System.out.println("[DEBUG] parseDomainName() ++++++++++++++++++++++++++++ ");
-        System.out.println( debugHexString );
-        System.out.println("[DEBUG] parseDomainName() ---------------------------- ");
         // ----------------------------
         // For DEBUG.
         // ----------------------------
@@ -1993,6 +1971,36 @@ public class LoulanDNSProtocolUtils
         return dnsResponseMessage;
 
     }
+
+
+    
+    /**
+     * UDP#53用のDNSメッセージのwiredデータから、TCP#53用のDNSパケット(先頭に2byteのlengthヘッダが追加)を生成する.
+     * 
+     * @param wiredDNSMessageBytes
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public byte[]  toTCP53DNSPacketBytes(byte[] wiredDNSMessageBytes) throws DNSServiceCommonException
+    {
+        short length = (short)wiredDNSMessageBytes.length;
+        byte[] lengthBytes = shortToBytes(length);
+
+        byte[] tcp53DNSMessageBytes = new byte[wiredDNSMessageBytes.length + 2];
+        System.arraycopy(lengthBytes, 0, tcp53DNSMessageBytes, 0, lengthBytes.length);
+        System.arraycopy(wiredDNSMessageBytes, 0, tcp53DNSMessageBytes, lengthBytes.length, length);
+
+        return tcp53DNSMessageBytes;
+    }
+
+
+    public byte[]  toTCP53DNSPacketBytes(IDNSMessage dnsMessage) throws DNSServiceCommonException
+    {
+        byte[] wiredMessage = dnsMessage.getDNSMessageBytes();
+        byte[] tcp53DNSMessageBytes = toTCP53DNSPacketBytes(wiredMessage);
+
+        return tcp53DNSMessageBytes;
+    }   
 
 
 

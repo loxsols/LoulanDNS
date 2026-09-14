@@ -6,8 +6,8 @@ import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+import org.loxsols.net.service.dns.loulandns.server.common.DNSServiceCommonException;
+import org.loxsols.net.service.dns.loulandns.server.common.LoulanDNSSystemServiceException;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSUtils;
 
@@ -37,10 +37,32 @@ public class DNSServiceInstanceInfoFactory
         return dnsServiceInstanceInfo;
     }
 
-    public DNSServiceInstanceInfo createDNSServiceInstanceInfoObject(Long dnsServiceInstanceID, Long userID, String dnsServiceInstanceName, String dnsServiceInstanceExplain, Long dnsServiceTypeCode, Long dnsResolverInstanceID, long recordStatus, String memo, String createDateString, String updateDateString)
+    public DNSServiceInstanceInfo createDNSServiceInstanceInfoObject(Long dnsServiceInstanceID, Long userID, String dnsServiceInstanceName, String dnsServiceInstanceExplain, Long dnsServiceTypeCode, Long dnsResolverInstanceID, long recordStatus, String memo, String createDateString, String updateDateString) throws LoulanDNSSystemServiceException
     {
-        ZonedDateTime createDate = LoulanDNSUtils.toDateTimeObject(createDateString);
-        ZonedDateTime updateDate = LoulanDNSUtils.toDateTimeObject(updateDateString);
+        ZonedDateTime createDate;
+        try
+        {
+            createDate = LoulanDNSUtils.toDateTimeObject(createDateString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to convert to ZonedDateTime object from String. value=%s", createDateString);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
+
+
+        ZonedDateTime updateDate;
+        try
+        {
+            updateDate = LoulanDNSUtils.toDateTimeObject(updateDateString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            String msg = String.format("Failed to convert to ZonedDateTime object from String. value=%s", updateDateString);
+            LoulanDNSSystemServiceException exception = new LoulanDNSSystemServiceException(msg, cause);
+            throw exception;
+        }
 
         DNSServiceInstanceInfo dnsServiceInstanceInfo = createDNSServiceInstanceInfoObject(dnsServiceInstanceID, userID, dnsServiceInstanceName, dnsServiceInstanceExplain, dnsServiceTypeCode, dnsResolverInstanceID, recordStatus, memo, createDate, updateDate );
         return dnsServiceInstanceInfo;
