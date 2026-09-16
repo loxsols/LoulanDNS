@@ -16,6 +16,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,19 @@ public class DNSSubwayGatewayInstancePoolImpl implements IDNSSubwayGatewayInstan
 
     IDNSSubwayGatewayFactory sshGatewayFactory;
 
+    IDNSResolverInstance subResolverInstance;
+
     Map<String, IDNSSubwayGatewayDescriptor> gwDescriptorTable = new HashMap<String, IDNSSubwayGatewayDescriptor>();
 
 
     DNSSubwayUtils dnsSubwayUtils = new DNSSubwayUtils();
+
+
+    // コンストラクタ.
+    public DNSSubwayGatewayInstancePoolImpl(IDNSResolverInstance subResolverInstance) throws DNSSubwayCommonException
+    {
+        setSubResolverInstance(subResolverInstance);
+    }
 
 
     void setProperties(Properties properties)
@@ -71,14 +81,25 @@ public class DNSSubwayGatewayInstancePoolImpl implements IDNSSubwayGatewayInstan
     }
 
 
+    public void setSubResolverInstance(IDNSResolverInstance instance) throws DNSSubwayCommonException
+    {
+        this.subResolverInstance = instance;
+    }
+
+    public IDNSResolverInstance getSubResolverInstance() throws DNSSubwayCommonException
+    {
+        return this.subResolverInstance;
+    }
+
+
     public void init(Properties properties) throws DNSSubwayCommonException
     {
         setProperties(properties);
 
         if ( getSSHGatewayFactory() == null )
         {
-            // SSH GWファクトリを設定する.
-            IDNSSubwayGatewayFactory sshGatewayFactory = new SSHGatewayFactoryImpl();
+            // SSH GWファクトリを新規に生成して本クラスに登録する.
+            IDNSSubwayGatewayFactory sshGatewayFactory = new SSHGatewayFactoryImpl(getSubResolverInstance());
             setSSHGatewayFactory(sshGatewayFactory);
         }
 

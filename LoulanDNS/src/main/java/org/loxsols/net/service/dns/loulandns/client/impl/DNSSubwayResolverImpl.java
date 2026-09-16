@@ -84,6 +84,15 @@ public class DNSSubwayResolverImpl extends SimpleDNSSubwayResolverImpl implement
             // ------------------ 
             // DNS-Subwayのサブリゾルバを設定する.
             // ------------------
+            String subResolverMode = properties.getProperty( DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_MODE);
+            if ( subResolverMode == null || subResolverMode.isEmpty() )
+            {
+                String msg = String.format("Faield to init DNSSubwayResolverImpl. SubResolverMode is not specified. key=%s", DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_MODE );
+                DNSClientCommonException exception = new DNSClientCommonException(msg);
+                throw exception;      
+            }
+
+
             String subResolverName = properties.getProperty( DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_NAME);
             if ( subResolverName == null || subResolverName.isEmpty() )
             {

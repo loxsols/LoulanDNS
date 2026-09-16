@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -1598,17 +1599,37 @@ public class LoulanDNSProtocolUtils
         InetAddress address;
         try
         {
-            address = InetAddress.getByAddress(rdata);
+            address = Inet4Address.getByAddress(rdata);
         }
         catch(UnknownHostException cause)
         {
-            String msg = String.format("Failed to convert DNS ResourceData(rdata) to  IPAddress.");
+            String msg = String.format("Failed to convert DNS ResourceData(rdata) to IPv4 Address.");
             DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
             throw exception;
         }
 
         return address;
     }
+
+
+    // DNSのリソースレコードで使用されるバイナリ形式のrdataをIPv6アドレスに変換する.
+    public InetAddress rdataToIPv6Address(byte[] rdata) throws DNSServiceCommonException
+    {
+        InetAddress address;
+        try
+        {
+            address = Inet6Address.getByAddress(rdata);
+        }
+        catch(UnknownHostException cause)
+        {
+            String msg = String.format("Failed to convert DNS ResourceData(rdata) to  IPv6 Address.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+
+        return address;
+    }
+
 
     // InetAddress形式のIPアドレスを文字列に変換する.
     public String inetAddressToIPAddressString(InetAddress inetAddress) throws DNSServiceCommonException

@@ -352,7 +352,10 @@ public class DNSSubwayUtils
         try
         {
             serverSocket = new ServerSocket();
-        
+       
+            // 2026/09/14 追加 : bind前にSO_REUSEADDRを設定し、このTCPポートがTIME_WAIT状態で掴まれるのを防ぐ. 
+            serverSocket.setReuseAddress(true);
+            
             serverSocket.bind(new InetSocketAddress(addr, port));
             serverSocket.close();
         }

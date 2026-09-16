@@ -14,6 +14,13 @@ public class DNSSubwayConstants
     // --------------------------------------------------------------------
 
 
+    // -------------------- サブリゾルバの動作モード. --------------------------
+    public static final String COSNT_DNS_SUBWAY_SUB_RESOLVER_MODE_LOCAL = "local";      // ローカル (本システム内で名前解決)
+    public static final String COSNT_DNS_SUBWAY_SUB_RESOLVER_MODE_FORWARD = "forward";  // フォワード (踏み台経由で名前解決)
+    // --------------------------------------------------------------------
+
+
+
     // -------------------- DNS-Subwayのその他の共通パラメータ --------------------------
     
     //      DNS-SubwayのGW構築の対象とするターゲットのドメイン(","区切りのリストで指定する)
@@ -22,11 +29,16 @@ public class DNSSubwayConstants
     //      DNS-SubwayのGW構築の対象とするターゲットのポート番号(","区切りのリストで指定する)
     public static final String CONST_PROP_KEY_DNS_SUBWAY_TARGET_PORT = "loulan.dns.subway.target.port";
 
+    //     DNS-SubwayのGW構築時に使用するサブリゾルバの動作モード (local/forward)
+    public static final String CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_MODE = "loulan.dns.subway.sub-resolver.mode";
+
     //     DNS-SubwayのGW構築時に使用するサブリゾルバのインスタンス名.
     public static final String CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_NAME = "loulan.dns.subway.sub-resolver.name";
 
     //     DNS-SubwayのGW構築時に使用するサブリゾルバの所属するユーザー名.
     public static final String CONST_PROP_KEY_DNS_SUBWAY_SUB_RESOLVER_USER_NAME = "loulan.dns.subway.sub-resolver.user.name";
+
+
 
 
 
@@ -44,7 +56,10 @@ public class DNSSubwayConstants
     public static final String CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_SERVER_PASSWORD = "loulan.dns.subway.gateway.ssh.tunnel.server.password";
 
     //      SSHトンネルの構築時にSSHセッションを共有するか(true/false)
-    public static final String CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED = "loulan.dns.subway.gateway.ssh.tunnel.mode.session.shared";
+    public static final String CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED_ENABLE = "loulan.dns.subway.gateway.ssh.tunnel.mode.session.shared.enable";
+
+
+
 
 
 

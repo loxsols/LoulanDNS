@@ -40,6 +40,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.m
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.part.IDNSQueryPart;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.section.part.IDNSRROptPseudoRRData;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.TCPResolverInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.util.DNSUtils;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
@@ -224,7 +225,33 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
             setDNSResourceRecordFactory( new DNSResourceRecordFactoryImpl() );
             setDNSAdditionalSectionFactory( new DNSAdditionalSectionFactoryImpl() );
 
-            IDNSSubwayGatewayInstancePoolFactory gwPoolFactory = new DNSSubwayGatewayInstancePoolFactoryImpl();
+
+            // // とりあえず、UDPリゾルバ(8.8.8.8#53宛て)をサブリゾルバに設定する.
+            // Properties resolverProperties = new Properties();
+            // resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_HOST_PRIMARY, "8.8.8.8"  );
+            // resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_PORT_PRIMARY, "53"  );            
+            // IDNSResolverInstance resolverInstance = new UDPResolverInstanceImpl(resolverProperties);
+
+
+            // とりあえず、UDPリゾルバをサブリゾルバに設定する.
+            Properties resolverProperties = new Properties();
+            resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_HOST_PRIMARY, getDNSServerAddress().getHostAddress()  );
+            resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_PORT_PRIMARY, getDNSServerPortString()  );            
+            IDNSResolverInstance resolverInstance = new UDPResolverInstanceImpl(resolverProperties);
+
+
+            // // とりあえず、TCPリゾルバをサブリゾルバに設定する.
+            // Properties resolverProperties = new Properties();
+            // resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_HOST_PRIMARY, getDNSServerAddress().getHostAddress()  );
+            // resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_PORT_PRIMARY, getDNSServerPortString()  );            
+            // IDNSResolverInstance resolverInstance = new TCPResolverInstanceImpl(resolverProperties);
+
+            setSubResolverInstance(resolverInstance);
+
+            
+
+
+            IDNSSubwayGatewayInstancePoolFactory gwPoolFactory = new DNSSubwayGatewayInstancePoolFactoryImpl( getSubResolverInstance() );
             setDNSSubwayGatewayInstancePoolFactory( gwPoolFactory );
 
 
@@ -232,12 +259,6 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
             setDNSSubwayGatewayPool(gwInstancePool);
 
 
-            // とりあえず、UDPリゾルバをデフォルトゲートのDNSリゾルバに設定する.
-            Properties resolverProperties = new Properties();
-            resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_HOST_PRIMARY, getDNSServerAddress().getHostAddress()  );
-            resolverProperties.setProperty(LoulanDNSConstants.PROP_KEY_RESOLVER_OUTBOUND_SERVER_PORT_PRIMARY, getDNSServerPortString()  );
-            IDNSResolverInstance resolverInstance = new UDPResolverInstanceImpl(resolverProperties);
-            setSubResolverInstance(resolverInstance);
         }
         catch(DNSServiceCommonException cause)
         {
@@ -434,7 +455,6 @@ public class SimpleDNSSubwayResolverImpl extends DNSLookupClientBaseImpl impleme
 
         // --- ターゲットホストのドメイン名(単独)の設定
         // 例えば、ターゲットホストが予め"google.co.jp,yahoo.co.jp"のように複数件指定されている場合に、実際にアクセスするサイトに応じてGWのオプションを固定する.
-        String targetHost = dname;
         gwOptions.setProperty(DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_TARGET_HOST, dname);
 
 

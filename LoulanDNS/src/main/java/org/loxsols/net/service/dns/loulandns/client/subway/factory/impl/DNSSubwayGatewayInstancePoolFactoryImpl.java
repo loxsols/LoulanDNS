@@ -15,6 +15,8 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +38,29 @@ import java.util.Properties;
 public class DNSSubwayGatewayInstancePoolFactoryImpl implements IDNSSubwayGatewayInstancePoolFactory
 {
 
+    IDNSResolverInstance subResolverInstance;
+
+    // コンストラクタ
+    public DNSSubwayGatewayInstancePoolFactoryImpl(IDNSResolverInstance subResolverInstance) throws DNSSubwayCommonException
+    {
+        setSubResolverInstance(subResolverInstance);
+    }
+
+
+    public void setSubResolverInstance(IDNSResolverInstance instance) throws DNSSubwayCommonException
+    {
+        this.subResolverInstance = instance;
+    }
+
+    public IDNSResolverInstance getSubResolverInstance() throws DNSSubwayCommonException
+    {
+        return this.subResolverInstance;
+    }
+
+
     public IDNSSubwayGatewayInstancePool createDNSSubwayGatewayInstancePool(Properties properties) throws DNSSubwayCommonException
     {
-        IDNSSubwayGatewayInstancePool instance = new DNSSubwayGatewayInstancePoolImpl();
+        IDNSSubwayGatewayInstancePool instance = new DNSSubwayGatewayInstancePoolImpl( getSubResolverInstance() );
         instance.init(properties);
 
         return instance;

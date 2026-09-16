@@ -18,6 +18,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSQuestionMessage;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.message.IDNSResponseMessage;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.IDNSResolverInstance;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,26 @@ import java.util.ArrayList;
 public class SSHGatewayFactoryImpl implements IDNSSubwayGatewayFactory
 {
 
-
     List<SSHSessionInstance> sshSessionInstanceList = new ArrayList<SSHSessionInstance>();
+
+    IDNSResolverInstance subResolverInstance;
+
+
+    public SSHGatewayFactoryImpl(IDNSResolverInstance subResolverInstance) throws DNSSubwayCommonException
+    {
+        setSubResolverInstance(subResolverInstance);
+    }
+
+
+    public void setSubResolverInstance(IDNSResolverInstance instance) throws DNSSubwayCommonException
+    {
+        this.subResolverInstance = instance;
+    }
+
+    public IDNSResolverInstance getSubResolverInstance() throws DNSSubwayCommonException
+    {
+        return this.subResolverInstance;
+    }
 
 
     /**
@@ -55,9 +74,10 @@ public class SSHGatewayFactoryImpl implements IDNSSubwayGatewayFactory
     public IDNSSubwayGateway createDNSSubwayGatewayInstance(Properties properties) throws DNSSubwayCommonException
     {
 
-        SSHSessionInstance sshSessionInstance = getOrcreateSSHSessionInstance(properties);     
+        SSHSessionInstance sshSessionInstance = getOrcreateSSHSessionInstance(properties);
+        IDNSResolverInstance subResolverInstance = getSubResolverInstance();
 
-        IDNSSubwayGateway gwImpl = new SSHGatewayImpl(sshSessionInstance);
+        IDNSSubwayGateway gwImpl = new SSHGatewayImpl(sshSessionInstance, subResolverInstance);
         gwImpl.init(properties);
 
         return gwImpl;
@@ -137,10 +157,10 @@ public class SSHGatewayFactoryImpl implements IDNSSubwayGatewayFactory
 
 
         // SSHトンネルの構築時にSSHセッションを共有するか否かのフラグ.
-        String sshSessionSharedFlagString = properties.getProperty( DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED );
+        String sshSessionSharedFlagString = properties.getProperty( DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED_ENABLE );
         if ( sshSessionSharedFlagString == null || sshSessionSharedFlagString.isEmpty() )
         {
-            String msg = String.format("Failed to init SSHGateway. SSH session mode shared flag is not specified. key=%s", DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED );
+            String msg = String.format("Failed to init SSHGateway. SSH session mode shared flag is not specified. key=%s", DNSSubwayConstants.CONST_PROP_KEY_DNS_SUBWAY_GW_SSH_TUNNEL_MODE_SESSION_SHARED_ENABLE );
             DNSSubwayCommonException exception = new DNSSubwayCommonException(msg);
             throw exception;
         }

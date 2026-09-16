@@ -7,6 +7,8 @@ import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtoco
 
 public class LoulanDNSDebugUtils
 {
+    // デバッグモード出力をする場合はtrueに設定する.
+    static boolean IS_DEBUG_MODE_FLG = false;
 
     static PrintStream debugPrintStream = System.out;
 
@@ -23,12 +25,24 @@ public class LoulanDNSDebugUtils
         return getDebugPrintStream();
     }
 
+    public static boolean isDebugMode()
+    {
+        return IS_DEBUG_MODE_FLG;
+    }
+
     // デバッグ用出力
     public static void printDebug(Class clazz, String tag, String msg)
     {
         String debugMessage = String.format("[DEBUG] class=%s, tag=%s, msg=%s", clazz.getName(), tag, msg);
-        out().println( debugMessage );
+
+        if ( isDebugMode() )
+        {
+            // デバッグモードがONのときだけ出力する.
+            out().println( debugMessage );
+        }
+
     }
+
 
 
     // 指定されたbyte配列のデータを16進数表記でデバッグ出力する.
@@ -38,10 +52,15 @@ public class LoulanDNSDebugUtils
         String hexString = protocolUtils.toDebugHexString( bytes );
 
         String debugMessage = String.format("[DEBUG] class=%s, tag=%s ", clazz.getName(), tag );
-        out().println( debugMessage );
-        out().println( "******************************");
-        out().print( hexString );
-        out().println( "******************************");
+
+        if ( isDebugMode() )
+        {
+            // デバッグモードがONのときだけ出力する.
+            out().println( debugMessage );
+            out().println( "******************************");
+            out().print( hexString );
+            out().println( "******************************");
+        }
 
     }
 
