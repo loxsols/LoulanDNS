@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "USER_GROUP_PROPERTIES")
 @Entity
 public class UserGroupProperties

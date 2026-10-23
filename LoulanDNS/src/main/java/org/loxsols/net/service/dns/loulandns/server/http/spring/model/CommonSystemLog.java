@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "COMMON_SYSTEM_LOG")
 @Entity
 public class CommonSystemLog

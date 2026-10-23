@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "SYSTEM_PROPERTIES")
 @Entity
 public class SystemProperties

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "USER")
 @Entity
 public class User

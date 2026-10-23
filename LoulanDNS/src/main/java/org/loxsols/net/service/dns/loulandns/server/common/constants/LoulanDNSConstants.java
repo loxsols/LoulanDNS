@@ -60,7 +60,7 @@ public class LoulanDNSConstants
     public static final int DB_CONST_VALUE_RECORD_STATUS_INACTIVE = 401;
 
     // LoulanDNSのDBで使用する時刻表記の書式 : 例)"2024/06/11 12:34:56.123 JST"
-    public static String DB_CONST_VALUE_DATE_TIME_FORMAT = "uuuu/MM/dd hh:mm:ss.SSS zzz";
+    public static String DB_CONST_VALUE_DATE_TIME_FORMAT = "uuuu/MM/dd HH:mm:ss.SSS zzz";
 
     // 上記時刻表記書式のフォーマットクラス
     public static DateTimeFormatter DB_CONST_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern( DB_CONST_VALUE_DATE_TIME_FORMAT );
@@ -310,6 +310,10 @@ public class LoulanDNSConstants
 
     // DNSサービスインスタンス内部のドメインキャッシュサービスの有効/無効設定キー(true/falseで指定)
     public static String PROP_KEY_SERVICE_INSTANCE_DOMAIN_CACHE_ACTIVE = "loulan.dns.service.instance.domain.cache.active";
+
+    // DNSサービスインスタンス内部のDNS統計情報ログサービスの有効/無効設定キー(true/falseで指定)
+    public static String PROP_KEY_SERVICE_INSTANCE_DNS_STAT_LOG_SERVICE_ACTIVE = "loulan.dns.service.instance.dns.stat.log.active";
+
 
 
     // **************************************************

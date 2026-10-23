@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "USER_GROUP")
 @Entity
 public class UserGroup

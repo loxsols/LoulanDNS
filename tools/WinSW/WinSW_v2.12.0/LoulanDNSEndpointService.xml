@@ -1,0 +1,46 @@
+<service>
+  <!-- 1. サービスの基本情報（システム内で一意にする） -->
+  <id>LoulanDNSEndpointService</id>
+  <name>LoulanDNS Endpoint Service</name>
+  <description>LoulanDNS Endpoint Service</description>
+
+  <!-- 2. 実行対象（cmd.exe を経由してbatをキックする） -->
+  <executable>cmd.exe</executable>
+
+  <!-- コマンド引数の設定 -->
+  <argument>/c</argument>
+
+  <!-- %BASE% はこのXML（WinSW）が置いてある絶対パスに自動置換される -->
+  <argument>"%BASE%\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat"</argument>
+
+  <argument>-load</argument>
+  <argument>database</argument>
+
+  <argument>-su</argument>
+  <argument>%SERVICE_USER_NAME%</argument>
+
+  <argument>-sn</argument>
+  <argument>%SERVICE_INSTANCE_NAME%</argument>
+
+  <argument>-eu</argument>
+  <argument>%ENDPOINT_USER_NAME%</argument>
+
+  <argument>-en</argument>
+  <argument>%ENDPOINT_INSTANCE_NAME%</argument>
+
+  <!-- サービス個別の環境変数の定義 -->
+  <!-- 起動batに渡したい引数の値をここで定義する -->
+
+  <env name="SERVICE_USER_NAME" value="admin" />
+  <env name="SERVICE_INSTANCE_NAME" value="test-service-subway" />
+
+
+  <env name="ENDPOINT_USER_NAME" value="admin" />
+  <env name="ENDPOINT_INSTANCE_NAME" value="test-endpoint-subway" />
+
+  <!-- 4. ログ出力設定（オプション） -->
+  <!-- javaの標準出力・エラーを logs フォルダに自動保存（日次ローテーション） -->
+  <log mode="roll-by-time">
+    <pattern>yyyyMMdd</pattern>
+  </log>
+</service>

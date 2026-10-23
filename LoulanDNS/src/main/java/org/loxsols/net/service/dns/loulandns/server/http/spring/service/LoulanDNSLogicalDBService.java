@@ -438,6 +438,44 @@ public class LoulanDNSLogicalDBService
         return commonSystemLogInfoList;
     }
 
+
+
+    /**
+     * DBから共通ログ情報のうち、指定したタグをもつレコードのみを取得する.
+     * 
+     * @param tag
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+
+    /**
+     * DBから共通ログ情報のうち、指定したタグをもつレコード、かつ指定した下限時刻以降、かつ指定した上限時刻以内を、指定した件数を上限として取得する.
+     * 
+     * @param tag
+     * @param fromDateTime
+     * @param untilDateTime
+     * @param maxSize
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public List<CommonSystemLogInfo> getCommonSystemLogInfoListByTag(String tag, ZonedDateTime fromDateTime, ZonedDateTime untilDateTime, int maxSize) throws LoulanDNSSystemServiceException
+    {
+        List<CommonSystemLog> commonSystemLogList = loulanDNSDBService.getCommonSystemLogListByTag(tag, fromDateTime, untilDateTime, maxSize);
+        List<CommonSystemLogInfo> tmpInfoList = toCommonSystemLogInfoList(commonSystemLogList);
+
+        // プロパティ情報も含めた論理クラスとして完成されるために再度DBからデータを取得しなおす.
+        List<CommonSystemLogInfo> commonSystemLogInfoList = new ArrayList<CommonSystemLogInfo>();
+        for(CommonSystemLogInfo tmpInfo : tmpInfoList)
+        {
+            CommonSystemLogInfo info = getCommonSystemLogInfoByID( tmpInfo.getCommonSystemLogID() );
+            commonSystemLogInfoList.add(info);
+        }
+
+
+        return commonSystemLogInfoList;
+    }
+
+
     /**
      * DBから共通ログ情報のうち、指定したタグを持ち、かつ指定したプロパティ情報が紐づいたレコードのみを取得する.
      * 
@@ -506,11 +544,18 @@ public class LoulanDNSLogicalDBService
             return savedInfo;
         }
 
+
+        if ( savedInfo.getCommonSystemLogPropertiesInfoList() == null )
+        {
+            // 論理モデルのプロパティリストがnullなので新規作成する.
+            var list = new ArrayList<CommonSystemLogPropertiesInfo>();
+            savedInfo.setCommonSystemLogPropertiesInfoList(list);
+        }
         
         // プロパティ情報の登録.
-        for( int i=0; i < savedInfo.getCommonSystemLogPropertiesInfoList().size(); i++ )
+        for( int i=0; i < info.getCommonSystemLogPropertiesInfoList().size(); i++ )
         {
-            var propertiesInfo = savedInfo.getCommonSystemLogPropertiesInfoList().get(i);
+            var propertiesInfo = info.getCommonSystemLogPropertiesInfoList().get(i);
 
             // DB側で採番済みのログIDをプロパティにもセットする.
             propertiesInfo.setCommonSystemLogID( commonSystemLogID );
@@ -518,8 +563,6 @@ public class LoulanDNSLogicalDBService
             // DBにログプロパティを登録する.
             CommonSystemLogPropertiesInfo savedPropertiesInfo = saveCommonSystemLogPropertiesInfo(propertiesInfo);
 
-            // 論理モデルにも反映する.
-            savedInfo.getCommonSystemLogPropertiesInfoList().set(i, savedPropertiesInfo);
         }
 
 
@@ -529,9 +572,9 @@ public class LoulanDNSLogicalDBService
         for(var r : dbRegisteredList)
         {
             boolean isModeled = false;
-            for( var m : savedInfo.getCommonSystemLogPropertiesInfoList() )
+            for( var m : info.getCommonSystemLogPropertiesInfoList() )
             {
-                if ( r.getCommonSystemLogPropertyID() == m.getCommonSystemLogPropertyID() )
+                if ( r.getCommonSystemLogPropertyKey().equals( m.getCommonSystemLogPropertyKey()) )
                 {
                     isModeled = true;
                     break;
@@ -546,6 +589,10 @@ public class LoulanDNSLogicalDBService
 
         }
 
+
+        // DBに設定済みのプロパティ情報をもとに再度更新済みの論理モデルをロードする.
+        savedModel = loulanDNSDBService.getCommonSystemLogListByID(commonSystemLogID).get(0);
+        savedInfo = toCommonSystemLogInfo(savedModel);
 
         return savedInfo;
     }
@@ -1421,7 +1468,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private UserGroup toUserGroup(UserGroupInfo userGroupInfo)
+    private UserGroup toUserGroup(UserGroupInfo userGroupInfo) throws LoulanDNSSystemServiceException
     {
 
         UserGroup userGroup = new UserGroup();
@@ -1430,8 +1477,8 @@ public class LoulanDNSLogicalDBService
         userGroup.setUserGroupName( userGroupInfo.getUserGroupName() );
         userGroup.setRecordStatus( userGroupInfo.getRecordStatus() );
         userGroup.setMemo( userGroupInfo.getMemo() );
-        userGroup.setCreateDate( LoulanDNSUtils.toDateTimeString( userGroupInfo.getCreateDate() ) );
-        userGroup.setUpdateDate( LoulanDNSUtils.toDateTimeString( userGroupInfo.getUpdateDate() ) );
+        userGroup.setCreateDate( userGroupInfo.getCreateDate()  );
+        userGroup.setUpdateDate( userGroupInfo.getUpdateDate()  );
 
         return userGroup;
     }
@@ -1457,7 +1504,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSServiceInstance toDNSServiceInstance(DNSServiceInstanceInfo dnsServiceInstanceInfo)
+    private DNSServiceInstance toDNSServiceInstance(DNSServiceInstanceInfo dnsServiceInstanceInfo) throws LoulanDNSSystemServiceException
     {
         DNSServiceInstance dnsServiceInstance = new DNSServiceInstance();
 
@@ -1469,14 +1516,14 @@ public class LoulanDNSLogicalDBService
         dnsServiceInstance.setDNSResolverInstanceID( dnsServiceInstanceInfo.getDNSResolverInstanceID() );
         dnsServiceInstance.setRecordStatus( dnsServiceInstanceInfo.getRecordStatus() );
         dnsServiceInstance.setMemo( dnsServiceInstanceInfo.getMemo() );
-        dnsServiceInstance.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstanceInfo.getCreateDate() ) );
-        dnsServiceInstance.setUpdateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstanceInfo.getUpdateDate() ) );
+        dnsServiceInstance.setCreateDate( dnsServiceInstanceInfo.getCreateDate()  );
+        dnsServiceInstance.setUpdateDate( dnsServiceInstanceInfo.getUpdateDate()  );
 
         return dnsServiceInstance;
     }
     
 
-    private DNSResolverInstance toDNSResolverInstance(DNSResolverInstanceInfo dnsResolverInstanceInfo)
+    private DNSResolverInstance toDNSResolverInstance(DNSResolverInstanceInfo dnsResolverInstanceInfo)  throws LoulanDNSSystemServiceException
     {
 
         DNSResolverInstance dnsResolverInstance = new DNSResolverInstance();
@@ -1488,8 +1535,8 @@ public class LoulanDNSLogicalDBService
         dnsResolverInstance.setDnsResolverTypeCode( dnsResolverInstanceInfo.getDnsResolverTypeCode() );
         dnsResolverInstance.setRecordStatus( dnsResolverInstanceInfo.getRecordStatus() );
         dnsResolverInstance.setMemo( dnsResolverInstanceInfo.getMemo() );
-        dnsResolverInstance.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsResolverInstanceInfo.getCreateDate() ) );
-        dnsResolverInstance.setUpdateDate( LoulanDNSUtils.toDateTimeString( dnsResolverInstanceInfo.getUpdateDate() ) );
+        dnsResolverInstance.setCreateDate( dnsResolverInstanceInfo.getCreateDate()  );
+        dnsResolverInstance.setUpdateDate( dnsResolverInstanceInfo.getUpdateDate()  );
 
         return dnsResolverInstance;
     }
@@ -1514,7 +1561,7 @@ public class LoulanDNSLogicalDBService
         return info;
     }
 
-    public DNSServiceInstanceProperties toDNSServiceInstanceProperties(DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo)
+    public DNSServiceInstanceProperties toDNSServiceInstanceProperties(DNSServiceInstancePropertyInfo dnsServiceInstancePropertyInfo)  throws LoulanDNSSystemServiceException
     {
         DNSServiceInstanceProperties dnsServiceInstanceProperties = new DNSServiceInstanceProperties();
 
@@ -1525,14 +1572,14 @@ public class LoulanDNSLogicalDBService
         dnsServiceInstanceProperties.setDnsServiceInstancePropertyExplain( dnsServiceInstancePropertyInfo.getDnsServiceInstancePropertyExplain() );
         dnsServiceInstanceProperties.setRecordStatus( dnsServiceInstancePropertyInfo.getRecordStatus() );
         dnsServiceInstanceProperties.setMemo( dnsServiceInstancePropertyInfo.getMemo() );
-        dnsServiceInstanceProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstancePropertyInfo.getCreateDate() ) );
-        dnsServiceInstanceProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( dnsServiceInstancePropertyInfo.getUpdateDate() ) );
+        dnsServiceInstanceProperties.setCreateDate( dnsServiceInstancePropertyInfo.getCreateDate()  );
+        dnsServiceInstanceProperties.setUpdateDate( dnsServiceInstancePropertyInfo.getUpdateDate()  );
 
         return dnsServiceInstanceProperties;
     }
 
 
-    private DNSResolverInstanceProperties toDNSResolverInstanceProperties(DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo)
+    private DNSResolverInstanceProperties toDNSResolverInstanceProperties(DNSResolverInstancePropertyInfo dnsResolverPropertiesInfo)  throws LoulanDNSSystemServiceException
     {
 
         DNSResolverInstanceProperties dnsResolverInstanceProperties = new DNSResolverInstanceProperties();
@@ -1544,8 +1591,8 @@ public class LoulanDNSLogicalDBService
         dnsResolverInstanceProperties.setDnsResolverInstancePropertyExplain( dnsResolverPropertiesInfo.getDnsResolverPropertyExplain() );
         dnsResolverInstanceProperties.setRecordStatus( dnsResolverPropertiesInfo.getRecordStatus() );
         dnsResolverInstanceProperties.setMemo( dnsResolverPropertiesInfo.getMemo() );
-        dnsResolverInstanceProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( dnsResolverPropertiesInfo.getCreateDate() )  );
-        dnsResolverInstanceProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( dnsResolverPropertiesInfo.getUpdateDate() ) );
+        dnsResolverInstanceProperties.setCreateDate( dnsResolverPropertiesInfo.getCreateDate()  );
+        dnsResolverInstanceProperties.setUpdateDate( dnsResolverPropertiesInfo.getUpdateDate()  );
 
         return dnsResolverInstanceProperties;
     }
@@ -1567,7 +1614,7 @@ public class LoulanDNSLogicalDBService
         return dnsServiceEndpointInstanceInfo;
     }
 
-    private DNSServiceEndpointInstance toDNSServiceEndpointInstance(DNSServiceEndpointInstanceInfo dnsServiceEndpointInstanceInfo )
+    private DNSServiceEndpointInstance toDNSServiceEndpointInstance(DNSServiceEndpointInstanceInfo dnsServiceEndpointInstanceInfo )  throws LoulanDNSSystemServiceException
     {
 
         DNSServiceEndpointInstance dnsServiceEndpointInstance = new DNSServiceEndpointInstance();
@@ -1578,8 +1625,8 @@ public class LoulanDNSLogicalDBService
         dnsServiceEndpointInstance.setDnsServiceEndpointInstanceExplain( dnsServiceEndpointInstanceInfo.getDNSServiceEndpointInstanceExplain() );
         dnsServiceEndpointInstance.setDnsServiceEndpointTypeCode( dnsServiceEndpointInstanceInfo.getDNSServiceEndpointTypeCode() );
         dnsServiceEndpointInstance.setRecordStatus( dnsServiceEndpointInstanceInfo.getRecordStatus() );
-        dnsServiceEndpointInstance.setCreateDate( LoulanDNSUtils.toDateTimeString(dnsServiceEndpointInstanceInfo.getCreateDate()) );
-        dnsServiceEndpointInstance.setUpdateDate( LoulanDNSUtils.toDateTimeString(dnsServiceEndpointInstanceInfo.getUpdateDate()) );
+        dnsServiceEndpointInstance.setCreateDate( dnsServiceEndpointInstanceInfo.getCreateDate() );
+        dnsServiceEndpointInstance.setUpdateDate( dnsServiceEndpointInstanceInfo.getUpdateDate() );
 
         return dnsServiceEndpointInstance;
     }
@@ -1605,7 +1652,7 @@ public class LoulanDNSLogicalDBService
     }
 
 
-    private DNSServiceEndpointInstanceProperties toDNSServiceEndpointInstanceProperties(DNSServiceEndpointInstancePropertyInfo info)
+    private DNSServiceEndpointInstanceProperties toDNSServiceEndpointInstanceProperties(DNSServiceEndpointInstancePropertyInfo info)  throws LoulanDNSSystemServiceException
     {
 
         DNSServiceEndpointInstanceProperties dnsServiceEndpointInstanceProperties = new DNSServiceEndpointInstanceProperties();
@@ -1617,8 +1664,8 @@ public class LoulanDNSLogicalDBService
         dnsServiceEndpointInstanceProperties.setDnsServiceEndpointInstancePropertyExplain( info.getDNSServiceEndpointInstancePropertyExplain() );
         dnsServiceEndpointInstanceProperties.setRecordStatus( info.getRecordStatus() );
         dnsServiceEndpointInstanceProperties.setMemo( info.getMemo() );
-        dnsServiceEndpointInstanceProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( info.getCreateDate() )  );
-        dnsServiceEndpointInstanceProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( info.getUpdateDate() ) );
+        dnsServiceEndpointInstanceProperties.setCreateDate( info.getCreateDate()   );
+        dnsServiceEndpointInstanceProperties.setUpdateDate( info.getUpdateDate()  );
 
         return dnsServiceEndpointInstanceProperties;
     }
@@ -1640,7 +1687,7 @@ public class LoulanDNSLogicalDBService
     }
 
     
-    private SystemProperties toSystemProperties(SystemPropertiesInfo systemPropertiesInfo)
+    private SystemProperties toSystemProperties(SystemPropertiesInfo systemPropertiesInfo)  throws LoulanDNSSystemServiceException
     {
         SystemProperties systemProperties = new SystemProperties();
 
@@ -1650,13 +1697,13 @@ public class LoulanDNSLogicalDBService
         systemProperties.setSystemPropertyExplain( systemPropertiesInfo.getSystemPropertyExplain() );
         systemProperties.setRecordStatus( systemPropertiesInfo.getRecordStatus() );
         systemProperties.setMemo( systemPropertiesInfo.getMemo() );
-        systemProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( systemPropertiesInfo.getCreateDate() ) );
-        systemProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( systemPropertiesInfo.getUpdateDate() ) );
+        systemProperties.setCreateDate( systemPropertiesInfo.getCreateDate()  );
+        systemProperties.setUpdateDate( systemPropertiesInfo.getUpdateDate()  );
 
         return systemProperties;
     }
 
-    private CommonSystemLog toCommonSystemLog(CommonSystemLogInfo commonSystemLogInfo)
+    private CommonSystemLog toCommonSystemLog(CommonSystemLogInfo commonSystemLogInfo) throws LoulanDNSSystemServiceException
     {
         CommonSystemLog commonSystemLog = new CommonSystemLog();
 
@@ -1672,13 +1719,13 @@ public class LoulanDNSLogicalDBService
 
         commonSystemLog.setRecordStatus( commonSystemLogInfo.getRecordStatus() );
         commonSystemLog.setMemo( commonSystemLogInfo.getMemo() );
-        commonSystemLog.setCreateDate( LoulanDNSUtils.toDateTimeString( commonSystemLogInfo.getCreateDate() ) );
-        commonSystemLog.setUpdateDate( LoulanDNSUtils.toDateTimeString( commonSystemLogInfo.getUpdateDate() ) );
+        commonSystemLog.setCreateDate( commonSystemLogInfo.getCreateDate()  );
+        commonSystemLog.setUpdateDate( commonSystemLogInfo.getUpdateDate()  );
 
         return commonSystemLog;
     }
 
-    private CommonSystemLogProperties toCommonSystemLogProperties(CommonSystemLogPropertiesInfo commonSystemLogPropertiesInfo)
+    private CommonSystemLogProperties toCommonSystemLogProperties(CommonSystemLogPropertiesInfo commonSystemLogPropertiesInfo) throws LoulanDNSSystemServiceException
     {
         CommonSystemLogProperties commonSystemLogProperties = new CommonSystemLogProperties();
 
@@ -1694,8 +1741,8 @@ public class LoulanDNSLogicalDBService
 
         commonSystemLogProperties.setRecordStatus( commonSystemLogPropertiesInfo.getRecordStatus() );
         commonSystemLogProperties.setMemo( commonSystemLogPropertiesInfo.getMemo() );
-        commonSystemLogProperties.setCreateDate( LoulanDNSUtils.toDateTimeString( commonSystemLogPropertiesInfo.getCreateDate() ) );
-        commonSystemLogProperties.setUpdateDate( LoulanDNSUtils.toDateTimeString( commonSystemLogPropertiesInfo.getUpdateDate() ) );
+        commonSystemLogProperties.setCreateDate( commonSystemLogPropertiesInfo.getCreateDate()  );
+        commonSystemLogProperties.setUpdateDate( commonSystemLogPropertiesInfo.getUpdateDate()  );
 
         return commonSystemLogProperties;
     }

@@ -1,0 +1,137 @@
+2026-10-23 13:25:20,238 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:22,290 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:22,306 INFO  - Installing service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:25:22,333 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was installed successfully.
+2026-10-23 13:25:30,741 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:32,521 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:32,543 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:25:32,683 DEBUG - Starting WinSW in service mode
+2026-10-23 13:25:32,700 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:25:32,716 INFO  - Starting cmd.exe /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat"
+2026-10-23 13:25:32,747 INFO  - Started process 15496
+2026-10-23 13:25:32,755 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:25:37,366 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:39,003 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:39,016 INFO  - Stopping service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:25:39,028 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' has already stopped.
+2026-10-23 13:25:48,845 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:50,478 DEBUG - Starting WinSW in console mode
+2026-10-23 13:25:50,491 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:25:50,578 DEBUG - Starting WinSW in service mode
+2026-10-23 13:25:50,588 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:25:50,595 INFO  - Starting cmd.exe /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat"
+2026-10-23 13:25:50,613 INFO  - Started process 3780
+2026-10-23 13:25:50,618 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:26:47,384 DEBUG - Starting WinSW in console mode
+2026-10-23 13:26:48,907 DEBUG - Starting WinSW in console mode
+2026-10-23 13:26:48,920 INFO  - Stopping service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:26:48,929 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' has already stopped.
+2026-10-23 13:27:44,174 DEBUG - Starting WinSW in console mode
+2026-10-23 13:27:45,798 DEBUG - Starting WinSW in console mode
+2026-10-23 13:27:45,811 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:27:45,897 DEBUG - Starting WinSW in service mode
+2026-10-23 13:27:45,906 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:27:45,914 INFO  - Starting cmd.exe /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat"
+2026-10-23 13:27:45,931 INFO  - Started process 16412
+2026-10-23 13:27:45,936 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:30:19,482 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:21,022 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:21,034 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:30:21,038 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was uninstalled successfully.
+2026-10-23 13:30:26,263 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:27,770 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:27,784 INFO  - Installing service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:30:27,797 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was installed successfully.
+2026-10-23 13:30:31,521 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:33,255 DEBUG - Starting WinSW in console mode
+2026-10-23 13:30:33,267 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:30:33,344 DEBUG - Starting WinSW in service mode
+2026-10-23 13:30:33,356 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:30:33,364 INFO  - Starting cmd.exe /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat"
+2026-10-23 13:30:33,380 INFO  - Started process 4560
+2026-10-23 13:30:33,385 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:39:09,996 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:11,602 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:11,614 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:39:11,618 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was uninstalled successfully.
+2026-10-23 13:39:15,638 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:15,649 FATAL - Unhandled exception
+System.Exception: Unknown command: instann
+   場所 WinSW.Program.Run(String[] argsArray, IServiceConfig config)
+   場所 WinSW.Program.Main(String[] args)
+2026-10-23 13:39:27,374 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:29,405 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:29,417 INFO  - Installing service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:39:29,427 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was installed successfully.
+2026-10-23 13:39:32,452 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:34,309 DEBUG - Starting WinSW in console mode
+2026-10-23 13:39:34,323 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:39:34,428 DEBUG - Starting WinSW in service mode
+2026-10-23 13:39:34,440 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:39:34,449 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat" "-load database" "-su admin" "-sn test-service-subway" "-eu admin" "-en test-endpoint-subway"
+2026-10-23 13:39:34,467 INFO  - Started process 22532
+2026-10-23 13:39:34,472 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:40:15,901 DEBUG - Starting WinSW in console mode
+2026-10-23 13:40:17,235 DEBUG - Starting WinSW in console mode
+2026-10-23 13:40:17,259 INFO  - Stopping service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:40:17,270 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' has already stopped.
+2026-10-23 13:40:22,644 DEBUG - Starting WinSW in console mode
+2026-10-23 13:40:24,530 DEBUG - Starting WinSW in console mode
+2026-10-23 13:40:24,547 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:40:24,552 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was uninstalled successfully.
+2026-10-23 13:41:50,017 DEBUG - Starting WinSW in console mode
+2026-10-23 13:41:51,540 DEBUG - Starting WinSW in console mode
+2026-10-23 13:41:51,554 INFO  - Installing service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:41:51,563 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was installed successfully.
+2026-10-23 13:41:55,474 DEBUG - Starting WinSW in console mode
+2026-10-23 13:41:56,957 DEBUG - Starting WinSW in console mode
+2026-10-23 13:41:56,970 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:41:57,057 DEBUG - Starting WinSW in service mode
+2026-10-23 13:41:57,067 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:41:57,075 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat" -load database -su admin -sn test-service-subway -eu admin -en test-endpoint-subway
+2026-10-23 13:41:57,092 INFO  - Started process 14556
+2026-10-23 13:41:57,097 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:43:00,061 DEBUG - Starting WinSW in console mode
+2026-10-23 13:43:01,497 DEBUG - Starting WinSW in console mode
+2026-10-23 13:43:01,512 INFO  - Stopping service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:43:01,519 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' stopped successfully.
+2026-10-23 13:43:01,521 INFO  - Stopping LoulanDNSEndpointService
+2026-10-23 13:43:01,522 DEBUG - ProcessKill 14556
+2026-10-23 13:43:01,526 DEBUG - Stopping process 14556...
+2026-10-23 13:43:16,540 DEBUG - Process 14556 terminated.
+2026-10-23 13:43:16,548 INFO  - Finished LoulanDNSEndpointService
+2026-10-23 13:43:23,194 DEBUG - Starting WinSW in console mode
+2026-10-23 13:43:24,797 DEBUG - Starting WinSW in console mode
+2026-10-23 13:43:24,811 INFO  - Starting service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:43:24,900 DEBUG - Starting WinSW in service mode
+2026-10-23 13:43:24,910 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' started successfully.
+2026-10-23 13:43:24,918 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261023-001\LoulanDNS\tools\WinSW\WinSW_v2.12.0\..\..\..\bin\exec\exec-loulandns-endpoint-service.bat" -load database -su admin -sn test-service-subway -eu admin -en test-endpoint-subway
+2026-10-23 13:43:24,932 INFO  - Started process 11580
+2026-10-23 13:43:24,940 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-23 13:45:33,065 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:34,504 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:34,520 INFO  - Stopping service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:45:34,523 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' stopped successfully.
+2026-10-23 13:45:34,525 INFO  - Stopping LoulanDNSEndpointService
+2026-10-23 13:45:34,525 DEBUG - ProcessKill 11580
+2026-10-23 13:45:34,528 DEBUG - Stopping process 11580...
+2026-10-23 13:45:38,344 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:40,324 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:40,337 INFO  - Installing service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:45:40,340 ERROR - A service with ID 'LoulanDNSEndpointService' already exists.
+2026-10-23 13:45:40,342 FATAL - Failed to install the service. 指定されたサービスは既に開始されています。
+2026-10-23 13:45:45,794 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:47,453 DEBUG - Starting WinSW in console mode
+2026-10-23 13:45:47,464 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:45:47,467 WARN  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' is started. It may be impossible to uninstall it.
+2026-10-23 13:45:47,469 INFO  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' was uninstalled successfully.
+2026-10-23 13:45:49,535 DEBUG - Process 11580 terminated.
+2026-10-23 13:45:49,551 INFO  - Finished LoulanDNSEndpointService
+2026-10-23 13:47:02,321 DEBUG - Starting WinSW in console mode
+2026-10-23 13:47:05,493 DEBUG - Starting WinSW in console mode
+2026-10-23 13:47:05,505 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:47:05,510 WARN  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' does not exist.
+2026-10-23 13:54:42,465 DEBUG - Starting WinSW in console mode
+2026-10-23 13:54:44,151 DEBUG - Starting WinSW in console mode
+2026-10-23 13:54:44,163 INFO  - Uninstalling service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)'...
+2026-10-23 13:54:44,167 WARN  - Service 'LoulanDNS Endpoint Service (LoulanDNSEndpointService)' does not exist.

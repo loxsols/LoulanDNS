@@ -23,6 +23,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.DNSServiceInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.TemporaryDNSServiceInstanceImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.ILoulanDNSStatLogServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -53,6 +54,11 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
     @Qualifier("loulanDNSDomainCacheServiceFactoryImpl")
     ILoulanDNSDomainCacheServiceFactory loulanDNSDomainCacheServiceFactory;
 
+
+
+    @Autowired
+    @Qualifier("loulanDNSStatLogServiceFactoryImpl")
+    ILoulanDNSStatLogServiceFactory loulanDNSStatLogServiceFactory;
 
 
 
@@ -354,6 +360,9 @@ public class DNSServiceInstanceFactoryImpl implements IDNSServiceInstanceFactory
         // ドメインキャッシュサービスのファクトリクラスを設定.
         ( (DNSServiceInstanceImpl)dnsServiceInstance ).setDomainCacheServiceFactoryInstance( this.loulanDNSDomainCacheServiceFactory );
 
+
+        // サービスインスタンス層の統計情報入出力サービスのファクトリクラスを設定.
+        ( (DNSServiceInstanceImpl)dnsServiceInstance ).setLoulanDNSStatLogServiceFactory( this.loulanDNSStatLogServiceFactory );
 
 
 

@@ -32,6 +32,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.ILoulanDNSLogger;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.ILoulanDNSStatLogServiceFactory;
 
 
 
@@ -50,7 +51,8 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
 
     IDNSResolverInstanceFactory dnsResolerInstanceFactory;
 
-    ILoulanDNSLoggerFactory loulanDNSLoggerFactory;
+    // ILoulanDNSLoggerFactory loulanDNSLoggerFactory;
+
 
 
     
@@ -112,19 +114,14 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
     }
 
 
-
-
+    @Override
     @Autowired
     @Qualifier("loulanDNSLoggerFactoryImpl")
     public void setLoulanDNSLoggerFactory(ILoulanDNSLoggerFactory instance)
     {
-        this.loulanDNSLoggerFactory = instance;
+        super.setLoulanDNSLoggerFactory(instance);
     }
 
-    public ILoulanDNSLoggerFactory getLoulanDNSLoggerFactory()
-    {
-        return this.loulanDNSLoggerFactory;
-    }
 
 
     @Override
@@ -141,7 +138,7 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
     }
 
 
-
+    @Override
     @Autowired
     @Qualifier("loulanDNSDomainCacheServiceFactoryImpl")
     public void setDomainCacheServiceFactoryInstance(ILoulanDNSDomainCacheServiceFactory instance) throws DNSServiceCommonException
@@ -150,6 +147,13 @@ public class DNSServiceInstanceImpl extends TemporaryDNSServiceInstanceImpl impl
     }
 
 
+    @Override
+    @Autowired
+    @Qualifier("loulanDNSStatLogServiceFactoryImpl")
+    public void setLoulanDNSStatLogServiceFactory(ILoulanDNSStatLogServiceFactory instance) throws DNSServiceCommonException
+    {
+        super.setLoulanDNSStatLogServiceFactory(instance);
+    }
 
 
     // -----------------------------------------------

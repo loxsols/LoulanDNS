@@ -59,6 +59,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 
 import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.factory.impl.service.*;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.admin.*;
+import org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.stat.LoulanDNSStatDNSWebAPIService;
 import org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.doh.DoHServiceApplicationConfig;
 import org.loxsols.net.service.dns.loulandns.app.spring.base.config.LoulanDNSBaseApplicationConfig;
 
@@ -80,6 +81,22 @@ import org.loxsols.net.service.dns.loulandns.app.spring.base.config.LoulanDNSBas
     includeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE, 
         classes = LoulanDNSAdminUserWebAPIService.class // ここで指定したコントローラークラスだけを読み込む.
+    )
+)
+@ComponentScan(
+    basePackages = "org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.admin",
+    useDefaultFilters = false, // 全てのコンポーネントを読み込むデフォルト設定をオフにする
+    includeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, 
+        classes = LoulanDNSAdminCommonSystemLogWebAPIService.class // ここで指定したコントローラークラスだけを読み込む.
+    )
+)
+@ComponentScan(
+    basePackages = "org.loxsols.net.service.dns.loulandns.server.http.spring.controller.service.api.stat",
+    useDefaultFilters = false, // 全てのコンポーネントを読み込むデフォルト設定をオフにする
+    includeFilters = @ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE, 
+        classes = LoulanDNSStatDNSWebAPIService.class // ここで指定したコントローラークラスだけを読み込む.
     )
 )
 public class LoulanDNSAdminAPIServiceApplicationConfig

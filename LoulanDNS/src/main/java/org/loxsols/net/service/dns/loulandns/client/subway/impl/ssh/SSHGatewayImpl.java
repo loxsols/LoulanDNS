@@ -1,11 +1,19 @@
 package org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.DatagramPacket;
+import java.net.Socket;
+
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
@@ -28,6 +36,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.DNSProtocolConstants;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
+import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSCommonUtils;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSDebugUtils;
 import org.loxsols.net.service.dns.loulandns.server.common.util.LoulanDNSProtocolUtils;
 import org.loxsols.net.service.dns.loulandns.client.subway.*;
@@ -47,6 +56,14 @@ import org.apache.sshd.common.util.buffer.ByteArrayBuffer;
 import org.apache.sshd.common.util.net.SshdSocketAddress;
 import org.apache.sshd.core.CoreModuleProperties;
 
+
+import sockslib.client.SocksProxy;
+import sockslib.client.SocksSocket;
+import sockslib.client.CommandReplyMessage;
+import sockslib.client.Socks5;
+import sockslib.client.Socks5DatagramSocket;
+import sockslib.common.UsernamePasswordCredentials;
+
 import java.util.concurrent.TimeUnit;
 import java.util.Properties;
 import java.util.List;
@@ -59,6 +76,7 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
     List<SSHTunnelInstance> sshTunnelInstanceList = new ArrayList<SSHTunnelInstance>();
 
     LoulanDNSProtocolUtils protocolUtils = new LoulanDNSProtocolUtils();
+    LoulanDNSCommonUtils commonUtils = new LoulanDNSCommonUtils();
 
     // コンストラクタ.
     public SSHGatewayImpl(SSHSessionInstance sshSessionInstance, IDNSResolverInstance subResolverInstance) throws DNSSubwayCommonException
@@ -330,7 +348,18 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
         }
 
 
+        synchronized(sshSessionInstance)
+        {
+            if ( sshSessionInstance.isOpen() == false )
+            {
+                // SSHセッションがまだオープン済みでないのでオープンする.
+                sshSessionInstance.open();
+            }
+        }
+
+
         String remoteHostAddress;
+        IDNSResponseMessage responseMessage = null;
 
         // TODO : サブリゾルバの問い合わせ時に同期すべきか検討
         //// synchronized(sshSessionInstance)
@@ -354,8 +383,140 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
                     headerSection.setRD(1);
                     headerSection.setQDCOUNT(1);
 
-                    IDNSResponseMessage responseMessage = subResolverInstance.resolve(questionMessage);
+                    responseMessage = subResolverInstance.resolve(questionMessage);
 
+                }
+                catch(DNSServiceCommonException cause)
+                {
+                    String msg = String.format("Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. RemoteHost=%s, SubResolverMode=%s, SubResolverInstance=%s", remoteHost, subResolverMode, subResolverInstance.toString() );
+                    DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                    throw exception; 
+                }
+
+
+            }
+            else if ( subResolverMode.equals(DNSSubwayConstants.COSNT_DNS_SUBWAY_SUB_RESOLVER_MODE_FORWARD) )
+            {
+                // リモートホストの名前解決をフォワード問い合わせする.
+
+                // DNSの問い合わせ経路用にSSHトンネル(ローカルポートフォワード)を張る.
+                // このSSHトンネルを経由して、DNS問い合わせを踏み台サーバー経由でフォワードする.
+                // 当然、UDP問い合わせは使用できないので、TCP#53/DoT/DoHのようなTCPベースの問い合わせをすることになる.
+                // 
+                // NOTE :   当初はSOCKS I/F(SSHのダイナミックポートフォワード)を使用しようと試みたが、以下の理由で断念した.
+                //          ApacheMinaのダイナミックポートフォワードはUDPアソシエートには対応していない.
+                //          このため、現状ではUDP#53のDNSクエリは転送できない.
+                // 
+                // TODO :   将来的に、UDPアソシエートに対応したSOCKSサーバー経由のフォワード問い合わせを検討する.
+
+
+                // DNSクエリを中継するSSHトンネルのGWを設定.
+                String localDNSGWAddress = "127.0.0.1";     // TODO : とりあえず、127.0.0.1に固定する.
+                int localDNSGWPort = 0;                     // SSHトンネルの構築時に動的にポートを設定する.
+
+                // DNSクエリをフォワードする先のDNSサーバーを設定.
+                String forwardDNSSVAddress = "1.1.1.1";  // TODO : とりあえず、Cloudflareに設定する.
+                int forwardDNSSVPort = 53;               // TDOO : とりあえず、TCP#53(非暗号化)に設定する.
+                
+                try
+                {
+                    // DNSクエリを中継するSSHトンネルのGWを設定.
+                    SshdSocketAddress localDNSGWSocket = new SshdSocketAddress(localDNSGWAddress, localDNSGWPort );
+
+                    // DNSクエリをフォワードする先のDNSサーバーを設定.
+                    SshdSocketAddress forwardDNSSVSocket = new SshdSocketAddress(forwardDNSSVAddress, forwardDNSSVPort );
+
+                    // ローカルポートフォワードを開始.
+                    localDNSGWSocket = sshSessionInstance.getSSHSession().startLocalPortForwarding(localDNSGWSocket, forwardDNSSVSocket);
+
+                    // 実際にbindしたアドレスとポート番号を取得.
+                    localDNSGWAddress = commonUtils.toIPAddressString( localDNSGWSocket.getFirstExternalNetwork4Address() );
+                    localDNSGWPort = localDNSGWSocket.getPort();
+
+                }
+                catch(IOException cause)
+                {
+                    String msg = String.format("Failed to open SSH Gateway, caused by failed to start SSH LocalPortForwarding(SOCKS I/F) service on local. RemoteHost=%s, SubResolverMode=%s, SubResolverInstance=%s", remoteHost, subResolverMode, subResolverInstance.toString() );
+                    DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                    throw exception; 
+                }
+                catch(DNSServiceCommonException cause)
+                {
+                    String msg = String.format("Failed to open SSH Gateway, caused by failed to start SSH LocalPortForwarding(SOCKS I/F) service on local. RemoteHost=%s, SubResolverMode=%s, SubResolverInstance=%s", remoteHost, subResolverMode, subResolverInstance.toString() );
+                    DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                    throw exception;
+                }
+
+
+                // TCP#53 DNS問い合わせ
+                try 
+                {
+                    // Socket socket = new Socket(localDNSGWAddress, localDNSGWPort);
+                    Socket socket = new Socket("127.0.0.1", localDNSGWPort);
+
+                    OutputStream outputStream = socket.getOutputStream();
+                    InputStream inputStream = socket.getInputStream();
+
+                    // ----------------------------
+                    // 以下、TCP#53リゾルバをSSHトンネル経由で実行
+                    // ----------------------------
+                    IDNSMessageFactory messageFactory = new SimpleDNSMessageFactoryImpl();
+                    IDNSQuestionMessage questionMessage = messageFactory.createQuestionDNSMesssage(remoteHost, DNSProtocolConstants.DNS_RR_TYPE_A, DNSProtocolConstants.DNS_CLASS_IN);
+
+                    IDNSHeaderSection headerSection = questionMessage.getDNSHeaderSection();
+                    headerSection.setOPCode(0);
+                    headerSection.setQR(0);
+                    headerSection.setRD(1);
+                    headerSection.setQDCOUNT(1);
+
+                    // --- 送信パケットの作成 ---
+                    byte[] wiredDNSMessage = questionMessage.getDNSMessageBytes();
+                    byte[] sendHeader = protocolUtils.int16ToBytes(wiredDNSMessage.length);
+
+                    // --- DNSクエリの送信
+                    outputStream.write(sendHeader);
+                    outputStream.write(wiredDNSMessage);
+
+                    // DNSレスポンスの受信
+                    byte[] recvHeader = inputStream.readNBytes(2);
+                    int recvPacketSize = (int)protocolUtils.bytesToUInt16(recvHeader);
+                    byte[] wiredRecvDNSMessage = inputStream.readNBytes(recvPacketSize);
+
+                    socket.close();
+
+                    responseMessage = messageFactory.createResponseDNSMesssage(wiredRecvDNSMessage);
+                    
+                    System.out.println("[DEBUG] DNSレスポンス内容: " + responseMessage);
+
+                }
+                catch (IOException cause)
+                {
+                    String msg = String.format("Failed to handle forward DNS query, caused by IOException. localDNSGWAddress=%s, localDNSGWPort=%d", localDNSGWAddress, localDNSGWPort );
+                    DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                    throw exception; 
+                }
+                catch(DNSServiceCommonException cause)
+                {
+                    String msg = String.format("Failed to handle forward DNS query, caused by DNSServiceCommonException.");
+                    DNSSubwayCommonException exception = new DNSSubwayCommonException(msg, cause);
+                    throw exception; 
+                }
+
+
+
+
+            }
+            else
+            {
+                // 未定義のサブリゾルバ動作モードが指定された.
+                String msg = String.format("Failed to open SSH Gateway. Invalid SubResovlerMode : %s", subResolverMode );
+                DNSSubwayCommonException exception = new DNSSubwayCommonException(msg);
+                throw exception; 
+            }
+
+
+            try
+            {
                     if ( responseMessage == null )
                     {
                         String msg = String.format("Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. The Resolver returuned null. RemoteHost=%s, SubResolverMode=%s, SubResolverInstance=%s", remoteHost, subResolverMode, subResolverInstance.toString() );
@@ -418,22 +579,6 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
                     throw exception; 
                 }
 
-
-            }
-            else if ( subResolverMode.equals(DNSSubwayConstants.COSNT_DNS_SUBWAY_SUB_RESOLVER_MODE_FORWARD) )
-            {
-                // リモートホストの名前解決をフォワード(SSHサーバー上のリゾルバ)で実行する.
-                // この場合、単にApacheMinaのフォワード処理時に接続先ホストをホスト名で指定するだけなので、接続先アドレスにホスト名を指定する.
-                remoteHostAddress = remoteHost;
-            }
-            else
-            {
-                // 未定義のサブリゾルバ動作モードが指定された.
-                String msg = String.format("Failed to open SSH Gateway. Invalid SubResovlerMode : %s", subResolverMode );
-                DNSSubwayCommonException exception = new DNSSubwayCommonException(msg);
-                throw exception; 
-            }
-
         }
 
 
@@ -442,11 +587,6 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
         // TDOO : 将来的には、性能面でこの同期処理部分を改善する必要があるだろう. 
         synchronized(sshSessionInstance)
         {
-            if ( sshSessionInstance.isOpen() == false )
-            {
-                // SSHセッションがまだオープン済みでないのでオープンする.
-                sshSessionInstance.open();
-            }
 
 
 
@@ -707,8 +847,8 @@ public class SSHGatewayImpl implements IDNSSubwayGateway
 
         public InetSocketAddress getRemoteSocketAddress()
         {
-            InetSocketAddress localSocketAddress = new InetSocketAddress( this.getRemoteAddress(), this.getRemotePort() );
-            return localSocketAddress;
+            InetSocketAddress remoteSocketAddress = new InetSocketAddress( this.getRemoteAddress(), this.getRemotePort() );
+            return remoteSocketAddress;
         }
 
         public SshdSocketAddress getLocalSSHSocketAddress()

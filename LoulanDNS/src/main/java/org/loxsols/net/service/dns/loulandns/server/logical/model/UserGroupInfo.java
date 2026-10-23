@@ -64,6 +64,37 @@ public class UserGroupInfo
     }
 
 
+    /**
+     * 日付時刻情報は文字列化して返す.
+     * WebAPI呼び出し時にJSONシリアライズした際に、タイムゾーン情報が適切に付加されない(JSTやAsia/Tokyoではなく、+09000表記になる)ため.
+     * 時刻情報自体はローカルタイムゾーン値(JST時刻)なのに、タイムゾーン情報が+0900だと、東京時刻から更に9時間プラスされてしまう....
+     * 
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public String getCreateDate() throws LoulanDNSSystemServiceException
+    {
+        String dateTimeString = LoulanDNSUtils.toDateTimeString( this.createDate );
+        return dateTimeString;
+    }
+
+
+    /**
+     * 日付時刻情報は文字列化して返す.
+     * WebAPI呼び出し時にJSONシリアライズした際に、タイムゾーン情報が適切に付加されない(JSTやAsia/Tokyoではなく、+09000表記になる)ため.
+     * 時刻情報自体はローカルタイムゾーン値(JST時刻)なのに、タイムゾーン情報が+0900だと、東京時刻から更に9時間プラスされてしまう....
+     * 
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public String getUpdateDate() throws LoulanDNSSystemServiceException
+    {
+        String dateTimeString = LoulanDNSUtils.toDateTimeString( this.updateDate );
+        return dateTimeString;
+    }
+
+
+
     // 本ユーザーが管理者権限を有しているのかを判定する.
     public boolean isAdministrator()
     {

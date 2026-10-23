@@ -39,12 +39,25 @@ public class DNSQuestionMessageImpl extends DNSMessageImpl implements IDNSMessag
     public void init(String qname, int qtype, int qclass) throws DNSServiceCommonException
     {
         short id = protocolUtils.getRandom16bitValue(); // id : ランダムなID値(16bit)
+
         boolean tc = false; // tc : Truncated Message  : パケットサイズが512バイトを超えるならtrue
-        boolean rd = false; // rd : Recursion Desired) : リクエストを受けたサーバーが該当するレコードを所持していない場合、再帰的な名前解決を依頼する場合はtrue
+
+        // rd : Recursion Desired) : リクエストを受けたサーバーが該当するレコードを所持していない場合、再帰的な名前解決を依頼する場合はtrue
+        // 2026/09/17 : 外部リゾルバ(Cloudflare)のBAN対応でRD=1を初期値とする.(RD=0だと不審なリクエストに見えるっぽい)
+        boolean rd = true;
+
         int qd = 1; // qd : QDCOUNT(16bit)     : Questionセクションに含まれるエントリの数
 
+        // QR=0(問い合わせ)を設定
+        int qr = 0;
+
+        // OPCodeは0(問い合わせ)を設定
+        int opCode = 0;
 
         IDNSHeaderSection headerSection = buildHeaderSection(id, tc, rd, qd);
+        headerSection.setQR(qr);
+        headerSection.setOPCode(opCode);
+
         IDNSQuestionSection questionSection = buildQuestionSection(qname, qtype, qclass);
 
         init(headerSection, questionSection);

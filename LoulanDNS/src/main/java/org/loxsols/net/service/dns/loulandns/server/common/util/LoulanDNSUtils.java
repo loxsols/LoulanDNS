@@ -4,16 +4,28 @@ import java.util.TimeZone;
 
 import static org.mockito.ArgumentMatchers.endsWith;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
 import java.util.regex.Matcher;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalQueries;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import org.loxsols.net.service.dns.loulandns.client.common.DNSClientCommonException;
 import org.loxsols.net.service.dns.loulandns.server.common.*;
 import org.loxsols.net.service.dns.loulandns.server.common.constants.LoulanDNSConstants;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserInfo;
+import org.xbill.DNS.Zone;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserGroupInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserGroupMappingInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.UserGroupPrivilegeInfo;
@@ -34,6 +46,23 @@ public class LoulanDNSUtils
     // 例) "2024/06/11 12:34:56.123 JST" -> TimeZone型クラス
     public static ZonedDateTime toDateTimeObject(String dateTimeString) throws DNSServiceCommonException
     {
+        ZonedDateTime dateTime;
+
+        if ( isISO8601DateTimeFormatString(dateTimeString) )
+        {
+            // 2026/10/06追加.
+            // ISO8601形式文字列("20260914T164342+0900"など)の場合も拾うことにする.
+            dateTime = toDateTimeObjectFromISO8601(dateTimeString);
+            return dateTime;
+        }
+        else if ( isISO8601DateTimeFormatSubString(dateTimeString) )
+        {
+            // 2026/10/19追加.
+            // ISO8601形式の部分文字列("20260914"など)の場合も拾うことにする.
+            dateTime = toDateTimeObjectFromISO8601SubString(dateTimeString);
+            return dateTime;
+        }
+
         // 以下のタイムゾーン付きの文字列を正規表現で空白文字で区切る.
         // 例)"2024/06/11 12:34:56.123 Asia/Tokyo"  -> ["2024/06/11", "12:34:56.123", "Asia/Tokyo"]
         String[] dateTimeStringArray = dateTimeString.split("\\s+");
@@ -65,7 +94,7 @@ public class LoulanDNSUtils
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern( LoulanDNSConstants.LOCAL_DATE_TIME_FORMAT_PATTERN );
 
         LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr2, formatter );
-        ZonedDateTime dateTime = ZonedDateTime.of( localDateTime, zoneID );
+        dateTime = ZonedDateTime.of( localDateTime, zoneID );
         return dateTime;
     }
 
@@ -98,6 +127,47 @@ public class LoulanDNSUtils
         return timeZone;
     }
 
+
+    /**
+     * 本システムのデフォルトタイムゾーンを取得する.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public static TimeZone getSystemDefaultTimeZone() throws DNSServiceCommonException
+    {
+        TimeZone timeZone = TimeZone.getDefault();
+        return timeZone;
+    }
+
+
+    /**
+     *  指定したTimeZoneのZoneID値を取得する.
+     * 
+     * @param timeZone
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public static ZoneId getTimeZoneID(TimeZone timeZone) throws DNSServiceCommonException
+    {
+        ZoneId zoneID = timeZone.toZoneId();
+        return zoneID;
+    }
+
+    /**
+     * ZoneIDからタイムゾーン型を取得する.
+     * 
+     * @param zoneID
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public static TimeZone getTimeZone(ZoneId zoneID) throws DNSServiceCommonException
+    {
+        TimeZone timeZone = TimeZone.getTimeZone(zoneID);
+        return timeZone;
+    }
+
+
     // 現在時刻を表すZonedDateTimeオブジェクトを取得する.
     // タイムゾーンは本システムの設定に従い設定する(現状はシステムのデフォルト値).
     public static ZonedDateTime getCurrentZonedDateTime()
@@ -113,6 +183,253 @@ public class LoulanDNSUtils
         String dateTimeString = toDateTimeString(dateTime);
         return dateTimeString;
     }
+
+
+    /**
+     * 本システムにおける下限表現日時(エポック時刻)を返す.
+     * 
+     * @return
+     */
+    public static ZonedDateTime getSystemMinimumZonedDateTime() throws DNSServiceCommonException
+    {
+        String minValue = getSystemMinimumDateTimeString();
+        ZonedDateTime minDateTime = toDateTimeObject(minValue);
+        return minDateTime;
+    }
+
+
+    /**
+     * 本システムにおける下限表現日時(エポック時刻)の文字列を返す.
+     * 
+     * @return
+     */
+    public static String getSystemMinimumDateTimeString()
+    {
+        // "1900/01/01 00:00:00.000 Asia/Tokyo"
+        String minValue = "1900/01/01 00:00:00.000 Asia/Tokyo";
+        return minValue;
+    }
+
+
+    /**
+     * 本システムにおける上限表現日時(限界時刻)を返す.
+     * 
+     * @return
+     */
+    public static ZonedDateTime getSystemMaxZonedDateTime() throws DNSServiceCommonException
+    {
+        String maxValue = getSystemMaxDateTimeString();
+        ZonedDateTime maxDateTime = toDateTimeObject(maxValue);
+        return maxDateTime;
+    }
+
+
+    /**
+     * 本システムにおける下限表現日時(エポック時刻)の文字列を返す.
+     * 
+     * @return
+     */
+    public static String getSystemMaxDateTimeString()
+    {
+        // "9999/12/31 23:59:59.999 Asia/Tokyo"
+        String maxValue = "9999/12/31 23:59:59.999 Asia/Tokyo";
+        return maxValue;
+    }
+
+
+
+    /**
+     * ISO8601形式の日時文字列かを判定する.
+     * 
+     * @param iso8601DateTimeString
+     * @return
+     */
+    public static boolean isISO8601DateTimeFormatString(String iso8601DateTimeString)
+    {
+        try
+        {
+            toDateTimeObjectFromISO8601(iso8601DateTimeString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    /**
+     * ISO8601形式の日時文字列をZonedDateTime型に変換する.
+     * Ex.1) 基本型 : 20220904T160748.53
+     * Ex.2) 拡張型 : 2022-09-04T16:07:48.53 
+     * 
+     * @param iso8601DateTimeString
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public static ZonedDateTime toDateTimeObjectFromISO8601(String iso8601DateTimeString) throws DNSServiceCommonException
+    {
+        ZonedDateTime dateTime;
+
+        try
+        {
+            // 指定したISO8601文字列をタイムゾーン情報付きとして解析する.
+            dateTime = ZonedDateTime.parse(iso8601DateTimeString, DateTimeFormatter.ISO_DATE_TIME);
+        }
+        catch(DateTimeParseException cause)
+        {
+            try
+            {
+                // タイムゾーン情報が付加されてない場合に備えて、システムのデフォルトタイムゾーン情報を付加して再度読み取る.
+                TimeZone defaultTimeZone = getSystemDefaultTimeZone();
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone( getTimeZoneID(defaultTimeZone) );
+                dateTime = ZonedDateTime.parse(iso8601DateTimeString, formatter);
+            }
+            catch(DateTimeParseException cause2)
+            {
+                String msg = String.format("Failed to parse ISO8601 DateTime format String. value=%s", iso8601DateTimeString);
+                DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause2);
+                throw exception;
+            }
+        }
+
+        return dateTime;
+    }
+
+
+    /**
+     * ISO8601形式の日時形式の部分文字列かを判定する.
+     * 
+     * @param iso8601DateTimeString
+     * @return
+     */
+    public static boolean isISO8601DateTimeFormatSubString(String dateTimeString)
+    {
+        try
+        {
+            toDateTimeObjectFromISO8601SubString(dateTimeString);
+        }
+        catch(DNSServiceCommonException cause)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * ISO8601形式の部分文字列からZonedDateTimeの日付時刻型に変換する.
+     * 以下のISO8601形式の文字列をベースに、その部分文字列をも変換する.
+     *      基本形式    20260914T164342+0900
+     *      拡張形式	2026-09-14T16:43:42+09:00
+     * 
+     * Ex.1 ) "20260914"            -> "2026/09/14 00:00:00.000 Asia/Tokyo";
+     * Ex.2 ) "2026-09-14"          -> "2026/09/14 00:00:00.000 Asia/Tokyo";
+     * Ex.3 ) "20260914T164342"     -> "2026/09/14 16:43:42.000 Asia/Tokyo";
+     * Ex.4 ) "2026-09-14T16:43:42" -> "2026/09/14 16:43:42.000 Asia/Tokyo";
+     * 
+     * 
+     * @param dateTimeString
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    protected static ZonedDateTime toDateTimeObjectFromISO8601SubString(String dateTimeString) throws DNSServiceCommonException
+    {
+
+        // 2026/10/19 本関数内部はGeminiで実装した.
+
+        if (dateTimeString == null || dateTimeString.trim().isEmpty())
+        {
+            String msg = String.format("Failed to parse ISO8601SubString. The value is not specified : %s", dateTimeString );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+        String s = dateTimeString.trim();
+
+        // 1. "T" の有無で日付のみか、時刻も含むかを判定
+        int tIndex = s.indexOf('T');
+        boolean hasTime = (tIndex >= 0);
+
+        // 2. 日付部分(Tより前)にハイフンが含まれるかで「拡張形式 / 基本形式」を判定
+        String datePart = hasTime ? s.substring(0, tIndex) : s;
+        boolean isExtendedDate = datePart.contains("-");
+
+        // 3. 時刻部分にタイムゾーン (+, -, Z) が含まれるかを判定
+        boolean hasZone = false;
+        if (hasTime)
+        {
+            String timePart = s.substring(tIndex + 1);
+            hasZone = timePart.contains("+") || timePart.contains("-") || timePart.endsWith("Z");
+        }
+
+        DateTimeFormatter formatter;
+
+        try
+        {
+            // 文字列の特徴に応じたフォーマッターの選択
+            if (isExtendedDate)
+            {
+                // [拡張形式] yyyy-MM-dd...
+                if (hasTime)
+                {
+                    formatter = hasZone ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+                }
+                else
+                {
+                    formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+                }
+
+            }
+            else
+            {
+                // [基本形式] yyyyMMdd...
+                if (hasTime)
+                {
+                    // [XXX][XX][X] は +09:00, +0900, +09, Z などの各フォーマットを柔軟にパースするための指定
+                    formatter = hasZone ? DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss[XXX][XX][X]") : DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
+                }
+                else
+                {
+                    formatter = DateTimeFormatter.BASIC_ISO_DATE;
+                }
+            }
+
+            // 解析を実行
+            TemporalAccessor accessor = formatter.parse(s);
+
+            // タイムゾーンの取得
+            // とりあえずシステムデフォルトのタイムゾーンを強制的に設定する.
+            // TODO : 将来的にタイムゾーンを引数文字列から動的に指定できるようにする.
+            ZoneId zoneId;
+            TimeZone defaultTimeZone = getSystemDefaultTimeZone();
+            zoneId = getTimeZoneID(defaultTimeZone);
+
+            // 日付の取得 (必須)
+            LocalDate date = LocalDate.from(accessor);
+
+            // 時刻の取得
+            // とりえあず、00:00:00を設定しておく
+            // TODO : いずれは、引数文字列から動的に指定できるようにする.
+            LocalTime time = LocalTime.MIDNIGHT;
+
+            // 最終的なZonedDateTimeを生成して返却
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(date, time, zoneId);
+            return zonedDateTime;
+        }
+        catch (DateTimeParseException cause)
+        {
+            // 解析失敗時に共通例外にラップしてスローする
+            String msg = String.format("Failed to parse ISO8601SubString. The value is %s", dateTimeString);
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+    }
+
+
 
 
     // 指定されたユーザー名が正しい書式か検証する.
@@ -597,6 +914,79 @@ public class LoulanDNSUtils
         }
 
         return code;
+    }
+
+
+    // DNS統計情報ログサービスのインスタンスの名前を生成する.
+    public static String getDNSStatLogServiceName(String userName, String serviceInstanceName) throws DNSServiceCommonException
+    {
+        String dnsStatLogServiceName;
+
+        // DNS統計情報ログサービスのインスタンス名は、"<ユーザー名>/<サービスインスタンス名>"とする.
+        dnsStatLogServiceName = String.format("%s/%s",  userName, serviceInstanceName );
+        return dnsStatLogServiceName;
+    }
+
+
+
+    /**
+     * 指定したbyte配列をgzip圧縮して返す.
+     * 
+     */
+    public byte[] encodeGZIP(byte[] rawBytes) throws DNSServiceCommonException
+    {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try
+        {
+            GZIPOutputStream gzipStream = new GZIPOutputStream(outputStream);
+
+            // データを書き込んでフラッシュ（圧縮実行）
+            gzipStream.write(rawBytes);
+            gzipStream.finish();
+        }
+        catch(IOException cause)
+        {
+            String msg = String.format("Failed to encode to GZIP bytes. rawBytes.length=%d", rawBytes.length );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+        
+        byte[] gzipBytes = outputStream.toByteArray();
+        return gzipBytes;
+    }
+
+
+    /**
+     * 指定したgzip圧縮済みbyte配列を平文のbyte配列に解凍して返す.
+     * 
+     */
+    public byte[] decodeGZIP(byte[] gzipBytes)  throws DNSServiceCommonException
+    {
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        try
+        {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(gzipBytes);
+            GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream);
+
+            byte[] buffer = new byte[8192];
+            int len;
+            while ((len = gzipInputStream.read(buffer)) > 0)
+            {
+                outputStream.write(buffer, 0, len);
+            }
+        }
+        catch(IOException cause)
+        {
+            String msg = String.format("Failed to decode from GZIP bytes. gzipBytes.length=%d", gzipBytes.length );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+            
+        byte[] rawBytes = outputStream.toByteArray();
+        return rawBytes;
     }
 
 

@@ -44,6 +44,7 @@ import org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.f
 public class LoulanDNSProtocolUtils
 {
 
+
     // DNSメッセージを人間が読める文字列に変換する.
     public String toDNSDebugMessage(byte[] dnsMessageBytes) throws DNSServiceCommonException
     {
@@ -915,6 +916,7 @@ public class LoulanDNSProtocolUtils
         byte[] bytes = decoder.decode( base64String );
         return bytes;
     }
+
 
 
     // DNSのCLASSの値を文字列に変換する. (例 : 1 -> "IN" )
@@ -1839,6 +1841,7 @@ public class LoulanDNSProtocolUtils
 
 		IDNSHeaderSection dnsHeader = new DNSHeaderSectionImpl();
 		dnsHeader.setDNSHeaderBytes(dnsMessageBytes);
+        int qr = (int)dnsHeader.getQR();
 		int qdCount = (int)dnsHeader.getQDCOUNT();
         int anCount = (int)dnsHeader.getANCOUNT();
 
@@ -1848,14 +1851,17 @@ public class LoulanDNSProtocolUtils
                                 = getSimpleDNSProtocolModelInstanceFactory();
 
         IDNSMessage dnsMessage;
-        if ( anCount > 0 )
+        if ( qr == 0 )
         {
-            dnsMessage = new DNSResponseMessageImpl(dnsProtocolModelInstanceFactory);
+            // QRが0なのでDNSクエリ.
+            dnsMessage =new DNSQuestionMessageImpl(dnsProtocolModelInstanceFactory);
         }
         else
         {
-            dnsMessage =new DNSQuestionMessageImpl(dnsProtocolModelInstanceFactory);
+            // QRが1なのでDNSレスポンス.
+            dnsMessage = new DNSResponseMessageImpl(dnsProtocolModelInstanceFactory);
         }
+
 
         dnsMessage.setDNSMessageBytes( dnsMessageBytes );
         return dnsMessage;

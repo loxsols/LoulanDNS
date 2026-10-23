@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "DNS_RESOLVER_TYPE_PROPERTIES")
 @Entity
 public class DNSResolverTypeProperties

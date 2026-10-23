@@ -42,6 +42,8 @@ import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.
 import org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.factory.IDNSServiceInstanceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.ILoulanDNSLoggerFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.factory.impl.LoulanDNSLoggerFactoryImpl;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.ILoulanDNSStatLogServiceFactory;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.impl.LoulanDNSStatLogServiceFactoryImpl;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.LoulanDNSLogicalModelService;
 
 import org.loxsols.net.service.dns.loulandns.server.http.spring.common.security.provider.*;
@@ -307,6 +309,36 @@ public class LoulanDNSBaseApplicationConfig
         return instance;
     }
 
+
+    @Bean( name="loulanDNSStatLogServiceFactoryImpl")
+    public ILoulanDNSStatLogServiceFactory getLoulanDNSStatLogServiceFactory() throws DNSServiceCommonException
+    {
+        ILoulanDNSStatLogServiceFactory instance = new LoulanDNSStatLogServiceFactoryImpl();
+        
+
+        LoulanDNSLogicalDBService logicalDBService;
+        try
+        {
+            // LoulanDNSLogicalDBServiceのインスタンスをセットする.
+            logicalDBService = configLoulanDNSLogicalDBServiceImpl();
+        }
+        catch(IOException cause)
+        {
+            String msg = String.format("Failed to load LoulanDNSLogicalDBService instance, caused of IOException.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+        catch(ZoneTransferException cause)
+        {
+            String msg = String.format("Failed to load LoulanDNSLogicalDBService instance, caused of ZoneTransferException.");
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg, cause);
+            throw exception;
+        }
+
+        ( (LoulanDNSStatLogServiceFactoryImpl)instance ).setLogicalDBService( logicalDBService );
+
+        return instance;
+    }
 
 
 }

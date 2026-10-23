@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+
 import org.loxsols.net.service.dns.loulandns.server.http.spring.repository.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSResolverInstanceInfo;
 import org.loxsols.net.service.dns.loulandns.server.logical.model.DNSServiceInstancePropertyInfo;
@@ -1436,6 +1439,7 @@ public class LoulanDNSDBService
         return commonSystemLogList;
     }
 
+
     /**
      * 共通ログ情報(COMMON_SYSTEM_LOGテーブル)からタグ値をもとにレコードを取得する.
      * 
@@ -1448,6 +1452,33 @@ public class LoulanDNSDBService
         List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogTag(commonSystemLogTag);
         return commonSystemLogList;
     }
+
+
+    /**
+     * 共通ログ情報(COMMON_SYSTEM_LOGテーブル)からタグ値、開始日時、終了日時、最大取得件数をもとにレコードを取得する.
+     * 
+     * @param commonSystemLogTag
+     * @param from
+     * @param until
+     * @param maxSize
+     * @return
+     * @throws LoulanDNSSystemServiceException
+     */
+    public List<CommonSystemLog> getCommonSystemLogListByTag(String commonSystemLogTag, ZonedDateTime from, ZonedDateTime until, int maxSize) throws LoulanDNSSystemServiceException
+    {
+        String fromDateTime = LoulanDNSUtils.toDateTimeString(from);
+        String untilDateTime = LoulanDNSUtils.toDateTimeString(until);
+
+        System.out.println( String.format("[DEBUG] getCommonSystemLogListByTag() : commonSystemLogTag=%s, fromDateTime=%s,untilDateTime=%s, maxSize=%d", commonSystemLogTag, fromDateTime, untilDateTime, maxSize)  );
+
+        List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogTagAndFromDateTimeAndUntilDateTime(commonSystemLogTag, fromDateTime, untilDateTime, PageRequest.of(0, maxSize) );
+
+        System.out.println( String.format("[DEBUG] getCommonSystemLogListByTag() : commonSystemLogList.size()=%d", commonSystemLogList.size() ) );
+
+        return commonSystemLogList;
+    }
+
+
 
     /**
      * 共通ログ情報(COMMON_SYSTEM_LOGテーブル)から、指定したタグ値と、指定したプロパティ情報を持つレコードを取得する.

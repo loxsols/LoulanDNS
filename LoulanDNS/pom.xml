@@ -54,6 +54,16 @@
             </properties>
 
 
+    <repositories>
+        <!-- githubのプロジェクトを一時的なMavenリポジトリとして使用するためにJitPackを使用する -->
+        <!-- JitPackリポジトリの追加 -->
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+
 
   <dependencies>
   
@@ -303,6 +313,13 @@
       <version>2.14.0</version>
     </dependency>
 
+    <!-- SOCKSクライアントのライブラリ-->
+    <!-- Source: https://mvnrepository.com/artifact/com.github.mike10004/fengyouchao-sockslib -->
+    <dependency>
+        <groupId>com.github.mike10004</groupId>
+        <artifactId>fengyouchao-sockslib</artifactId>
+        <version>1.0.6</version>
+    </dependency>
 
 
 <dependency>

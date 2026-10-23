@@ -2,6 +2,7 @@
 package org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base;
 
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import lombok.Getter;
@@ -31,7 +32,8 @@ import org.loxsols.net.service.dns.loulandns.server.common.constants.*;
 import org.loxsols.net.service.dns.loulandns.server.common.util.*;
 
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.*;
-
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.ILoulanDNSStatLogService;
+import org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.stat.ILoulanDNSStatLogServiceFactory;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.common.DNSCacheServiceCommonException;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.*;
 import org.loxsols.net.service.dns.loulandns.server.logical.service.system.cache.domain.impl.*;
@@ -53,12 +55,17 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     // 本DNSサービスに紐づくDNSリゾルバのインスタンス.
     IDNSResolverInstance dnsResolverInstance;
 
-
     // ドメインキャッシュサービスのファクトリインスタンス
     ILoulanDNSDomainCacheServiceFactory domainCacheServiceFactoryInstance;
 
+    // DNS統計情報ログサービスのファクトリインスタンス
+    ILoulanDNSStatLogServiceFactory loulanDNSStatLogServiceFactory;
+
     // ドメインキャッシュサービスの有効/無効フラグ.
     boolean domainCacheServiceActiveFlag;
+
+    // DNS統計情報ログサービスの有効/無効フラグ.
+    boolean dnsStatLogServiceActiveFlag;
 
     // 本サービスのタスクステータス.
     int serviceTaskStatus = LoulanDNSConstants.CONST_TASK_STATUS_INACTIVE_DNS_SERVICE_INSTANCE;
@@ -123,6 +130,31 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     }
 
 
+
+    /**
+     * DNS統計情報ログサービスのファクトリクラスのインスタンスを設定する.
+     * 
+     * @param instance
+     * @throws DNSServiceCommonException
+     */
+    public void setLoulanDNSStatLogServiceFactory(ILoulanDNSStatLogServiceFactory instance) throws DNSServiceCommonException
+    {
+        this.loulanDNSStatLogServiceFactory = instance;
+    }
+
+
+    /**
+     * DNS統計情報ログサービスのファクトリクラスのインスタンスを返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public ILoulanDNSStatLogServiceFactory getLoulanDNSStatLogServiceFactory() throws DNSServiceCommonException
+    {
+        return this.loulanDNSStatLogServiceFactory;
+    }
+
+
     // ドメインキャッシュサービスの識別名を取得する.
     public String getDomainCacheServiceName() throws DNSServiceCommonException
     {
@@ -132,6 +164,8 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
         domainCacheServiceName = String.format("%s/%s", getDNSServiceUserName(), getDNSServiceInstanceName() );
         return domainCacheServiceName;
     }
+
+
 
     // ドメインキャッシュサービスのインスタンスを取得or新規生成する.
     public ILoulanDNSDomainCacheService getOrCreateDomainCacheServiceInstance() throws DNSServiceCommonException
@@ -155,15 +189,15 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
 
         try
         {
-        String domainCacheServiceName = getDomainCacheServiceName();
+            String domainCacheServiceName = getDomainCacheServiceName();
 
-        // サービスインスタンスのプロパティ値をコピーして再利用する.
-        Properties options = (Properties)this.getDNSServiceInstanceProperties().clone();
+            // サービスインスタンスのプロパティ値をコピーして再利用する.
+            Properties options = (Properties)this.getDNSServiceInstanceProperties().clone();
 
-        // キャッシュサービスタイプをドメインキャッシュに固定する.
-        options.setProperty(LoulanDNSConstants.PROP_KEY_CACHE_SERVICE_TYPE, LoulanDNSConstants.CONST_CACHE_SERVICE_TYPE_DOMAIN_CACHE);
+            // キャッシュサービスタイプをドメインキャッシュに固定する.
+            options.setProperty(LoulanDNSConstants.PROP_KEY_CACHE_SERVICE_TYPE, LoulanDNSConstants.CONST_CACHE_SERVICE_TYPE_DOMAIN_CACHE);
 
-        cacheService = (ILoulanDNSDomainCacheService)factory.getOrCreateDomainCacheService(domainCacheServiceName, options);
+            cacheService = (ILoulanDNSDomainCacheService)factory.getOrCreateDomainCacheService(domainCacheServiceName, options);
         }
         catch(Exception exception)
         {
@@ -175,14 +209,92 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     }
 
 
+
+    // DNS統計情報ログサービスのインスタンスの名前を取得する.
+    public String getDNSStatLogServiceName() throws DNSServiceCommonException
+    {
+        // DNS統計情報ログサービスのインスタンス名は、"<ユーザー名>/<サービスインスタンス名>"とする.
+        String dnsStatLogServiceName = 
+            LoulanDNSUtils.getDNSStatLogServiceName(getDNSServiceUserName(), getDNSServiceInstanceName());
+
+        return dnsStatLogServiceName;
+    }
+
+
+    /**
+     * DNS統計情報ログサービスのインスタンスを取得or新規作成する.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public ILoulanDNSStatLogService getOrCreateLoulanDNSStatLogServiceInstance() throws DNSServiceCommonException
+    {
+        ILoulanDNSStatLogService dnsStatLogService;
+
+        ILoulanDNSStatLogServiceFactory factory = getLoulanDNSStatLogServiceFactory();
+
+        if ( factory == null )
+        {
+            String msg = String.format("Failed to create DNSStatLogService instance. LoulanDNSStatLogServiceFactory instance is null. userName=%s, dnsServiceInstanceName=%s", getDNSServiceUserName(), getDNSServiceInstanceName() );
+            DNSServiceCommonException exception = new DNSServiceCommonException(msg);
+            throw exception;
+        }
+
+        String dnsStatLogServiceInstance = getDNSStatLogServiceName();
+
+        // DNSサービスインスタンスのプロパティ値をコピーして再利用する.
+        Properties options = (Properties)this.getDNSServiceInstanceProperties().clone();
+
+        dnsStatLogService = factory.getOrCreateLoulanDNSStatLogService(dnsStatLogServiceInstance, options);
+
+        return dnsStatLogService;
+    }
+
+
+    /**
+     * ドメインキャッシュサービスの有効/無効を設定する.
+     * 
+     * @param value
+     * @throws DNSServiceCommonException
+     */
     public void setDomainCacheServiceActiveFlag(boolean value) throws DNSServiceCommonException
     {
         this.domainCacheServiceActiveFlag = value;
     }
 
+
+    /**
+     * ドメインキャッシュサービスの有効/無効を返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
     public boolean isDomainCacheServiceActive() throws DNSServiceCommonException
     {
         return this.domainCacheServiceActiveFlag;
+    }
+
+
+    /**
+     * DNS統計情報ログサービスの有効/無効を設定する.
+     * 
+     * @param value
+     * @throws DNSServiceCommonException
+     */
+    public void setDNSStatLogServiceActiveFlag(boolean value) throws DNSServiceCommonException
+    {
+        this.dnsStatLogServiceActiveFlag = value;
+    }
+
+    /**
+     * DNS統計情報ログサービスの有効/無効を返す.
+     * 
+     * @return
+     * @throws DNSServiceCommonException
+     */
+    public boolean isDNSStatLogServiceActive() throws DNSServiceCommonException
+    {
+        return this.dnsStatLogServiceActiveFlag;
     }
 
 
@@ -302,6 +414,16 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
             setDomainCacheServiceActiveFlag(domainCacheActiveFlag);
         }
 
+
+        // DNS統計情報ログサービスの有効/無効を取得する.
+        // キー : "loulan.dns.service.instance.dns.stat.log.active"
+        String dnsStatLogServiceActiveValue = properties.getProperty( LoulanDNSConstants.PROP_KEY_SERVICE_INSTANCE_DNS_STAT_LOG_SERVICE_ACTIVE );
+        if ( dnsStatLogServiceActiveValue != null || dnsStatLogServiceActiveValue.isEmpty() == false )
+        {
+            boolean dnsStatLogServiceActiveFlag = Boolean.parseBoolean(dnsStatLogServiceActiveValue);
+            setDNSStatLogServiceActiveFlag(dnsStatLogServiceActiveFlag);
+        }
+
     }
 
     /**
@@ -313,6 +435,9 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
     public IDNSResponseMessage serveDNSQuery(IDNSQuestionMessage dnsQuestionMessage) throws DNSServiceCommonException
     {
         IDNSResponseMessage responseMessage = null;
+
+
+        ZonedDateTime starDateTime = LoulanDNSUtils.getCurrentZonedDateTime();
 
         getLoulanDNSLogger().debug(String.format("DNSQuery is arrived. DNSQuery=%s", dnsQuestionMessage.toString()) );
 
@@ -341,6 +466,19 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
             if ( responseMessage != null )
             {
                 // ドメインキャッシュに当該問い合わせの結果が存在するので、それを返す.
+
+                if ( isDNSStatLogServiceActive() )
+                {
+                    // DNS統計情報ログサービスが有効な場合は、DNSクエリとレスポンスをログ出力する.
+                    ILoulanDNSStatLogService dnsStatLogService = getOrCreateLoulanDNSStatLogServiceInstance();
+
+                    // オプション情報はとりあえず空文字列としておく.
+                    String[] options = new String[]{"", "", ""};
+
+                    ZonedDateTime endDateTime = LoulanDNSUtils.getCurrentZonedDateTime();
+                    dnsStatLogService.saveDNSServiceStatLogRecord( getDNSServiceUserName(), getDNSServiceInstanceName(), dnsQuestionMessage, responseMessage, options, starDateTime, endDateTime );
+                }
+
                 return responseMessage;
             }
         }
@@ -402,6 +540,20 @@ public abstract class DNSServiceInstanceImplBase implements IDNSServiceInstance
                     throw exception;
                 }
             }
+        }
+
+
+        
+        if ( isDNSStatLogServiceActive() )
+        {
+            // DNS統計情報ログサービスが有効な場合は、DNSクエリとレスポンスをログ出力する.
+            ILoulanDNSStatLogService dnsStatLogService = getOrCreateLoulanDNSStatLogServiceInstance();
+            
+            // オプション情報はとりあえず空文字列としておく.
+            String[] options = new String[]{"", "", ""};
+
+            ZonedDateTime endDateTime = LoulanDNSUtils.getCurrentZonedDateTime();
+            dnsStatLogService.saveDNSServiceStatLogRecord( getDNSServiceUserName(), getDNSServiceInstanceName(), dnsQuestionMessage, responseMessage, options, starDateTime, endDateTime);
         }
 
         return responseMessage;
