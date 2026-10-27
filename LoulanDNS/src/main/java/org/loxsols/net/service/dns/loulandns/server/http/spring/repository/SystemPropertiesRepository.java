@@ -3,7 +3,6 @@ package org.loxsols.net.service.dns.loulandns.server.http.spring.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
@@ -21,7 +20,12 @@ public interface SystemPropertiesRepository extends JpaRepository<SystemProperti
 {
     List<SystemProperties> findBySystemPropertyID(long systemPropertyID);
 
-    @Query("select p from SystemProperties p where p.systemPropertyKey LIKE %:propertyKey% order by p.systemPropertyID asc")
+    // 2026/10/27 JPA関数修正 : LIKE演算子に指定する文字列を後方一致とするため、%記号を後方にのみ配置する.
+    // [修正前]
+    // @Query("select p from SystemProperties p where p.systemPropertyKey LIKE %:propertyKey% order by p.systemPropertyID asc")
+    //
+    // [修正後]
+    @Query("select p from SystemProperties p where p.systemPropertyKey LIKE CONCAT(:propertyKey,'%') order by p.systemPropertyID asc")    
     List<SystemProperties> findBySystemPropertyKey(String propertyKey);
 
 }

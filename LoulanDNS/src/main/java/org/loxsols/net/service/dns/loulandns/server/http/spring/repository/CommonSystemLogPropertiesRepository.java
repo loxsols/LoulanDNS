@@ -11,7 +11,7 @@ import org.springframework.stereotype.*;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
+import org.springframework.data.repository.query.Param;
 import org.loxsols.net.service.dns.loulandns.server.http.spring.model.*;
 
 
@@ -31,12 +31,23 @@ public interface CommonSystemLogPropertiesRepository extends JpaRepository<Commo
 
 
     /**
+     * CommonSystemLogテーブルのID値(複数件)をリスト指定し、IN句で一致したプロパティ情報を返す.
+     * 
+     * @param commonSystemLogIDList
+     * @return
+     */
+    @Query("select p from CommonSystemLogProperties p where p.commonSystemLogID in :commonSystemLogIDList order by p.commonSystemLogID asc, p.commonSystemLogPropertyID asc")
+    List<CommonSystemLogProperties> findByCommonSystemLogIDList(@Param("commonSystemLogIDList") List<Long> commonSystemLogIDList);
+
+
+    /**
      * プロパティ情報のキー値で検索する.
      * 
      * @param commonSystemLogPropertyKey
      * @return
      */
-    @Query("select p from CommonSystemLogProperties p where p.commonSystemLogPropertyKey LIKE %:commonSystemLogPropertyKey% order by p.commonSystemLogPropertyID asc")
+    // @Query("select p from CommonSystemLogProperties p where p.commonSystemLogPropertyKey LIKE %:commonSystemLogPropertyKey% order by p.commonSystemLogPropertyID asc")
+    @Query("select p from CommonSystemLogProperties p where p.commonSystemLogPropertyKey LIKE CONCAT(:commonSystemLogPropertyKey, '%') order by p.commonSystemLogPropertyID asc")
     List<CommonSystemLogProperties> findByCommonSystemLogPropertyKey(String commonSystemLogPropertyKey);
 
 }

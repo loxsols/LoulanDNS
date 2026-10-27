@@ -41,10 +41,10 @@ REM %1
 
 
 
-java -jar LoulanDNS\target\LoulanDNSClientCommand.jar %*
+java -jar %PRJ_DIR%\LoulanDNS\target\LoulanDNSClientCommand.jar %*
 
 
-
+exit /b %ERRORLEVEL%
 
 
 

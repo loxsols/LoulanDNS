@@ -1,0 +1,273 @@
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Starting LoulanDNSEndpointServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 7120 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSEndpointService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSEndpointService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 312 ms. Found 13 JPA repository interfaces.
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@44f24a20
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10ŒŽ 26, 2026 5:12:49 ŒßŒã org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10ŒŽ 26, 2026 5:12:49 ŒßŒã org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10ŒŽ 26, 2026 5:12:49 ŒßŒã org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10ŒŽ 26, 2026 5:12:51 ŒßŒã org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@150963fe, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@280d20fb, org.springframework.security.web.context.SecurityContextHolderFilter@dd5ea90, org.springframework.security.web.header.HeaderWriterFilter@7fe75649, org.springframework.security.web.authentication.logout.LogoutFilter@28833fff, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@41ff98dc, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2083bcfd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7aabbe81, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@20c7a91d, org.springframework.security.web.access.ExceptionTranslationFilter@65402e26, org.springframework.security.web.access.intercept.AuthorizationFilter@6bca3b27]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 10.622 seconds (process running for 11.32)
+10ŒŽ 26, 2026 5:12:56 ŒßŒã org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl log
+î•ñ: [INFO]Logger is created. loggerName=LoulanDNSEndpointServiceApplication, LoggerClass=org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSEndpointService.jar/!BOOT-INF/lib/jna-5.13.0.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 33 ms. Found 13 JPA repository interfaces.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ce1b67b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@d05d8c3, org.springframework.security.web.context.SecurityContextHolderFilter@7f9f3516, org.springframework.security.web.header.HeaderWriterFilter@2627da4c, org.springframework.security.web.authentication.logout.LogoutFilter@67dc7d0, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@344ab465, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@d89b0d3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@18a129b8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@250988e5, org.springframework.security.web.access.ExceptionTranslationFilter@7d24def, org.springframework.security.web.access.intercept.AuthorizationFilter@574ffd63]
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 1.19 seconds (process running for 13.913)
+[Thread-18] INFO org.apache.sshd.common.io.DefaultIoServiceFactoryFactory - No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+[Thread-18] INFO org.apache.sshd.client.config.hosts.DefaultConfigFileHostEntryResolver - resolveEffectiveResolver(subway01@133.130.109.187:22/null) no configuration file at C:\WINDOWS\system32\config\systemprofile\.ssh\config
+[sshd-SshClient[7d4a8793]-nio2-thread-6] WARN org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier - Server at /133.130.109.187:22 presented unverified EC key: SHA256:FshXrPVaiJULuOQgQYjy3U2pvnvOdxyuGEoIMNZM7Ww
+[sshd-SshClient[7d4a8793]-nio2-thread-6] INFO org.apache.sshd.common.kex.extension.parser.HostBoundPubkeyAuthentication - Server announced support for publickey-hostbound@openssh.com version 0
+org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException: Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. The DNS Repsonse has NO ANCOUNT. RemoteHost=hv-local-ubuntu-2204-lts.local., SubResolverMode=local, SubResolverInstance=org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl@4518713c, DNSResponse=;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 39108
+;; flags: QR   RD RA; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+;; QUESTION SECTION:
+;hv-local-ubuntu-2204-lts.local.              IN      A
+
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.SSHGatewayImpl.open(SSHGatewayImpl.java:533)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayGatewayInstance(DNSSubwayGatewayInstancePoolImpl.java:221)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:150)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.getOrCreateDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:118)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway(SimpleDNSSubwayResolverImpl.java:472)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolve(SimpleDNSSubwayResolverImpl.java:567)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.DNSResolverInstanceBaseImpl.resolve(DNSResolverInstanceBaseImpl.java:108)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.DNSServiceInstanceImplBase.serveDNSQuery(DNSServiceInstanceImplBase.java:491)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.base.DNSServiceEndpointInstanceImplBase.serveDNSQuery(DNSServiceEndpointInstanceImplBase.java:441)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl.access$000(UDPServiceEndpointInstanceImpl.java:107)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl$UDPServiceThreadTask.run(UDPServiceEndpointInstanceImpl.java:577)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolRcodeErrorSERVFAILException: Failed to call resolver instance. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@8fc7fac
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.DNSServiceInstanceImplBase.serveDNSQuery(DNSServiceInstanceImplBase.java:497)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.base.DNSServiceEndpointInstanceImplBase.serveDNSQuery(DNSServiceEndpointInstanceImplBase.java:441)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl.access$000(UDPServiceEndpointInstanceImpl.java:107)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl$UDPServiceThreadTask.run(UDPServiceEndpointInstanceImpl.java:577)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException: Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. RemoteHost=hv-local-ubuntu-2204-lts.local., SubResolverMode=local, SubResolverInstance=org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl@4518713c
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.SSHGatewayImpl.open(SSHGatewayImpl.java:578)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayGatewayInstance(DNSSubwayGatewayInstancePoolImpl.java:221)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:150)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.getOrCreateDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:118)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway(SimpleDNSSubwayResolverImpl.java:472)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolve(SimpleDNSSubwayResolverImpl.java:567)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.DNSResolverInstanceBaseImpl.resolve(DNSResolverInstanceBaseImpl.java:108)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.DNSServiceInstanceImplBase.serveDNSQuery(DNSServiceInstanceImplBase.java:491)
+	... 4 more
+Caused by: org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException: Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. The DNS Repsonse has NO ANCOUNT. RemoteHost=hv-local-ubuntu-2204-lts.local., SubResolverMode=local, SubResolverInstance=org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl@4518713c, DNSResponse=;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 39108
+;; flags: QR   RD RA; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+;; QUESTION SECTION:
+;hv-local-ubuntu-2204-lts.local.              IN      A
+
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.SSHGatewayImpl.open(SSHGatewayImpl.java:533)
+	... 11 more
+10ŒŽ 26, 2026 5:13:25 ŒßŒã org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl log
+Œx: [WARN][WARN-200101]DNS protocol error is happend., {Failed to call resolver instance. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@8fc7fac}
+org.loxsols.net.service.dns.loulandns.server.common.DNSProtocolRcodeErrorSERVFAILException: Failed to call resolver instance. DNSQuery=org.loxsols.net.service.dns.loulandns.server.logical.model.protocol.dns.impl.DNSQuestionMessageImpl@8fc7fac
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.DNSServiceInstanceImplBase.serveDNSQuery(DNSServiceInstanceImplBase.java:497)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.base.DNSServiceEndpointInstanceImplBase.serveDNSQuery(DNSServiceEndpointInstanceImplBase.java:441)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl.access$000(UDPServiceEndpointInstanceImpl.java:107)
+	at org.loxsols.net.service.dns.loulandns.server.impl.service.endpoint.udp.UDPServiceEndpointInstanceImpl$UDPServiceThreadTask.run(UDPServiceEndpointInstanceImpl.java:577)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException: Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. RemoteHost=hv-local-ubuntu-2204-lts.local., SubResolverMode=local, SubResolverInstance=org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl@4518713c
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.SSHGatewayImpl.open(SSHGatewayImpl.java:578)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayGatewayInstance(DNSSubwayGatewayInstancePoolImpl.java:221)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.createDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:150)
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.DNSSubwayGatewayInstancePoolImpl.getOrCreateDNSSubwayDescriptor(DNSSubwayGatewayInstancePoolImpl.java:118)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolveDNSSubwayGateway(SimpleDNSSubwayResolverImpl.java:472)
+	at org.loxsols.net.service.dns.loulandns.client.impl.simple.SimpleDNSSubwayResolverImpl.resolve(SimpleDNSSubwayResolverImpl.java:567)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.DNSResolverInstanceBaseImpl.resolve(DNSResolverInstanceBaseImpl.java:108)
+	at org.loxsols.net.service.dns.loulandns.server.logical.service.dns.service.impl.base.DNSServiceInstanceImplBase.serveDNSQuery(DNSServiceInstanceImplBase.java:491)
+	... 4 more
+Caused by: org.loxsols.net.service.dns.loulandns.client.subway.common.DNSSubwayCommonException: Failed to open SSH Gateway, caused by failed to resolve RemoteHostAddress by SubResolver on local. The DNS Repsonse has NO ANCOUNT. RemoteHost=hv-local-ubuntu-2204-lts.local., SubResolverMode=local, SubResolverInstance=org.loxsols.net.service.dns.loulandns.server.logical.service.dns.resolver.impl.outbound.UDPResolverInstanceImpl@4518713c, DNSResponse=;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 39108
+;; flags: QR   RD RA; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+;; QUESTION SECTION:
+;hv-local-ubuntu-2204-lts.local.              IN      A
+
+	at org.loxsols.net.service.dns.loulandns.client.subway.impl.ssh.SSHGatewayImpl.open(SSHGatewayImpl.java:533)
+	... 11 more
+
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Starting LoulanDNSEndpointServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 7824 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSEndpointService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSEndpointService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 301 ms. Found 13 JPA repository interfaces.
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@242b6e1a
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10ŒŽ 26, 2026 5:38:22 ŒßŒã org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10ŒŽ 26, 2026 5:38:22 ŒßŒã org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10ŒŽ 26, 2026 5:38:22 ŒßŒã org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10ŒŽ 26, 2026 5:38:26 ŒßŒã org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@33544cc5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2080ee70, org.springframework.security.web.context.SecurityContextHolderFilter@495c4ce7, org.springframework.security.web.header.HeaderWriterFilter@270a113f, org.springframework.security.web.authentication.logout.LogoutFilter@25bd8eab, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@435a13ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4821e1a3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5ba4735c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1bce19db, org.springframework.security.web.access.ExceptionTranslationFilter@76a90ecb, org.springframework.security.web.access.intercept.AuthorizationFilter@2fba15c5]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 12.952 seconds (process running for 14.175)
+10ŒŽ 26, 2026 5:38:30 ŒßŒã org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl log
+î•ñ: [INFO]Logger is created. loggerName=LoulanDNSEndpointServiceApplication, LoggerClass=org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSEndpointService.jar/!BOOT-INF/lib/jna-5.13.0.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 13 JPA repository interfaces.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@419fc1d6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@46c85b61, org.springframework.security.web.context.SecurityContextHolderFilter@250988e5, org.springframework.security.web.header.HeaderWriterFilter@d05d8c3, org.springframework.security.web.authentication.logout.LogoutFilter@5f453412, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@370c9681, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4481f9bd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1502cd38, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@192800d, org.springframework.security.web.access.ExceptionTranslationFilter@5ce1b67b, org.springframework.security.web.access.intercept.AuthorizationFilter@17aa06eb]
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 0.97 seconds (process running for 17.729)
+[Thread-18] INFO org.apache.sshd.common.io.DefaultIoServiceFactoryFactory - No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+[Thread-18] INFO org.apache.sshd.client.config.hosts.DefaultConfigFileHostEntryResolver - resolveEffectiveResolver(subway01@133.130.109.187:22/null) no configuration file at C:\WINDOWS\system32\config\systemprofile\.ssh\config
+[sshd-SshClient[6a32110e]-nio2-thread-6] WARN org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier - Server at /133.130.109.187:22 presented unverified EC key: SHA256:FshXrPVaiJULuOQgQYjy3U2pvnvOdxyuGEoIMNZM7Ww
+[sshd-SshClient[6a32110e]-nio2-thread-6] INFO org.apache.sshd.common.kex.extension.parser.HostBoundPubkeyAuthentication - Server announced support for publickey-hostbound@openssh.com version 0
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+Exception in thread "main" java.lang.reflect.InvocationTargetException
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:119)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:91)
+	at org.springframework.boot.loader.launch.Launcher.launch(Launcher.java:53)
+	at org.springframework.boot.loader.launch.JarLauncher.main(JarLauncher.java:58)
+Caused by: java.lang.Error: Unresolved compilation problem: 
+	ApplicationPidFileWriter cannot be resolved to a type
+
+	at org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication.main(LoulanDNSEndpointServiceApplication.java:213)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	... 4 more
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Starting LoulanDNSEndpointServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 8452 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSEndpointService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSEndpointService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 190 ms. Found 13 JPA repository interfaces.
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@6a1d3225
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10ŒŽ 26, 2026 6:37:27 ŒßŒã org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10ŒŽ 26, 2026 6:37:27 ŒßŒã org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10ŒŽ 26, 2026 6:37:27 ŒßŒã org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10ŒŽ 26, 2026 6:37:29 ŒßŒã org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6b71fded, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1633962a, org.springframework.security.web.context.SecurityContextHolderFilter@6984f7d1, org.springframework.security.web.header.HeaderWriterFilter@7b3db079, org.springframework.security.web.authentication.logout.LogoutFilter@14738629, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@5f745970, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3e3b41cb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@14bb16ee, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2afd8972, org.springframework.security.web.access.ExceptionTranslationFilter@5e79bdf6, org.springframework.security.web.access.intercept.AuthorizationFilter@435a13ac]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 7.224 seconds (process running for 7.989)
+10ŒŽ 26, 2026 6:37:31 ŒßŒã org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl log
+î•ñ: [INFO]Logger is created. loggerName=LoulanDNSEndpointServiceApplication, LoggerClass=org.loxsols.net.service.dns.loulandns.server.logical.service.system.log.logger.impl.LoulanDNSSimpleLoggerImpl
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by com.sun.jna.Native in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSEndpointService.jar/!BOOT-INF/lib/jna-5.13.0.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 23 ms. Found 13 JPA repository interfaces.
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7ce87f9d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@e944541, org.springframework.security.web.context.SecurityContextHolderFilter@6d575cd8, org.springframework.security.web.header.HeaderWriterFilter@52f9a620, org.springframework.security.web.authentication.logout.LogoutFilter@34f636a5, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@79ae2d13, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@69c00140, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7cc7769d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1c89cec5, org.springframework.security.web.access.ExceptionTranslationFilter@192800d, org.springframework.security.web.access.intercept.AuthorizationFilter@1ae11dd3]
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.endpoint.general.LoulanDNSEndpointServiceApplication - Started LoulanDNSEndpointServiceApplication in 0.794 seconds (process running for 10.125)
+[Thread-18] INFO org.apache.sshd.common.io.DefaultIoServiceFactoryFactory - No detected/configured IoServiceFactoryFactory; using Nio2ServiceFactoryFactory
+[Thread-18] INFO org.apache.sshd.client.config.hosts.DefaultConfigFileHostEntryResolver - resolveEffectiveResolver(subway01@133.130.109.187:22/null) no configuration file at C:\WINDOWS\system32\config\systemprofile\.ssh\config
+[sshd-SshClient[7d134a45]-nio2-thread-6] WARN org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier - Server at /133.130.109.187:22 presented unverified EC key: SHA256:FshXrPVaiJULuOQgQYjy3U2pvnvOdxyuGEoIMNZM7Ww
+[sshd-SshClient[7d134a45]-nio2-thread-6] INFO org.apache.sshd.common.kex.extension.parser.HostBoundPubkeyAuthentication - Server announced support for publickey-hostbound@openssh.com version 0
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -1,0 +1,169 @@
+Error: Unable to access jarfile LoulanDNS\target\LoulanDNSAdminAPIService.jar
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Starting LoulanDNSAdminAPIServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 9532 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSAdminAPIService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 425 ms. Found 13 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSAdminAPIService.jar/!BOOT-INF/lib/tomcat-embed-core-10.1.19.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10åé 26, 2026 5:30:41 åﬂå„ org.apache.catalina.core.StandardService startInternal
+èÓïÒ: Starting service [Tomcat]
+10åé 26, 2026 5:30:41 åﬂå„ org.apache.catalina.core.StandardEngine startInternal
+èÓïÒ: Starting Servlet engine: [Apache Tomcat/10.1.19]
+10åé 26, 2026 5:30:41 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring embedded WebApplicationContext
+[main] INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3325 ms
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@5f61371d
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10åé 26, 2026 5:30:42 åﬂå„ org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10åé 26, 2026 5:30:42 åﬂå„ org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10åé 26, 2026 5:30:42 åﬂå„ org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10åé 26, 2026 5:30:44 åﬂå„ org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4bcff08c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@52a1d6f, org.springframework.security.web.context.SecurityContextHolderFilter@23ac3788, org.springframework.security.web.header.HeaderWriterFilter@ae2227, org.springframework.web.filter.CorsFilter@38bb297, org.springframework.security.web.authentication.logout.LogoutFilter@732f7660, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@6195e7d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1d77762f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7e2bd635, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6c96e1d5, org.springframework.security.web.access.ExceptionTranslationFilter@46092840, org.springframework.security.web.access.intercept.AuthorizationFilter@700b9a54]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Started LoulanDNSAdminAPIServiceApplication in 13.465 seconds (process running for 14.34)
+10åé 26, 2026 5:30:52 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring DispatcherServlet 'dispatcherServlet'
+[http-nio-8080-exec-1] INFO org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[http-nio-8080-exec-1] INFO org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Starting LoulanDNSAdminAPIServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 14616 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSAdminAPIService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 331 ms. Found 13 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSAdminAPIService.jar/!BOOT-INF/lib/tomcat-embed-core-10.1.19.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10åé 26, 2026 5:38:23 åﬂå„ org.apache.catalina.core.StandardService startInternal
+èÓïÒ: Starting service [Tomcat]
+10åé 26, 2026 5:38:23 åﬂå„ org.apache.catalina.core.StandardEngine startInternal
+èÓïÒ: Starting Servlet engine: [Apache Tomcat/10.1.19]
+10åé 26, 2026 5:38:23 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring embedded WebApplicationContext
+[main] INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 5074 ms
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@faea4da
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10åé 26, 2026 5:38:24 åﬂå„ org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10åé 26, 2026 5:38:24 åﬂå„ org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10åé 26, 2026 5:38:24 åﬂå„ org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10åé 26, 2026 5:38:27 åﬂå„ org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@58e9375b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@d7d984c, org.springframework.security.web.context.SecurityContextHolderFilter@3c79be0f, org.springframework.security.web.header.HeaderWriterFilter@52e296c0, org.springframework.web.filter.CorsFilter@53bc8c7e, org.springframework.security.web.authentication.logout.LogoutFilter@2caf6813, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@52a1d6f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5c0bacaa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7cb15360, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@8ff4795, org.springframework.security.web.access.ExceptionTranslationFilter@35daccb8, org.springframework.security.web.access.intercept.AuthorizationFilter@7fd65f9a]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Started LoulanDNSAdminAPIServiceApplication in 16.292 seconds (process running for 17.449)
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Starting LoulanDNSAdminAPIServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 2540 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSAdminAPIService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 218 ms. Found 13 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSAdminAPIService.jar/!BOOT-INF/lib/tomcat-embed-core-10.1.19.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10åé 26, 2026 6:29:10 åﬂå„ org.apache.catalina.core.StandardService startInternal
+èÓïÒ: Starting service [Tomcat]
+10åé 26, 2026 6:29:10 åﬂå„ org.apache.catalina.core.StandardEngine startInternal
+èÓïÒ: Starting Servlet engine: [Apache Tomcat/10.1.19]
+10åé 26, 2026 6:29:10 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring embedded WebApplicationContext
+[main] INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2854 ms
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@64e7d698
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10åé 26, 2026 6:29:11 åﬂå„ org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10åé 26, 2026 6:29:11 åﬂå„ org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10åé 26, 2026 6:29:11 åﬂå„ org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10åé 26, 2026 6:29:13 åﬂå„ org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6f6c4462, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@f3458af, org.springframework.security.web.context.SecurityContextHolderFilter@372dc92e, org.springframework.security.web.header.HeaderWriterFilter@b7b5e7, org.springframework.web.filter.CorsFilter@20ac726c, org.springframework.security.web.authentication.logout.LogoutFilter@7625bfbd, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@43347199, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2a9464d9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21cb907d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@75c2a35, org.springframework.security.web.access.ExceptionTranslationFilter@f2bec99, org.springframework.security.web.access.intercept.AuthorizationFilter@58e9375b]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Started LoulanDNSAdminAPIServiceApplication in 8.496 seconds (process running for 9.143)
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Starting LoulanDNSAdminAPIServiceApplication v1.0-SNAPSHOT using Java 25.0.2 with PID 4912 (C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\LoulanDNS\target\LoulanDNSAdminAPIService.jar started by LAPTOP-8S76C5ME$ in C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService)
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[main] INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 217 ms. Found 13 JPA repository interfaces.
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (jar:nested:/C:/data/workspace/dev/src/LoulanDNS/101_working/LoulanDNS_20261026-001/LoulanDNS/LoulanDNS/target/LoulanDNSAdminAPIService.jar/!BOOT-INF/lib/tomcat-embed-core-10.1.19.jar!/)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10åé 26, 2026 6:33:58 åﬂå„ org.apache.catalina.core.StandardService startInternal
+èÓïÒ: Starting service [Tomcat]
+10åé 26, 2026 6:33:58 åﬂå„ org.apache.catalina.core.StandardEngine startInternal
+èÓïÒ: Starting Servlet engine: [Apache Tomcat/10.1.19]
+10åé 26, 2026 6:33:58 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring embedded WebApplicationContext
+[main] INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3005 ms
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[main] INFO com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Driver does not support get/set network timeout for connections. (feature not supported)
+[main] INFO com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.hsqldb.jdbc.JDBCConnection@61191222
+[main] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+10åé 26, 2026 6:33:59 åﬂå„ org.hibernate.jpa.internal.util.LogHelper logPersistenceUnitInformation
+INFO: HHH000204: Processing PersistenceUnitInfo [name: default]
+10åé 26, 2026 6:33:59 åﬂå„ org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 6.4.4.Final
+10åé 26, 2026 6:33:59 åﬂå„ org.hibernate.cache.internal.RegionFactoryInitiator initiateService
+INFO: HHH000026: Second-level cache disabled
+[main] INFO org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+10åé 26, 2026 6:34:01 åﬂå„ org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[main] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[main] INFO org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+[main] WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[main] INFO org.springframework.security.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6a49b3c7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f6c4462, org.springframework.security.web.context.SecurityContextHolderFilter@7abe3d53, org.springframework.security.web.header.HeaderWriterFilter@5f324d9f, org.springframework.web.filter.CorsFilter@f3458af, org.springframework.security.web.authentication.logout.LogoutFilter@38fc1904, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@2af5eab6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@a885aa1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a9464d9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@20ac726c, org.springframework.security.web.access.ExceptionTranslationFilter@48ac4201, org.springframework.security.web.access.intercept.AuthorizationFilter@6c96e1d5]
+[main] WARN org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+[main] INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+[main] INFO org.loxsols.net.service.dns.loulandns.app.spring.service.api.admin.LoulanDNSAdminAPIServiceApplication - Started LoulanDNSAdminAPIServiceApplication in 10.025 seconds (process running for 10.642)
+10åé 26, 2026 6:38:03 åﬂå„ org.apache.catalina.core.ApplicationContext log
+èÓïÒ: Initializing Spring DispatcherServlet 'dispatcherServlet'
+[http-nio-8080-exec-1] INFO org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[http-nio-8080-exec-1] INFO org.springframework.web.servlet.DispatcherServlet - Completed initialization in 12 ms
+^C[SpringApplicationShutdownHook] INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[SpringApplicationShutdownHook] INFO com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

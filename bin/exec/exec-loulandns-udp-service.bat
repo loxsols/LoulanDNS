@@ -38,9 +38,9 @@ java ^
 -Dloulan.dns.service.instance.default.instance.user.name=%DEFAULT_USER_NAME% ^
 -Dloulan.dns.user.name=%DEFAULT_USER_NAME% ^
 -Dspring.datasource.url="%SPRING_DATASOURCE_URL%" ^
--jar LoulanDNS\target\LoulanDNSUDPServer.jar 
+-jar %PRJ_DIR%\LoulanDNS\target\LoulanDNSUDPServer.jar 
 
 
-
+exit /b %ERRORLEVEL%
 
 

@@ -1,0 +1,39 @@
+<service>
+  <!-- 1. サービスの基本情報（システム内で一意にする） -->
+  <id>LoulanDNSAdminAPIService</id>
+  <name>LoulanDNS Admin API Service</name>
+  <description>LoulanDNS Admin API Service</description>
+
+  <!-- 2. 実行対象（cmd.exe を経由してbatをキックする） -->
+  <executable>cmd.exe</executable>
+
+  <!-- コマンド引数の設定 -->
+  <argument>/c</argument>
+
+  <!-- %BASE% はこのXML（WinSW）が置いてある絶対パスに自動置換される -->
+  <argument>"%BASE%\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"</argument>
+
+
+  <!-- Springアプリケーションが生成するpidファイルのパスを定義 -->
+  <env name="SPRING_PID_FILE" value="LoulanDNSAdminAPIService.pid" />
+
+
+  <!-- 4. ログ出力設定（オプション） -->
+  <!-- javaの標準出力・エラーを logs フォルダに自動保存（日次ローテーション） -->
+  <log mode="roll-by-time">
+    <pattern>yyyyMMdd</pattern>
+  </log>
+
+
+  <!-- サービス依存関係の指定 -->
+  <depend>LoulanDNSDBService</depend>
+
+
+  <!-- サービス起動完了状態の監視設定 -->
+  <!-- 起動完了をSpringアプリケーションが生成するpidファイルで検知する設定 -->
+  <waitforstartfile>LoulanDNSAdminAPIService.pid</waitforstartfile>
+  <!-- pidファイル生成処理の待機時間 -->
+  <starttimeout>120sec</starttimeout>
+
+
+</service>

@@ -33,6 +33,8 @@ java ^
 %* 
 
 
+exit /b %ERRORLEVEL%
+
 
 
 

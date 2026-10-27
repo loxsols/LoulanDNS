@@ -1,0 +1,117 @@
+2026-10-26 17:25:53,284 DEBUG - Starting WinSW in console mode
+2026-10-26 17:25:54,730 DEBUG - Starting WinSW in console mode
+2026-10-26 17:25:54,744 INFO  - Installing service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:25:54,766 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was installed successfully.
+2026-10-26 17:25:57,430 DEBUG - Starting WinSW in console mode
+2026-10-26 17:25:58,732 DEBUG - Starting WinSW in console mode
+2026-10-26 17:25:58,756 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:25:58,868 DEBUG - Starting WinSW in service mode
+2026-10-26 17:25:58,881 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' started successfully.
+2026-10-26 17:25:58,891 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"
+2026-10-26 17:25:58,913 INFO  - Started process 15976
+2026-10-26 17:25:58,919 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 17:30:26,287 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:27,571 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:27,584 INFO  - Uninstalling service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:30:27,588 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was uninstalled successfully.
+2026-10-26 17:30:30,965 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:32,179 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:32,196 INFO  - Installing service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:30:32,206 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was installed successfully.
+2026-10-26 17:30:34,789 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:36,206 DEBUG - Starting WinSW in console mode
+2026-10-26 17:30:36,218 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:30:36,304 DEBUG - Starting WinSW in service mode
+2026-10-26 17:30:36,315 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' started successfully.
+2026-10-26 17:30:36,324 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"
+2026-10-26 17:30:36,342 INFO  - Started process 20384
+2026-10-26 17:30:36,348 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 17:37:40,682 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:41,943 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:41,958 INFO  - Installing service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:37:41,961 ERROR - A service with ID 'LoulanDNSAdminAPIService' already exists.
+2026-10-26 17:37:41,963 FATAL - Failed to install the service. 指定されたサービスは既に開始されています。
+2026-10-26 17:37:47,447 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:48,714 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:48,726 INFO  - Stopping service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:37:48,731 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' stopped successfully.
+2026-10-26 17:37:48,734 INFO  - Stopping LoulanDNSAdminAPIService
+2026-10-26 17:37:48,735 DEBUG - ProcessKill 20384
+2026-10-26 17:37:51,319 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:52,523 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:52,537 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:37:52,547 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' has already started.
+2026-10-26 17:38:03,754 DEBUG - Process 20384 terminated.
+2026-10-26 17:38:03,767 INFO  - Finished LoulanDNSAdminAPIService
+2026-10-26 17:38:15,832 DEBUG - Starting WinSW in service mode
+2026-10-26 17:38:15,854 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"
+2026-10-26 17:38:15,874 INFO  - Started process 23540
+2026-10-26 17:38:15,880 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 17:43:00,728 INFO  - Stopping LoulanDNSAdminAPIService
+2026-10-26 17:43:00,729 DEBUG - ProcessKill 23540
+2026-10-26 17:43:00,732 DEBUG - Stopping process 23540...
+2026-10-26 17:43:15,740 DEBUG - Process 23540 terminated.
+2026-10-26 17:43:15,752 INFO  - Finished LoulanDNSAdminAPIService
+2026-10-26 17:44:15,023 DEBUG - Starting WinSW in console mode
+2026-10-26 17:44:15,034 FATAL - Unhandled exception
+System.Exception: Unknown command: unistall
+   場所 WinSW.Program.Run(String[] argsArray, IServiceConfig config)
+   場所 WinSW.Program.Main(String[] args)
+2026-10-26 17:44:18,198 DEBUG - Starting WinSW in console mode
+2026-10-26 17:44:19,396 DEBUG - Starting WinSW in console mode
+2026-10-26 17:44:19,407 INFO  - Uninstalling service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 17:44:19,411 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was uninstalled successfully.
+2026-10-26 18:29:01,339 DEBUG - Starting WinSW in console mode
+2026-10-26 18:29:02,565 DEBUG - Starting WinSW in console mode
+2026-10-26 18:29:02,579 INFO  - Installing service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:29:02,591 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was installed successfully.
+2026-10-26 18:29:05,344 DEBUG - Starting WinSW in console mode
+2026-10-26 18:29:06,623 DEBUG - Starting WinSW in console mode
+2026-10-26 18:29:06,641 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:29:06,733 DEBUG - Starting WinSW in service mode
+2026-10-26 18:29:06,743 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' started successfully.
+2026-10-26 18:29:06,750 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"
+2026-10-26 18:29:06,766 INFO  - Started process 22684
+2026-10-26 18:29:06,771 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 18:32:46,962 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:48,183 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:48,195 INFO  - Stopping service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:32:48,202 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' stopped successfully.
+2026-10-26 18:32:48,205 INFO  - Stopping LoulanDNSAdminAPIService
+2026-10-26 18:32:48,206 DEBUG - ProcessKill 22684
+2026-10-26 18:32:48,208 DEBUG - Stopping process 22684...
+2026-10-26 18:32:51,355 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:52,480 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:52,493 INFO  - Uninstalling service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:32:52,496 WARN  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' is started. It may be impossible to uninstall it.
+2026-10-26 18:32:52,498 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was uninstalled successfully.
+2026-10-26 18:32:55,216 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:56,324 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:56,337 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:32:56,346 FATAL - コンピューター '.' でサービス 'LoulanDNSAdminAPIService' を開始できません。
+2026-10-26 18:32:58,639 DEBUG - Starting WinSW in console mode
+2026-10-26 18:32:59,999 DEBUG - Starting WinSW in console mode
+2026-10-26 18:33:00,015 INFO  - Starting service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:33:00,025 FATAL - コンピューター '.' でサービス 'LoulanDNSAdminAPIService' を開始できません。
+2026-10-26 18:33:03,217 DEBUG - Process 22684 terminated.
+2026-10-26 18:33:03,226 INFO  - Finished LoulanDNSAdminAPIService
+2026-10-26 18:33:38,904 DEBUG - Starting WinSW in console mode
+2026-10-26 18:33:40,121 DEBUG - Starting WinSW in console mode
+2026-10-26 18:33:40,142 FATAL - 指定されたサービスはインストールされたサービスとして存在しません。
+2026-10-26 18:33:44,796 DEBUG - Starting WinSW in console mode
+2026-10-26 18:33:45,956 DEBUG - Starting WinSW in console mode
+2026-10-26 18:33:45,972 INFO  - Installing service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:33:45,981 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was installed successfully.
+2026-10-26 18:33:54,235 DEBUG - Starting WinSW in service mode
+2026-10-26 18:33:54,252 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSAdminAPIService\..\..\..\bin\exec\exec-loulandns-admin-api-service.bat"
+2026-10-26 18:33:54,266 INFO  - Started process 17164
+2026-10-26 18:33:54,270 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 18:38:32,607 INFO  - Stopping LoulanDNSAdminAPIService
+2026-10-26 18:38:32,608 DEBUG - ProcessKill 17164
+2026-10-26 18:38:32,610 DEBUG - Stopping process 17164...
+2026-10-26 18:38:47,620 DEBUG - Process 17164 terminated.
+2026-10-26 18:38:47,635 INFO  - Finished LoulanDNSAdminAPIService
+2026-10-26 18:39:25,001 DEBUG - Starting WinSW in console mode
+2026-10-26 18:39:26,139 DEBUG - Starting WinSW in console mode
+2026-10-26 18:39:26,150 INFO  - Uninstalling service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)'...
+2026-10-26 18:39:26,154 INFO  - Service 'LoulanDNS Admin API Service (LoulanDNSAdminAPIService)' was uninstalled successfully.

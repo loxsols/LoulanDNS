@@ -1,0 +1,102 @@
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 本バッチファイルのあるディレクトリのパス. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set CMD_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM プロジェクトのディレクトリ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set PRJ_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 共通モジュール(common.bat)のパス 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set COMMON_BAT=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM ----- 共通モジュール(common.bat)を呼び出す. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>call C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+[Server@52cc8049]: Startup sequence initiated from main() method
+[Server@52cc8049]: Could not load properties from file
+[Server@52cc8049]: Using cli/default properties only
+[Server@52cc8049]: Initiating startup sequence...
+[Server@52cc8049]: Server socket opened successfully in 10 ms.
+[Server@52cc8049]: Database [index=0, id=0, db=file:C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\lib\common\\..\..\..\/../data/db/HSQLDB/LoulanDNS/LoulanDNS, alias=loulandns] opened successfully in 524 ms.
+[Server@52cc8049]: Startup sequence completed in 542 ms.
+[Server@52cc8049]: 2026-10-26 08:37:16.594 HSQLDB server 2.7.3 is online on port 9001
+[Server@52cc8049]: To close normally, connect and execute SHUTDOWN SQL
+[Server@52cc8049]: From command line, use [Ctrl]+[C] to abort abruptly
+バッチ ジョブを終了しますか (Y/N)? 
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 本バッチファイルのあるディレクトリのパス. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set CMD_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM プロジェクトのディレクトリ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set PRJ_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 共通モジュール(common.bat)のパス 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set COMMON_BAT=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM ----- 共通モジュール(common.bat)を呼び出す. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>call C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+[Server@52cc8049]: Startup sequence initiated from main() method
+[Server@52cc8049]: Could not load properties from file
+[Server@52cc8049]: Using cli/default properties only
+[Server@52cc8049]: Initiating startup sequence...
+[Server@52cc8049]: Initiating shutdown sequence...
+[Server@52cc8049]: Shutdown sequence completed in 1 ms.
+[Server@52cc8049]: 2026-10-26 09:09:33.171 SHUTDOWN : System.exit() is called next
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 本バッチファイルのあるディレクトリのパス. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set CMD_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM プロジェクトのディレクトリ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set PRJ_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 共通モジュール(common.bat)のパス 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set COMMON_BAT=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM ----- 共通モジュール(common.bat)を呼び出す. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>call C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+[Server@52cc8049]: Startup sequence initiated from main() method
+[Server@52cc8049]: Could not load properties from file
+[Server@52cc8049]: Using cli/default properties only
+[Server@52cc8049]: Initiating startup sequence...
+[Server@52cc8049]: Server socket opened successfully in 13 ms.
+[Server@52cc8049]: Database [index=0, id=0, db=file:C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\lib\common\\..\..\..\/../data/db/HSQLDB/LoulanDNS/LoulanDNS, alias=loulandns] opened successfully in 596 ms.
+[Server@52cc8049]: Startup sequence completed in 618 ms.
+[Server@52cc8049]: 2026-10-26 09:28:54.385 HSQLDB server 2.7.3 is online on port 9001
+[Server@52cc8049]: To close normally, connect and execute SHUTDOWN SQL
+[Server@52cc8049]: From command line, use [Ctrl]+[C] to abort abruptly
+バッチ ジョブを終了しますか (Y/N)? 
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 本バッチファイルのあるディレクトリのパス. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set CMD_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM プロジェクトのディレクトリ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set PRJ_DIR=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\ 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM 共通モジュール(common.bat)のパス 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>set COMMON_BAT=C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>REM ----- 共通モジュール(common.bat)を呼び出す. 
+
+C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService>call C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\db\server\\..\..\..\\bin\lib\common\common.bat 
+[Server@52cc8049]: Startup sequence initiated from main() method
+[Server@52cc8049]: Could not load properties from file
+[Server@52cc8049]: Using cli/default properties only
+[Server@52cc8049]: Initiating startup sequence...
+[Server@52cc8049]: Server socket opened successfully in 11 ms.
+[Server@52cc8049]: Database [index=0, id=0, db=file:C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\lib\common\\..\..\..\/../data/db/HSQLDB/LoulanDNS/LoulanDNS, alias=loulandns] opened successfully in 481 ms.
+[Server@52cc8049]: Startup sequence completed in 501 ms.
+[Server@52cc8049]: 2026-10-26 09:33:32.581 HSQLDB server 2.7.3 is online on port 9001
+[Server@52cc8049]: To close normally, connect and execute SHUTDOWN SQL
+[Server@52cc8049]: From command line, use [Ctrl]+[C] to abort abruptly
+バッチ ジョブを終了しますか (Y/N)? 

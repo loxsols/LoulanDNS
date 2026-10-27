@@ -1,0 +1,76 @@
+2026-10-26 17:37:09,228 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:10,872 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:10,884 INFO  - Installing service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 17:37:10,900 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was installed successfully.
+2026-10-26 17:37:14,245 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:15,601 DEBUG - Starting WinSW in console mode
+2026-10-26 17:37:15,625 INFO  - Starting service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 17:37:15,730 DEBUG - Starting WinSW in service mode
+2026-10-26 17:37:15,743 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' started successfully.
+2026-10-26 17:37:15,752 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService\..\..\..\bin\db\server\HSQLDBServerMode.bat"
+2026-10-26 17:37:15,776 INFO  - Started process 4152
+2026-10-26 17:37:15,782 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 17:43:29,306 INFO  - Stopping LoulanDNSDBService
+2026-10-26 17:43:29,307 DEBUG - ProcessKill 4152
+2026-10-26 17:43:29,309 DEBUG - Stopping process 4152...
+2026-10-26 17:43:44,327 DEBUG - Process 4152 terminated.
+2026-10-26 17:43:44,336 INFO  - Finished LoulanDNSDBService
+2026-10-26 17:44:32,022 DEBUG - Starting WinSW in console mode
+2026-10-26 17:44:33,199 DEBUG - Starting WinSW in console mode
+2026-10-26 17:44:33,211 INFO  - Uninstalling service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 17:44:33,216 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was uninstalled successfully.
+2026-10-26 18:09:23,923 DEBUG - Starting WinSW in console mode
+2026-10-26 18:09:25,437 DEBUG - Starting WinSW in console mode
+2026-10-26 18:09:25,449 INFO  - Installing service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:09:25,460 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was installed successfully.
+2026-10-26 18:09:31,097 DEBUG - Starting WinSW in console mode
+2026-10-26 18:09:32,787 DEBUG - Starting WinSW in console mode
+2026-10-26 18:09:32,801 INFO  - Starting service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:09:32,875 DEBUG - Starting WinSW in service mode
+2026-10-26 18:09:32,885 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' started successfully.
+2026-10-26 18:09:32,896 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService\..\..\..\bin\db\server\HSQLDBServerMode.bat"
+2026-10-26 18:09:32,916 INFO  - Started process 12508
+2026-10-26 18:09:32,923 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 18:10:02,660 DEBUG - Starting WinSW in console mode
+2026-10-26 18:10:03,833 DEBUG - Starting WinSW in console mode
+2026-10-26 18:10:03,847 INFO  - Stopping service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:10:03,857 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' has already stopped.
+2026-10-26 18:10:07,671 DEBUG - Starting WinSW in console mode
+2026-10-26 18:10:07,681 FATAL - Unhandled exception
+System.Exception: Unknown command: unistall
+   èÍèä WinSW.Program.Run(String[] argsArray, IServiceConfig config)
+   èÍèä WinSW.Program.Main(String[] args)
+2026-10-26 18:10:11,601 DEBUG - Starting WinSW in console mode
+2026-10-26 18:10:12,648 DEBUG - Starting WinSW in console mode
+2026-10-26 18:10:12,661 INFO  - Uninstalling service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:10:12,667 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was uninstalled successfully.
+2026-10-26 18:28:47,794 DEBUG - Starting WinSW in console mode
+2026-10-26 18:28:49,525 DEBUG - Starting WinSW in console mode
+2026-10-26 18:28:49,537 INFO  - Installing service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:28:49,550 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was installed successfully.
+2026-10-26 18:28:52,170 DEBUG - Starting WinSW in console mode
+2026-10-26 18:28:53,338 DEBUG - Starting WinSW in console mode
+2026-10-26 18:28:53,354 INFO  - Starting service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:28:53,439 DEBUG - Starting WinSW in service mode
+2026-10-26 18:28:53,450 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' started successfully.
+2026-10-26 18:28:53,462 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService\..\..\..\bin\db\server\HSQLDBServerMode.bat"
+2026-10-26 18:28:53,493 INFO  - Started process 17020
+2026-10-26 18:28:53,498 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 18:33:12,219 INFO  - Stopping LoulanDNSDBService
+2026-10-26 18:33:12,220 DEBUG - ProcessKill 17020
+2026-10-26 18:33:12,223 DEBUG - Stopping process 17020...
+2026-10-26 18:33:27,239 DEBUG - Process 17020 terminated.
+2026-10-26 18:33:27,251 INFO  - Finished LoulanDNSDBService
+2026-10-26 18:33:31,779 DEBUG - Starting WinSW in service mode
+2026-10-26 18:33:31,796 INFO  - Starting cmd.exe  /c "C:\data\workspace\dev\src\LoulanDNS\101_working\LoulanDNS_20261026-001\LoulanDNS\bin\service\LoulanDNSDBService\..\..\..\bin\db\server\HSQLDBServerMode.bat"
+2026-10-26 18:33:31,810 INFO  - Started process 15188
+2026-10-26 18:33:31,815 DEBUG - Forwarding logs of the process System.Diagnostics.Process (cmd) to WinSW.TimeBasedRollingLogAppender
+2026-10-26 18:38:48,055 INFO  - Stopping LoulanDNSDBService
+2026-10-26 18:38:48,056 DEBUG - ProcessKill 15188
+2026-10-26 18:38:48,058 DEBUG - Stopping process 15188...
+2026-10-26 18:39:03,074 DEBUG - Process 15188 terminated.
+2026-10-26 18:39:03,088 INFO  - Finished LoulanDNSDBService
+2026-10-26 18:39:35,230 DEBUG - Starting WinSW in console mode
+2026-10-26 18:39:36,229 DEBUG - Starting WinSW in console mode
+2026-10-26 18:39:36,243 INFO  - Uninstalling service 'LoulanDNS DB Service (LoulanDNSDBService)'...
+2026-10-26 18:39:36,247 INFO  - Service 'LoulanDNS DB Service (LoulanDNSDBService)' was uninstalled successfully.

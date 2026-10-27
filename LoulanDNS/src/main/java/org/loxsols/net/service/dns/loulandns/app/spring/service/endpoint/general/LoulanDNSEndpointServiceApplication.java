@@ -42,6 +42,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.context.ApplicationPidFileWriter;
+
 
 
 /**
@@ -209,7 +211,8 @@ public class LoulanDNSEndpointServiceApplication implements CommandLineRunner
         SpringApplicationBuilder applicationBuilder 
             = new SpringApplicationBuilder(LoulanDNSEndpointServiceApplication.class)
                             .child(LoulanDNSEndpointServiceApplicationConfig.class)
-                            .web(WebApplicationType.NONE);
+                            .web(WebApplicationType.NONE)
+                            .listeners(new ApplicationPidFileWriter());
                             
         applicationBuilder.run(args);
 

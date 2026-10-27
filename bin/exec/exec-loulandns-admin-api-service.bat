@@ -33,11 +33,11 @@ java ^
 -Dloulan.dns.service.instance.default.instance.name=%DEFAULT_DNS_SERVICE_INSTANCE% ^
 -Dloulan.dns.service.instance.default.instance.user.name=%DEFAULT_USER_NAME% ^
 -Dspring.datasource.url="%SPRING_DATASOURCE_URL%" ^
--jar LoulanDNS\target\LoulanDNSAdminAPIService.jar ^
+-jar %PRJ_DIR%\LoulanDNS\target\LoulanDNSAdminAPIService.jar ^
 %* 
 
 
-
+exit /b %ERRORLEVEL%
 
 
 

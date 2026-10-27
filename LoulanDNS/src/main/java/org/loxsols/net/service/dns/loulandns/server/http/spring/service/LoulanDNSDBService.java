@@ -3,6 +3,8 @@ package org.loxsols.net.service.dns.loulandns.server.http.spring.service;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -1433,6 +1435,7 @@ public class LoulanDNSDBService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
+    @Transactional(readOnly = true)
     public List<CommonSystemLog> getCommonSystemLogListByID(long commonSystemLogID) throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogID(commonSystemLogID);
@@ -1447,6 +1450,7 @@ public class LoulanDNSDBService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
+    @Transactional(readOnly = true)
     public List<CommonSystemLog> getCommonSystemLogListByTag(String commonSystemLogTag) throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogTag(commonSystemLogTag);
@@ -1464,8 +1468,13 @@ public class LoulanDNSDBService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
+    @Transactional(readOnly = true)
     public List<CommonSystemLog> getCommonSystemLogListByTag(String commonSystemLogTag, ZonedDateTime from, ZonedDateTime until, int maxSize) throws LoulanDNSSystemServiceException
     {
+
+        // [性能測定用]
+        long startTime = System.currentTimeMillis();
+
         String fromDateTime = LoulanDNSUtils.toDateTimeString(from);
         String untilDateTime = LoulanDNSUtils.toDateTimeString(until);
 
@@ -1474,6 +1483,11 @@ public class LoulanDNSDBService
         List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogTagAndFromDateTimeAndUntilDateTime(commonSystemLogTag, fromDateTime, untilDateTime, PageRequest.of(0, maxSize) );
 
         System.out.println( String.format("[DEBUG] getCommonSystemLogListByTag() : commonSystemLogList.size()=%d", commonSystemLogList.size() ) );
+
+        // [性能測定用]
+        long endTime = System.currentTimeMillis();
+        System.out.println( String.format("getCommonSystemLogListByTag() : spend time(msec) : %d", (endTime - startTime)) );
+
 
         return commonSystemLogList;
     }
@@ -1489,6 +1503,7 @@ public class LoulanDNSDBService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
+    @Transactional(readOnly = true)
     public List<CommonSystemLog> getCommonSystemLogListByTagAndProperty(String commonSystemLogTag, String propertyKey, String propertyValue) throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLog> commonSystemLogList = commonSystemLogRepository.findByCommonSystemLogTagAndProperty(commonSystemLogTag, propertyKey, propertyValue);
@@ -1496,6 +1511,7 @@ public class LoulanDNSDBService
     }
 
 
+    @Transactional(readOnly = true)
     public CommonSystemLogProperties getCommonSystemLogPropertiesByID(long commonSystemLogPropertyID) throws LoulanDNSSystemServiceException
     {
         CommonSystemLogProperties commonSystemLogProperties  = commonSystemLogPropertiesRepository.findByCommonSystemLogPropertyID(commonSystemLogPropertyID);
@@ -1509,12 +1525,40 @@ public class LoulanDNSDBService
      * @return
      * @throws LoulanDNSSystemServiceException
      */
+    @Transactional(readOnly = true)
     public List<CommonSystemLogProperties> getCommonSystemLogPropertiesByCommonSystemLogID(long commonSystemLogID) throws LoulanDNSSystemServiceException
     {
         List<CommonSystemLogProperties> commonSystemLogPropertiesList = commonSystemLogPropertiesRepository.findByCommonSystemLogID(commonSystemLogID);
         return commonSystemLogPropertiesList;
     }
 
+
+
+    /**
+     * 共通ログのプロパティ情報(COMMON_SYSTEM_LOG_PROPERTIESテーブル)から、親レコードである共通ログ情報(COMMON_SYSTEM_LOGテーブル)のID値のリストからIN句で一致したレコードを返す.
+     * 結果は、Mapに共通ログ情報(COMMON_SYSTEM_LOGテーブル)のID値をキーとして格納して返す.
+     * 
+     */
+    @Transactional(readOnly = true)
+    public Map<Long, List<CommonSystemLogProperties> > getCommonSystemLogPropertiesByCommonSystemLogIDList(List<Long> commonSystemLogIDList) throws LoulanDNSSystemServiceException
+    {
+        Map<Long, List<CommonSystemLogProperties> > propertiesMap = new HashMap<Long, List<CommonSystemLogProperties> >();
+        List<CommonSystemLogProperties> propertiesList = commonSystemLogPropertiesRepository.findByCommonSystemLogIDList(commonSystemLogIDList);
+
+        for( var prop : propertiesList )
+        {
+            Long commonSystemLogID = Long.valueOf( prop.getCommonSystemLogID() );
+
+            if ( propertiesMap.containsKey(commonSystemLogID ) == false )
+            {
+                propertiesMap.put( commonSystemLogID, new ArrayList<CommonSystemLogProperties>() );
+            }
+
+            propertiesMap.get( commonSystemLogID).add( prop );
+        }
+        
+        return propertiesMap;
+    }
 
     
     /**

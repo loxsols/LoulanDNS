@@ -132,6 +132,10 @@ public class LoulanDNSStatLogServiceImpl implements  ILoulanDNSStatLogService
     public List<ILoulanDNSServiceStatLogRecord> getDNSServiceStatLogRecords(String userName, String dnsServiceInstanceName, ZonedDateTime fromDateTime, ZonedDateTime untilDateTime, int maxSize ) throws LoulanDNSSystemServiceException
     {
 
+        // [性能測定用]
+        long startTime = System.currentTimeMillis();
+
+
         String tag = LoulanDNSServiceStatLogRecordImpl.buildTagString(userName, dnsServiceInstanceName);
         List<CommonSystemLogInfo> list = logicalDBService.getCommonSystemLogInfoListByTag(tag, fromDateTime, untilDateTime, maxSize);
 
@@ -141,6 +145,10 @@ public class LoulanDNSStatLogServiceImpl implements  ILoulanDNSStatLogService
             ILoulanDNSServiceStatLogRecord statLogRecord = LoulanDNSServiceStatLogRecordImpl.fromCommonSystemLogInfo(logInfo);
             statLogRecordList.add( statLogRecord );
         }
+
+        // [性能測定用]
+        long endTime = System.currentTimeMillis();
+        System.out.println( String.format("LoulanDNSStatLogServiceImpl.getDNSServiceStatLogRecords() : spend time(msec) : %d", (endTime - startTime)) );
 
         return statLogRecordList;
     }

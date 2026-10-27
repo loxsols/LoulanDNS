@@ -48,7 +48,8 @@ public interface CommonSystemLogRepository extends JpaRepository<CommonSystemLog
      * @param propertyValue
      * @return
      */
-    @Query("select p, o from CommonSystemLog p inner join CommonSystemLogProperties o ON p.commonSystemLogID = o.commonSystemLogID where p.commonSystemLogTag LIKE %:commonSystemLogTag% and o.commonSystemLogPropertyKey LIKE %:propertyKey% and o.commonSystemLogPropertyValue LIKE %:propertyValue% order by p.commonSystemLogID asc")
+    // @Query("select p, o from CommonSystemLog p inner join CommonSystemLogProperties o ON p.commonSystemLogID = o.commonSystemLogID where p.commonSystemLogTag LIKE %:commonSystemLogTag% and o.commonSystemLogPropertyKey LIKE %:propertyKey% and o.commonSystemLogPropertyValue LIKE %:propertyValue% order by p.commonSystemLogID asc")
+    @Query("select p, o from CommonSystemLog p inner join CommonSystemLogProperties o ON p.commonSystemLogID = o.commonSystemLogID where p.commonSystemLogTag LIKE %:commonSystemLogTag% and o.commonSystemLogPropertyKey LIKE CONCAT(:propertyKey, '%') and o.commonSystemLogPropertyValue LIKE CONCAT(:propertyValue, '%') order by p.commonSystemLogID asc")
     List<CommonSystemLog> findByCommonSystemLogTagAndProperty(String commonSystemLogTag, String propertyKey, String propertyValue);
 
 

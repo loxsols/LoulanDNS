@@ -1,3 +1,21 @@
+# WinSWの使い方メモ
+
+
+## 基本的な流れ
+
+1. WinSWのexeバイナリを適当なサービス名(HogeService.exe)にリネームする.
+2. HogeService.exeと同じディレクトリに設定用のXMLファイル(HogeService.xml)を配置する.
+3. XMLファイルの編集(後述)
+4. 管理者モードでサービスのインストール : HogeService.exe install
+5. 管理者モードでサービスを開始 : HogeService.exe start
+6. 管理者モードでサービスを停止 : HogeService.exe stop
+7. 管理者モードでサービスをアンインストール : HogeService.exe uninstall
+
+## サービス定義XMLファイルの記述
+
+以下のように記述する.
+
+```
 <service>
   <!-- 1. サービスの基本情報（システム内で一意にする） -->
   <id>LoulanDNSEndpointService</id>
@@ -44,3 +62,6 @@
     <pattern>yyyyMMdd</pattern>
   </log>
 </service>
+```
+
+

@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
@@ -17,7 +18,9 @@ public class LoulanDNSAdminAPIServiceApplication
 
     public static void main(String[] args)
     {
-        SpringApplication.run(LoulanDNSAdminAPIServiceApplicationConfig.class, args);
+        SpringApplication application = new SpringApplication(LoulanDNSAdminAPIServiceApplicationConfig.class);
+        application.addListeners(new ApplicationPidFileWriter());
+        application.run(args);
     }
 
 
